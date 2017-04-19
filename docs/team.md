@@ -6,11 +6,11 @@ title:  Team
 # {{ page.title }}
 
 
-## USER 1
-***UCI Net ID***: ucinetid
+## Siena Saltzen
+***ssaltzen***: 52137789
 
-## USER 2
-***UCI Net ID***: ucinetid
+## Justine Venya
+***jcveyna***: 77816926
 
-## USER 3
-***UCI Net ID***: ucinetid
+## Derek Fisher
+***dsfisher***: 55724822
