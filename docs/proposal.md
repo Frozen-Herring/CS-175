@@ -1,4 +1,10 @@
 # Project Proposal
+## Project Meeting
+Office Hours
+01:15pm - Thursday, April 27, 2017
+Pacific Time - US & Canada
+DBH 4204
+
 ## Project Summary
 We will be making a reinforcement learning AI that takes a flat world of randomly generated lava, reward, and normal blocks as an input. As an output, it will return the shortest route to all the reward blocks that does not touch any lava blocks. The AI will not be given the set of blocks which makes up the world around it. Instead it must find the shortest path by trying out different paths and finding rewards without falling into the lava.
 
