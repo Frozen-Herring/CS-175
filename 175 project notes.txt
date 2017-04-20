@@ -1,0 +1,58 @@
+global dictionary expectedRewardDict... key = block index, value = reward score calculated by the monte carlo thing
+global dictionary blockReward... key = block type, value = reward value... {lava:-100, normal:-1, rewardBlock:+10}
+
+class world:
+	self.blocks = all the blocks in the world (each block is a string which says the block type)
+	getPossibleMoves(index) -> list of block indices which are valid moves
+
+class agent:
+	def makePath(int N)... continually calls makeMove N times, or until we lit lava, or until remainingRewards is empty
+		while ...:
+			makeMove()
+			self.distributeReward()
+		
+	def makeMove()... looks at all the possible moves and picks a move (
+		possibleMoves = world.getPossibleMoves()
+		moveToTake = self.chooseMove(possibleMoves)... 
+		self.update(moveToTake)
+		
+	
+	def chooseMove(moveList)... takes in the expected rewards of each of the possible moves passed, returns one of them
+		randomly choose a move, but possibly give higher chance to pick move with better reward
+		
+	def update(moveToTake)... updates currentPath and rewardSum with the consequence of taking the move
+	
+	distributeReward()... When we finish our iteration, we distribute our rewardSum to blocks in currentPath
+		go through all the blocks in 
+		
+	 // in order to get move it has to know what the expected reward of each action is...
+	 // it might roll a dice a factor in those weights to decide its next move...
+	 // at the end it calls distributeRewards()
+	 
+	 currentPath... list of the indices of the blocks we traversed....
+	 
+	 rewardSum... the sum of all the rewards we have gotten so far on currentPath
+	 self.remainingRewards... list of all the reward blocks which have not been visited
+	
+	
+	
+	
+	
+Summary of the project:
+
+WE will be making a reinforcement learning AI that takes a flat world of of randomly generated lava, reward, and normal blocks as an input. As an output, it will return the shortest route to all the reward blocks that does not touch any lava blocks. The AI will not be given the sest of blocks which makes up the world around it. Instead it must find the shortest path by trying out different paths and finding rewards without falling into the lava.
+
+2.3 ML/AI algotithms
+
+For out project we will use a temporal difference machine learning algorithm. 
+
+2.4 Evaluation Plan
+
+Quantative evaluation:
+Our primary quantative metric is the optimal reward compared our reward, where each reward is something like -1 for each move we make, +10 for each reward tile we touch, and -100 for each lava block we touch
+Baseline: The average reward of 100 or so random paths
+We expect our approach to vastly improve from the baseline because the baseline makes completely random decisions and does not learn
+
+Qualatative analysis:
+For our sanity cases we would make sure the path is continuous, and that the agent does not teleport over more than one block at a time. We would also make sure that stepping in each block type yields their respective rewards. We will visualize the interals of our algorithm by printing the expected reward for each action. 
+
