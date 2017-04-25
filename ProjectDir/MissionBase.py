@@ -76,56 +76,62 @@ def startMission(agent_host, xml):
             exit(1)
 #------------------------------------------
 
-#---------CONNECT AND SET UP AGENT---------
-sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)  # flush print output immediately
-agent_host = MalmoPython.AgentHost()
+#----------OUR MISSION CODE----------------
+def runOurMission(agent_host):
+    for x in xrange(10):
+        for z in xrange(10):
+            teleport_x = x * 2 + 1
+            teleport_z = z * 2 + 1
+            tp_command = "tp " + str(teleport_x)+ " 4 " + str(teleport_z) # command string is x y z, appears this map uses 4 as base
+            print "Sending command: " + tp_command
+            agent_host.sendCommand(tp_command)
+            time.sleep(10) # TIME BETWEEN MOVES
+# ------------------------------------------
 
-try:
-    agent_host.parse( sys.argv )
-except RuntimeError as e:
-    print 'ERROR:',e
-    print agent_host.getUsage()
-    exit(1)
-if agent_host.receivedArgument("help"):
-    print agent_host.getUsage()
-    exit(0)
+#----CONNECT/SET UP AGENT AND RUN MISSION-----
+if __name__ == "__main__":
+    sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)  # flush print output immediately
+    agent_host = MalmoPython.AgentHost()
 
-startMission(agent_host, worldXML)
-world_state = agent_host.peekWorldState()
-#-----------------------------------------
+    try:
+        agent_host.parse( sys.argv )
+    except RuntimeError as e:
+        print 'ERROR:',e
+        print agent_host.getUsage()
+        exit(1)
+    if agent_host.receivedArgument("help"):
+        print agent_host.getUsage()
+        exit(0)
 
-
-#----------------RUN MISSION--------------
-#Currently is teleport around with no purpose
-
-for x in xrange(10):
-    for z in xrange(10):
-        teleport_x = x * 2 + 1
-        teleport_z = z * 2 + 1
-        tp_command = "tp " + str(teleport_x)+ " 4 " + str(teleport_z) # command string is x y z, appears this map uses 4 as base
-        print "Sending command: " + tp_command
-        agent_host.sendCommand(tp_command)
-        time.sleep(10) # TIME BETWEEN MOVES
-
-#-------------------------------------------
-
-#------END MISSION AND CHECK REWARDS--------
-
-agent_host.sendCommand("quit")
-while world_state.is_mission_running:
+    startMission(agent_host, worldXML)
     world_state = agent_host.peekWorldState()
+    #-----------------------------------------
 
-print "Mission over."
 
-'''
-world_state = agent_host.getWorldState()
-if Mission Ran :
-    Calculate Final Rewards
-if not sucessful:
-    print "Error Messgae"
-    exit(1)
-'''
+    #----------------RUN MISSION--------------
+    #Currently is teleport around with no purpose
 
-print "Test successful"
-exit(0)
+    runOurMission(agent_host)
+
+    #-------------------------------------------
+
+    #------END MISSION AND CHECK REWARDS--------
+
+    agent_host.sendCommand("quit")
+    while world_state.is_mission_running:
+        world_state = agent_host.peekWorldState()
+
+    print "Mission over."
+
+    '''
+    world_state = agent_host.getWorldState()
+    if Mission Ran :
+        Calculate Final Rewards
+    if not sucessful:
+        print "Error Messgae"
+        exit(1)
+    '''
+
+    print "Test successful"
+    exit(0)
 
