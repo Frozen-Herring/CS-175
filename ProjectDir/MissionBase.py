@@ -11,8 +11,8 @@ def genItems():
     items = ""
     for x in xrange(10):
         for z in xrange(10):
-            items += '<DrawBlock x="' + str(x * 1000) + '" y="3" z="' + str(z * 1000) + '" type="redstone_block"/>'
-            items += '<DrawItem x="' + str(x * 1000) + '" y="10" z="' + str(z * 1000) + '" type="emerald"/>'
+            items += '<DrawBlock x="' + str(x * 10) + '" y="3" z="' + str(z * 10) + '" type="redstone_block"/>'
+            items += '<DrawItem x="' + str(x * 10) + '" y="10" z="' + str(z * 10) + '" type="emerald"/>'
     return items
 
 worldXML = '''<?xml version="1.0" encoding="UTF-8" ?>
@@ -39,7 +39,7 @@ worldXML = '''<?xml version="1.0" encoding="UTF-8" ?>
         <AgentSection mode="Survival">
             <Name>Brundlefly</Name>
             <AgentStart>
-                <Placement x="-100.5" y="4" z="400.5" yaw="0" pitch="90"/>  <!-- Look down at the ground -->
+                <Placement x="-100.5" y="4" z="400.5" yaw="0" pitch="0"/>  <!-- Look down at the ground -->
                 <Inventory/>
             </AgentStart>
             <AgentHandlers>
