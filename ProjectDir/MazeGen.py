@@ -3,8 +3,21 @@ Created on Apr 24, 2017
 
 @author: Justin Veyna
 '''
+'''
+PLEASE READ:
+File still needs to be cleaned up a lot documentation wise and there are a lot of general use functions that can surely be put in another file.
+DO NOT EDIT for now
+'''
 
 from random import random
+
+'''
+############################################################################################################
+#----------------------------------------------------------------------------------------------------------#
+#----------------------------------------------Constants---------------------------------------------------#
+#----------------------------------------------------------------------------------------------------------#
+############################################################################################################
+'''
 emptyBlock = "air"
 normalBlock = "stone"
 dangerBlock = "lava"
@@ -19,7 +32,13 @@ movement2D = [(1,0,0),(0,1,0),(-1,0,0),(0,-1,0)] #right, up, left, down #top-dow
     #not implemented yet: "2D side-view", "3D climb", "3D jump"
 
 possibleMovementDict = {"1D": movement1D, "2D": movement2D}
-
+'''
+############################################################################################################
+#----------------------------------------------------------------------------------------------------------#
+#------------------------------------------Coordinate Functions--------------------------------------------#
+#----------------------------------------------------------------------------------------------------------#
+############################################################################################################
+'''
 def inMaze(mazeSize, location):
     #takes in 
     max_x,max_y,max_z = seperateCoordinate(mazeSize, 1)
@@ -64,7 +83,13 @@ def _opCoordinates(coord1, coord2, op, default):
         return (x1-x2)**2+(y1-y2)**2+(z1-z2)**2
         
         
-        
+'''
+############################################################################################################
+#----------------------------------------------------------------------------------------------------------#
+#-------------------------------------------Path Generation------------------------------------------------#
+#----------------------------------------------------------------------------------------------------------#
+############################################################################################################
+'''        
         
 
 def possibleMoves(mazeSize, location, possibleMovement, currentPath=[]):
@@ -137,33 +162,33 @@ def _pickMove(posMoves, currentPath, endBlock, impetus=1.5, momentum = .1, backt
     return posMoves[-1]#safety net if total does not add up to 1
         
         
-
-def evalPath():
-    #evaluate how good the maze is
-    return 0
-    
+'''
+############################################################################################################
+#----------------------------------------------------------------------------------------------------------#
+#--------------------------------------------Maze Generation-----------------------------------------------#
+#----------------------------------------------------------------------------------------------------------#
+############################################################################################################
+'''  
     
 def genMaze(mazeSize, rewardCount=3, possibleMovement=movement2D):
     x,y,z = seperateCoordinate(mazeSize, 1)
     startBlock = (0,0,0)#hard coded for now
     endBlock = (x-1,y-1,0)#hard coded for now
     pass
-    
-    
-    
-    
-    
 
-if __name__ == '__main__':
-    x=20
-    y=50
-    z=1
-    print "x:", x, "y:",y, "z:",z
-    mazeSize = (x,y,z)
-    startBlock = (0,0,0)
-    endBlock = (x-1,y-1,0)
-    possibleMovement = "2D"
-    p =  genPath(mazeSize, startBlock, endBlock, possibleMovement)
+'''
+############################################################################################################
+#----------------------------------------------------------------------------------------------------------#
+#--------------------------------------------Post Analytics------------------------------------------------#
+#----------------------------------------------------------------------------------------------------------#
+############################################################################################################
+'''  
+
+def evalPath():
+    #evaluate how good the maze is
+    return 0
+
+def pathDetails(p):
     setP = set(p)
     print "path", p
     print "num", len(p)
@@ -179,10 +204,29 @@ if __name__ == '__main__':
             toPrint+=" "
         toPrint+="\n"
     print toPrint
+
+if __name__ == '__main__':
+    #maze specific constants
+    x=20
+    y=50
+    z=1
+    print "x:", x, "y:",y, "z:",z
+    mazeSize = (x,y,z)
+    startBlock = (0,0,0)
+    endBlock = (x-1,y-1,0)
+    possibleMovement = "2D"
     
+    #actual code
+    p =  genPath(mazeSize, startBlock, endBlock, possibleMovement)
+    pathDetails(p)
+
+
 '''
-This gave passable results    
+FINDINGS:
+
+This gave passable results
 impetus=1.5, momentum = 1, backtrackAversion = 0 #mostly centeralized movement towards goal
 impetus=1.5, momentum = .1, backtrackAversion = 0 #branch heavy linear paths
+impetus=1.5, momentum = .1, backtrackAversion = .3, backtrackCap = 500 # mostly same as above
 '''
                 
