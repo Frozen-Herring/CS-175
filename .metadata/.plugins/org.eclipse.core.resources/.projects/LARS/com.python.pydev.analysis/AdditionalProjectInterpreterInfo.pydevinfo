@@ -1,0 +1,39 @@
+-- VERSION_4
+-- START DISKCACHE_2
+C:\Users\Shintomo\Documents\GitHub\LARS\.metadata\.plugins\org.eclipse.core.resources\.projects\LARS\com.python.pydev.analysis\v2_indexcache
+MazeGen|1493088975710756000|C:\Users\Shintomo\Documents\GitHub\LARS\LARS\MazeGen.py
+-- END DISKCACHE
+-- START DICTIONARY
+1
+1=MazeGen
+-- END DICTIONARY
+-- START TREE 1
+24
+_op|1|_opCoordinates!10@
+_pi|1|_pickMove!10@
+dan|1|dangerBlock!11@
+dis|1|disCoordinates!10@
+emp|1|emptyBlock!11@
+end|1|endBlock!11@
+eva|1|evalPath!10@
+gen|2|genMaze!10@genPath!10@
+inm|1|inMaze!10@
+maz|1|mazeSize!11@
+mov|3|movement1D!11@movementBlocked!10@movement2D!11@
+nor|1|normalBlock!11@
+p|1|p!11@
+pos|3|possibleMovementDict!11@possibleMovement!11@possibleMoves!10@
+rew|1|rewardBlock!11@
+sep|1|seperateCoordinate!10@
+set|1|setP!11@
+sta|1|startBlock!11@
+sub|1|subCoordinates!10@
+sum|1|sumCoordinates!10@
+top|1|toPrint!11@
+x|1|x!11@
+y|1|y!11@
+z|1|z!11@
+-- END TREE
+-- START TREE 2
+0
+-- END TREE
