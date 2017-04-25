@@ -18,7 +18,7 @@ def genItems():
 worldXML = '''<?xml version="1.0" encoding="UTF-8" ?>
     <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <About>
-            <Summary>Teleportastic</Summary>
+            <Summary>Testing Base -- CHANGE THIS</Summary>
         </About>
 
         <ServerSection>
@@ -78,14 +78,16 @@ def startMission(agent_host, xml):
 
 #----------OUR MISSION CODE----------------
 def runOurMission(agent_host):
-    for x in xrange(10):
-        for z in xrange(10):
+    for x in xrange(3):
+        for z in xrange(3):
             teleport_x = x * 2 + 1
             teleport_z = z * 2 + 1
             tp_command = "tp " + str(teleport_x)+ " 4 " + str(teleport_z) # command string is x y z, appears this map uses 4 as base
             print "Sending command: " + tp_command
             agent_host.sendCommand(tp_command)
-            time.sleep(10) # TIME BETWEEN MOVES
+            time.sleep(2) # TIME BETWEEN MOVES
+
+    agent_host.sendCommand("quit")
 # ------------------------------------------
 
 #----CONNECT/SET UP AGENT AND RUN MISSION-----
@@ -117,7 +119,6 @@ if __name__ == "__main__":
 
     #------END MISSION AND CHECK REWARDS--------
 
-    agent_host.sendCommand("quit")
     while world_state.is_mission_running:
         world_state = agent_host.peekWorldState()
 
