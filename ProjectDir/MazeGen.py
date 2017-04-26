@@ -9,7 +9,7 @@ File still needs to be cleaned up a lot documentation wise and there are a lot o
 DO NOT EDIT for now
 '''
 
-from random import random
+from random import random, shuffle
 
 '''
 ############################################################################################################
@@ -18,10 +18,10 @@ from random import random
 #----------------------------------------------------------------------------------------------------------#
 ############################################################################################################
 '''
-emptyBlock = "air"
-normalBlock = "stone"
-dangerBlock = "lava"
-rewardBlock = "emerald"
+emptyBlock = " "#"air"#todo 
+normalBlock = "X"#"stone"
+dangerBlock = "."#"lava"#todo
+rewardBlock = "O"#"emerald"
 
 movement1D = [(1,0,0),(-1,0,0)] #right, left
 movement2D = [(1,0,0),(0,1,0),(-1,0,0),(0,-1,0)] #right, up, left, down #top-down
@@ -146,10 +146,6 @@ def _pickMove(posMoves, currentPath, endBlock, impetus=1.5, momentum = .1, backt
             timePast = reversedPath.index(move)
             score*=(1-backtrackAversion)#**timePast #todo odd behavior
         scores[move] = score
-        '''
-        if score != 0:
-            print score
-        '''
         total+=score
     #print "total", total
     randNum = random()
@@ -169,12 +165,94 @@ def _pickMove(posMoves, currentPath, endBlock, impetus=1.5, momentum = .1, backt
 #----------------------------------------------------------------------------------------------------------#
 ############################################################################################################
 '''  
+class Maze():
+    def __init__(self, mazeSize, lavaPercent=.5, rewardCount=5):
+        self.lavaPercent = lavaPercent
+        self.rewardCount = rewardCount
+        self.x, self.y, self.z = mazeSize
+        self.maze=[]
+        for _ in range(self.x):
+            l1=[]
+            for _ in range(self.y):
+                l2=[]
+                for _ in range(self.z):
+                    l2.append(None)
+                l1.append(l2)
+            self.maze.append(l1)
+                    
+
+    def __getitem__(self, key):
+        x,y,z = key
+        return self.maze[x][y][z]
     
-def genMaze(mazeSize, rewardCount=3, possibleMovement=movement2D):
+    def __setitem__(self, key, value):
+        x,y,z = key
+        self.maze[x][y][z] = value
+    
+    def set(self, location, blockType, weak=True):
+        if self[location] == None or not weak:
+            self[location] = blockType
+    
+    def fill_maze(self, pSet):
+        for x in range(self.x):
+            for y in range(self.y):
+                for z in range(self.z):
+                    self._dictateBlock((x,y,z), pSet)
+        self._addRewards(pSet)
+        self._fillAir()
+                    
+    def _dictateBlock(self, location, pSet):
+        x,y,z = location
+        if location in pSet:
+            #if part of path
+            for a in range(z+1):
+                self.set((x,y,a), normalBlock)
+        elif z==0:
+            if random() <= self.lavaPercent:
+                self.set(location, dangerBlock)
+            else:
+                self.set(location, normalBlock)
+    
+    def _addRewards(self, pSet):
+        pathBlocks = list(pSet)
+        shuffle(pathBlocks)
+        for i in range(self.rewardCount):
+            self.set(pathBlocks[i], rewardBlock, False)
+    
+    def _fillAir(self):
+        for x in range(self.x):
+            for y in range(self.y):
+                for z in range(self.z):
+                    self.set((x,y,z), emptyBlock)
+    
+    def prettyPrint(self):
+        #2D ONLY
+        toPrint=""
+        for x in self.maze:
+            for y in x:
+                for z in y:
+                    if z != None:
+                        toPrint+=z[0]
+                    else:
+                        toPrint+="_"
+                toPrint+=" "
+            toPrint+="\n"
+        print toPrint
+        
+    
+def genMaze(mazeSize, lavaPercent=1.0, rewardCount=5, possibleMovement="2D"):
     x,y,z = seperateCoordinate(mazeSize, 1)
     startBlock = (0,0,0)#hard coded for now
     endBlock = (x-1,y-1,0)#hard coded for now
-    pass
+    
+    p =  genPath(mazeSize, startBlock, endBlock, possibleMovement)
+    pSet = set(p)
+    
+    maze = Maze(mazeSize, lavaPercent, rewardCount)
+    maze.fill_maze(pSet)
+    return maze
+    
+    
 
 '''
 ############################################################################################################
@@ -205,6 +283,19 @@ def pathDetails(p):
         toPrint+="\n"
     print toPrint
 
+def test_maze():
+    mazeSize =(5,5,1)
+    maze = Maze(mazeSize)
+    maze.prettyPrint()
+    print (0,0,0), maze[(0,0,0)]
+    maze.set((0,0,0), normalBlock)
+    print (0,0,0), maze[(0,0,0)]
+    print (1,0,0), maze[(1,0,0)]
+    maze.set((1,0,0), dangerBlock)
+    print (1,0,0), maze[(1,0,0)]
+    #maze.fill_maze(pSet)
+    maze.prettyPrint()
+    
 if __name__ == '__main__':
     #maze specific constants
     x=20
@@ -212,13 +303,23 @@ if __name__ == '__main__':
     z=1
     print "x:", x, "y:",y, "z:",z
     mazeSize = (x,y,z)
-    startBlock = (0,0,0)
-    endBlock = (x-1,y-1,0)
+
     possibleMovement = "2D"
     
-    #actual code
-    p =  genPath(mazeSize, startBlock, endBlock, possibleMovement)
-    pathDetails(p)
+    
+    #Path Generation Test Code
+    #startBlock = (0,0,0)
+    #endBlock = (x-1,y-1,0)
+    #p =  genPath(mazeSize, startBlock, endBlock, possibleMovement)
+    #pathDetails(p)
+    
+    #Maze Generation Test Code
+    #test_maze()
+    lavaPercent = 1.0
+    rewardCount = 5
+    maze = genMaze(mazeSize, possibleMovement)
+    maze.prettyPrint()
+
 
 
 '''
