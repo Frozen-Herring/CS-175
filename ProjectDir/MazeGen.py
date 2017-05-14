@@ -18,10 +18,10 @@ from random import random, shuffle
 #----------------------------------------------------------------------------------------------------------#
 ############################################################################################################
 '''
-emptyBlock = " "#"air"#todo 
-normalBlock = "X"#"stone"
-dangerBlock = "."#"lava"#todo
-rewardBlock = "O"#"emerald"
+emptyBlock = "air"#todo
+normalBlock = "stone"
+dangerBlock = "lava"#todo
+rewardBlock = "lapis_block"
 
 movement1D = [(1,0,0),(-1,0,0)] #right, left
 movement2D = [(1,0,0),(0,1,0),(-1,0,0),(0,-1,0)] #right, up, left, down #top-down

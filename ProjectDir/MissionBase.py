@@ -2,64 +2,9 @@ import MalmoPython
 import os
 import sys
 import time
+from XMLgen import generateXML
 
-#-----------RANDOM WORLD GEN--------------
-WIDTH=860
-HEIGHT=480
-
-def genItems():
-    items = ""
-    for x in xrange(10):
-        for z in xrange(10):
-            items += '<DrawBlock x="' + str(x * 10) + '" y="3" z="' + str(z * 10) + '" type="redstone_block"/>'
-            items += '<DrawItem x="' + str(x * 10) + '" y="10" z="' + str(z * 10) + '" type="emerald"/>'
-    return items
-
-worldXML = '''<?xml version="1.0" encoding="UTF-8" ?>
-    <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <About>
-            <Summary>Testing Base -- CHANGE THIS</Summary>
-        </About>
-
-        <ServerSection>
-            <ServerInitialConditions>
-                <Time>
-                    <StartTime>1000</StartTime>
-                    <AllowPassageOfTime>false</AllowPassageOfTime> <!-- Keep steady daylight to make image parsing simple -->
-                </Time>
-                <Weather>clear</Weather> <!-- Keep steady weather to make image parsing simple -->
-            </ServerInitialConditions>
-            <ServerHandlers>
-                <FlatWorldGenerator generatorString="3;;1;" forceReset="true" destroyAfterUse="true"/>
-                <DrawingDecorator>''' + genItems() + '''</DrawingDecorator>
-                <ServerQuitWhenAnyAgentFinishes />
-            </ServerHandlers>
-        </ServerSection>
-
-        <AgentSection mode="Survival">
-            <Name>Brundlefly</Name>
-            <AgentStart>
-                <Placement x="-100.5" y="4" z="400.5" yaw="0" pitch="0"/>  <!-- Look down at the ground -->
-                <Inventory/>
-            </AgentStart>
-            <AgentHandlers>
-                <ObservationFromFullInventory/>
-                <AbsoluteMovementCommands/>
-                <MissionQuitCommands/>
-                <RewardForCollectingItem>
-                    <Item type="emerald" reward="1"/>
-                </RewardForCollectingItem>
-                <VideoProducer>
-                    <Width>''' + str(WIDTH) + '''</Width>
-                    <Height>''' + str(HEIGHT) + '''</Height>
-                </VideoProducer>
-            </AgentHandlers>
-        </AgentSection>
-
-    </Mission>'''
-
-#------------------------------------
-
+worldXML = generateXML((25,25,25))
 
 #--------SET UP MALMO INTERFACE-------
 def startMission(agent_host, xml):
@@ -78,6 +23,9 @@ def startMission(agent_host, xml):
 
 #----------OUR MISSION CODE----------------
 def runOurMission(agent_host):
+    agent_host.sendCommand('tp 1 7 1')
+    #agent_host.sendCommand('setworldspawn 1 6 1')
+    '''
     for x in xrange(3):
         for z in xrange(3):
             teleport_x = x * 2 + 1
@@ -86,7 +34,7 @@ def runOurMission(agent_host):
             print "Sending command: " + tp_command
             agent_host.sendCommand(tp_command)
             time.sleep(2) # TIME BETWEEN MOVES
-
+    '''
     agent_host.sendCommand("quit")
 # ------------------------------------------
 
