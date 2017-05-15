@@ -3,8 +3,11 @@ import os
 import sys
 import time
 from XMLgen import generateXML
+import AgentModule
 
-worldXML = generateXML((25,25,25))
+XML_DIMENSIONS_TUPLE = (25,25,25)
+
+worldXML = generateXML(XML_DIMENSIONS_TUPLE)
 
 #--------SET UP MALMO INTERFACE-------
 def startMission(agent_host, xml):
@@ -61,7 +64,11 @@ if __name__ == "__main__":
     #----------------RUN MISSION--------------
     #Currently is teleport around with no purpose
 
-    runOurMission(agent_host)
+    agent = AgentModule.Agent()
+    agent.ourAgent = agent_host
+    agent.makePath(1000)
+    # runOurMission(agent_host)
+
 
     #-------------------------------------------
 

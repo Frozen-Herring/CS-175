@@ -1,8 +1,4 @@
-from WorldModule import World
 import MalmoPython as Malmo
-
-
-
 
 
 class Agent:
@@ -19,14 +15,13 @@ class Agent:
         ''' (self, int) -> None
         Continually call makeMove N times, or until we hit lava, or until remainingRewards is empty '''
         count = 0
-        while count < N and not self.hitLava and len(self.remainingRewards) > 1:
+        while count < N and not self.hitLava:
             self.makeMove()
-            self.distributeReward()
             count += 1
 
     def makeMove(self):
         ''' (self, [int], '''
-        possibleMoves = self.world.getPossibleMoves(self.currentPath[-1])
+        possibleMoves = ['movenorth 1', 'movesouth 1', 'moveeast 1', 'movewest 1']
         moveToTake = self.chooseMove(possibleMoves)
         directionAction = self.world.getDirectionActionForMove(self.currentPath[-1], moveToTake)
         self.ourAgent.sendCommand(directionAction)
