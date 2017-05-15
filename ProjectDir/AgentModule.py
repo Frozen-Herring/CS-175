@@ -1,5 +1,7 @@
 import MalmoPython as Malmo
+from _collections import defaultdict
 
+Q_TABLE_DEFAULT = 0
 
 class Agent:
     def __init__(self, world):
@@ -10,6 +12,7 @@ class Agent:
         self.ourAgent = Malmo.AgentHost()
 
         self.hitLava = False # bool... we set this to true when we hit lava
+        self.qTable = defaultdict(lambda: Q_TABLE_DEFAULT)
 
     def makePath(self, N):
         ''' (self, int) -> None
