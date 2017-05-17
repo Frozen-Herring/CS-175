@@ -3,7 +3,7 @@
   <persistedState key="memento" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;workbench>&#xD;&#xA;&lt;mruList>&#xD;&#xA;&lt;file factoryID=&quot;org.eclipse.ui.part.FileEditorInputFactory&quot; id=&quot;org.python.pydev.editor.PythonEditor&quot; name=&quot;MazeGen.py&quot; tooltip=&quot;LARS/MazeGen.py&quot;>&#xD;&#xA;&lt;persistable path=&quot;/LARS/MazeGen.py&quot;/>&#xD;&#xA;&lt;/file>&#xD;&#xA;&lt;/mruList>&#xD;&#xA;&lt;/workbench>"/>
   <tags>activeSchemeId:org.eclipse.ui.defaultAcceleratorConfiguration</tags>
   <tags>ModelMigrationProcessor.001</tags>
-  <children xsi:type="basic:TrimmedWindow" xmi:id="_V7BYcilAEee96ZUKJcfj6A" elementId="IDEWindow" contributorURI="platform:/plugin/org.eclipse.ui.workbench" selectedElement="_XoSykylAEee96ZUKJcfj6A" x="130" y="130" width="1024" height="768">
+  <children xsi:type="basic:TrimmedWindow" xmi:id="_V7BYcilAEee96ZUKJcfj6A" elementId="IDEWindow" contributorURI="platform:/plugin/org.eclipse.ui.workbench" selectedElement="_XoSykylAEee96ZUKJcfj6A" x="737" y="211" width="1024" height="768">
     <persistedState key="coolBarVisible" value="true"/>
     <persistedState key="perspectiveBarVisible" value="true"/>
     <persistedState key="isRestored" value="true"/>
@@ -11,7 +11,6 @@
     <persistedState key="aggregateWorkingSetId"/>
     <persistedState key="show_in_time" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&#xD;&#xA;&lt;show_in_time/>"/>
     <tags>topLevel</tags>
-    <tags>shellMaximized</tags>
     <children xsi:type="basic:PartSashContainer" xmi:id="_XoSykylAEee96ZUKJcfj6A" selectedElement="_XoTZoClAEee96ZUKJcfj6A" horizontal="true">
       <children xsi:type="advanced:PerspectiveStack" xmi:id="_XoTZoClAEee96ZUKJcfj6A" elementId="org.eclipse.ui.ide.perspectivestack" containerData="7500" selectedElement="_Xr3rAClAEee96ZUKJcfj6A">
         <children xsi:type="advanced:Perspective" xmi:id="_Xr3rAClAEee96ZUKJcfj6A" elementId="org.python.pydev.ui.PythonPerspective" selectedElement="_Xr3rASlAEee96ZUKJcfj6A" label="PyDev" iconURI="platform:/plugin/org.python.pydev/icons/python_16x16.png">
@@ -145,7 +144,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_XpYXsClAEee96ZUKJcfj6A" elementId="org.eclipse.ui.workbench.file">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_3muA4DkAEeeMBc4qlssvLw" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" command="_V7ZMHilAEee96ZUKJcfj6A"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_6gMxcDtbEees08kC5f5RuA" elementId="print" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/print_edit.png" tooltip="Print" command="_V7ZMHilAEee96ZUKJcfj6A"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_XpYXsSlAEee96ZUKJcfj6A" elementId="additions" toBeRendered="false">
         <tags>toolbarSeparator</tags>
@@ -166,7 +165,7 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_XpYXtSlAEee96ZUKJcfj6A" elementId="org.eclipse.ui.workbench.navigate">
         <tags>Draggable</tags>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_3mv2EDkAEeeMBc4qlssvLw" elementId="org.eclipse.ui.window.pinEditor" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_V7YlCSlAEee96ZUKJcfj6A"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_6gP0wDtbEees08kC5f5RuA" elementId="org.eclipse.ui.window.pinEditor" visible="false" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/pin_editor.png" tooltip="Pin Editor" type="Check" command="_V7YlCSlAEee96ZUKJcfj6A"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_XpYXtilAEee96ZUKJcfj6A" elementId="group.editor" toBeRendered="false">
         <tags>toolbarSeparator</tags>
@@ -1481,7 +1480,7 @@
   <addons xmi:id="_V7B_iSlAEee96ZUKJcfj6A" elementId="MinMax Addon" contributorURI="platform:/plugin/org.eclipse.ui.workbench" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.minmax.MinMaxAddon"/>
   <addons xmi:id="_V7B_iilAEee96ZUKJcfj6A" elementId="org.eclipse.ui.workbench.addon.0" contributorURI="platform:/plugin/org.eclipse.ui.workbench" contributionURI="bundleclass://org.eclipse.e4.ui.workbench/org.eclipse.e4.ui.internal.workbench.addons.HandlerProcessingAddon"/>
   <addons xmi:id="_V7G4AClAEee96ZUKJcfj6A" elementId="SplitterAddon" contributionURI="bundleclass://org.eclipse.e4.ui.workbench.addons.swt/org.eclipse.e4.ui.workbench.addons.splitteraddon.SplitterAddon"/>
-  <addons xmi:id="_IYS0IKimEeS11vbz3f9ezw" elementId="org.eclipse.ui.ide.addon.0" contributorURI="platform:/plugin/org.eclipse.ui.ide" contributionURI="bundleclass://org.eclipse.ui.ide/org.eclipse.ui.internal.ide.addons.SaveAllDirtyPartsAddon"/>
+  <addons xmi:id="_6IrpUTtbEees08kC5f5RuA" elementId="org.eclipse.ui.ide.addon.0" contributionURI="bundleclass://org.eclipse.ui.ide/org.eclipse.ui.internal.ide.addons.SaveAllDirtyPartsAddon"/>
   <addons xmi:id="_dz0JgGOlEeSMMaPQU2nlzw" elementId="org.eclipse.ui.ide.application.addon.0" contributorURI="platform:/plugin/org.eclipse.ui.ide.application" contributionURI="bundleclass://org.eclipse.ui.ide.application/org.eclipse.ui.internal.ide.application.addons.ModelCleanupAddon"/>
   <categories xmi:id="_V7VhgClAEee96ZUKJcfj6A" elementId="org.eclipse.team.ui.category.team" name="Team" description="Actions that apply when working with a Team"/>
   <categories xmi:id="_V7VhgSlAEee96ZUKJcfj6A" elementId="org.eclipse.ui.category.views" name="Views" description="Commands for opening views"/>
