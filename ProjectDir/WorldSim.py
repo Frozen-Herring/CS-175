@@ -4,37 +4,54 @@ Created on May 17, 2017
 @author: Justin Veyna
 '''
 import MazeGen
+import CoordinateUtils
+
 
 
 emptyBlockReward, normalBlockReward, dangerBlockReward, rewardBlockReward = None, -1, -500, 100
-blockList = [MazeGen.emptyBlock, MazeGen.normalBlock, MazeGen.dangerBlock, MazeGen.rewardBlock]
+blockList = [CoordinateUtils.emptyBlock, CoordinateUtils.normalBlock, CoordinateUtils.dangerBlock, CoordinateUtils.rewardBlock]
 rewardList = [emptyBlockReward, normalBlockReward, dangerBlockReward, rewardBlockReward]
 
-REWARDDICT = dict(zip(blockList,rewardList))
-print REWARDDICT
+
 class WorldSim():
     '''
     classdocs
     '''
 
-    def __init__(self, worldMap, spawnLoc = (0,0,0)):
+    def __init__(self, worldMaze, spawnLoc = (0,0,0)):
         '''
-        worldMap: Maze class pre-gererated by MazeGen
+        worldMaze: Maze class pre-gererated by MazeGen
         '''
-        self.worldMap = worldMap
+        self.rewardDict = dict(zip(blockList,rewardList))
+        self.worldMaze = worldMaze
         self.agentLoc = spawnLoc
-        self.rewardsRemaining = set(worldMap.rewardBlocks)
     
-    def moveAgent(self, newLoc):
+    def getRewardList(self):
+        return self.worldMaze.rewardBlocks
+    
+    def getLoc(self):
+        return self.agentLoc
+    
+    def getTile(self, loc = None):
+        if loc == None:
+            loc = self.agentLoc
+        if not MazeGen.inMaze(self.worldMaze.mazeSize, loc):#all tiles outside of maze are dangerBlocks
+            return CoordinateUtils.dangerBlock
+        return self.worldMaze[loc]
+    
+    def moveAgent(self, directionToMove):
         '''returns reward here of new state'''
-        self.agentLoc = newLoc
-        if MazeGen.inMaze(self.worldMap.mazeSize, newLoc):
-            return REWARDDICT[self.worldMap(newLoc)]
-        else:
-            return  REWARDDICT[MazeGen.dangerBlock]
+        self.agentLoc = CoordinateUtils.sumCoordinates(directionToMove, self.agentLoc)
+        return self._getReward()
     
-    def getReward(self):
-        '''return the reward of the action???? or  block the user is standing on'''
+    def _getReward(self):
+        tile = self.getTile()
+        if tile == CoordinateUtils.rewardBlock:#if it's a rewardBlock then turn it normal (can't be taken more than once)
+            self.worldMaze.set(self.agentLoc, CoordinateUtils.normalBlock, weak = False)    
+        return self.rewardDict[tile]
+        
+    def onDangerBlock(self):
+        return self.getTile() == CoordinateUtils.dangerBlock
     
         
         
