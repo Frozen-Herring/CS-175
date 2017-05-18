@@ -169,7 +169,10 @@ class Maze():
     def __init__(self, mazeSize, lavaPercent=.5, rewardCount=5):
         self.lavaPercent = lavaPercent
         self.rewardCount = rewardCount
+        self.rewardBlocks = []
+        
         self.x, self.y, self.z = mazeSize
+        self.mazeSize = mazeSize
         self.maze=[]
         for _ in range(self.x):
             l1=[]
@@ -218,6 +221,7 @@ class Maze():
         shuffle(pathBlocks)
         for i in range(self.rewardCount):
             self.set(pathBlocks[i], rewardBlock, False)
+            self.rewardBlocks.append(pathBlocks[i])
     
     def _fillAir(self):
         for x in range(self.x):
