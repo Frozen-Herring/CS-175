@@ -144,7 +144,8 @@ def generateXML(mazeSize ):
 
     return missionSpecs.getAsXML(True)
 
-print generateXML((25,25,25))
+if __name__ == '__main__':
+    print generateXML((25,25,25))
 
 
 
