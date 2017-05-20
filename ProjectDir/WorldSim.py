@@ -51,7 +51,8 @@ class WorldSim():
     def _getReward(self):
         tile = self._getTile()
         if tile == CoordinateUtils.rewardBlock:#if it's a rewardBlock then turn it normal (can't be taken more than once)
-            self.worldMaze.set(self.agentLoc, CoordinateUtils.normalBlock, weak = False)    
+            self.worldMaze.set(self.agentLoc, CoordinateUtils.normalBlock, weak = False)
+        #print "tile: {}, reward: {}".format(tile, self.rewardDict[tile])
         return self.rewardDict[tile]
         
 

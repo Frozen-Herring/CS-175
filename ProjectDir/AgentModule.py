@@ -39,7 +39,7 @@ class Agent:
         self.moveHistory = [start] # [locs]... list of the locs we traversed so far...
         self.actionHistory = []
         self.rewardHistory = []
-        self.rewardsLooted = [0 for _ in range(world.getRewardList())]
+        self.rewardsLooted = [0 for _ in range(len(world.getRewardList()))]
         
         self.rewardSum = 0; # int... the sum of all the rewards gotten so far from currentPath
         self.ourAgent = Malmo.AgentHost()
@@ -51,7 +51,9 @@ class Agent:
         #returns (curLoc, itemsLooted)
         return (self.moveHistory[-1], tuple(self.rewardsLooted))
     
-
+    def isAlive(self):
+        return not self.world.onDangerBlock()
+    
     def makeMove(self,testing = True, eps = .5):
         ''' (self, [int], 
         MISSING A LOT
@@ -59,7 +61,9 @@ class Agent:
         if testing:
             possibleMoves = CoordinateUtils.movement2D #hard-coded 2D movement
             moveToTake = self.chooseAction(possibleMoves, eps)
+            self.moveHistory.append(CoordinateUtils.sumCoordinates(moveToTake, self.moveHistory[-1]))
             reward = self.world.moveAgent(moveToTake)
+            self.rewardHistory.append(reward)
             self.update(reward)
         if not testing:
             possibleMoves = None
@@ -69,7 +73,8 @@ class Agent:
     def chooseAction(self, possibleMoves, eps, testing = True):
         if testing:
             #todo: return random move in possibleMoves
-            pass
+            rand = random.randrange(len(possibleMoves))
+            return possibleMoves[rand]
         else:
             rnd = random.random()
             if rnd < eps:
