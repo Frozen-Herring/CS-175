@@ -187,12 +187,13 @@ class Maze():
     
     def prettyPrint(self):
         #2D ONLY
+        conversionDict = {dangerBlock: " ", normalBlock: "X", rewardBlock: "O", emptyBlock: "_"}
         toPrint=""
         for x in self.maze:
             for y in x:
                 for z in y:
                     if z != None:
-                        toPrint+=z[0]
+                        toPrint+=conversionDict[z]
                     else:
                         toPrint+="_"
                 toPrint+=" "

@@ -25,6 +25,7 @@ class WorldSim():
         '''
         self.rewardDict = dict(zip(blockList,rewardList))
         self.worldMaze = worldMaze
+        self.spawnLoc = spawnLoc
         self.agentLoc = spawnLoc
     
     def getRewardList(self):
@@ -32,6 +33,9 @@ class WorldSim():
     
     def getLoc(self):
         return self.agentLoc
+    
+    def newEpisode(self):
+        self.agentLoc = self.spawnLoc
     
     def moveAgent(self, directionToMove):
         '''returns reward here of new state'''
