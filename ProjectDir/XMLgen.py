@@ -12,9 +12,8 @@ change sleep times
 """
 
 HEIGHT = 226
-itemRewards = {"apple":25, "carrot":50, "emerald":70, "diamond":100}
 
-def generateXML(mazeSize ):
+def generateXML(mazeSize, rewardDict):
     global HEIGHT
 
     #USE THIS TO SET UP WITH MODIFICATIONS
@@ -55,6 +54,8 @@ def generateXML(mazeSize ):
       <Placement x="0" y="227" z="0" pitch="30" yaw="0"/>
     </AgentStart>
     <AgentHandlers>
+        <RewardForCollectingItem>REWARD_DICT_GOES_HERE
+        </RewardForCollectingItem>
       <ObservationFromFullStats/>
       <VideoProducer want_depth="false">
           <Width>640</Width>
@@ -77,6 +78,11 @@ def generateXML(mazeSize ):
 
 </Mission>'''
 
+    rewardDictXmlString = ""
+    for key, value in rewardDict.iteritems():
+        rewardDictXmlString += "\n<Item type=\"{}\" reward=\"{}\"/>".format(key, value)
+    initialXML = initialXML.replace("REWARD_DICT_GOES_HERE", rewardDictXmlString)
+
 
 
 
@@ -98,7 +104,7 @@ def generateXML(mazeSize ):
 
     #For Future use, set a entrance or exit state to be recorded
     missionSpecs.startAt(0, 227, 0) #- float x, float y, float z, float tolerance
-    maze = MazeGen.genMaze(mazeSize)
+    maze = MazeGen.genMaze(mazeSize, rewardCount=len(rewardDict))
     mazeValue = maze.maze
 
 
@@ -124,7 +130,8 @@ def generateXML(mazeSize ):
                 y = yVal
                 missionSpecs.drawBlock(x,(y + HEIGHT),z, str(mazeValue[x][z][y]))
                 if str(mazeValue[x][z][y]) == "lapis_block":
-                    missionSpecs.drawItem(x, (y + HEIGHT + 2), z, "apple")
+                    assert(len(rewardDict) != 0) # make sure that the number of reward blocks is equal to the size of the reward dict
+                    missionSpecs.drawItem(x, (y + HEIGHT + 2), z, rewardDict.popitem()[0])
 
     #Observations
     missionSpecs.observeFullInventory()  #Full item inventory of the player included in the observations
@@ -145,7 +152,7 @@ def generateXML(mazeSize ):
     return missionSpecs.getAsXML(True)
 
 if __name__ == '__main__':
-    print generateXML((25,25,25))
+    print generateXML((25,25,25), {"coal":10, "iron_ingot":20, "gold_ingot":30, "lapis_ore":40, "emerald_ore":50, "diamond":60, "potato":70})
 
 
 

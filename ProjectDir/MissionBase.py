@@ -4,9 +4,9 @@ import sys
 import time
 import json
 import random
-from XMLGen import generateXML
+from XMLgen import generateXML
 
-worldXML = generateXML((25,25,25)) #maze size x y z
+worldXML = generateXML((25,25,25), {"coal":10, "iron_ingot":20, "gold_ingot":30, "lapis_ore":40, "emerald_ore":50, "diamond":60, "potato":70}) #maze size x y z
 
 #--------SET UP MALMO INTERFACE-------
 def startMission(agentHost, xml):
