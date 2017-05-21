@@ -6,180 +6,117 @@ import json
 import random
 from XMLGen import generateXML
 
-worldXML = generateXML((25,25,25)) #maze size x y z
+def agentRun(agentHost):
+    totalReward = 0 #
+    currentReward = 0
 
-#--------SET UP MALMO INTERFACE-------
-def startMission(agentHost, xml):
-    mission = MalmoPython.MissionSpec(xml, True)
-    missionRecord = MalmoPython.MissionRecordSpec() # Need to set up
-    agentHost.startMission( mission, missionRecord )
-    worldState = agentHost.peekWorldState()
-    while not worldState.has_mission_begun:
-        time.sleep(0.1)
-        worldState = agentHost.peekWorldState()
-        for error in worldState.errors:
-            print "Error:",error.text
-        if len(worldState.errors) > 0:
-            exit(1)
-#------------------------------------------
-
-
-#-----------AGENENT RUN-------------------- Suggest moving this to agent
-actions = ["movenorth 1", "movesouth 1", "movewest 1", "moveeast 1"]
-
-def run(agentHost):
-    """run the agent on the world"""
-
-    totalReward = 0
-    currentRewards = 0
-
-    previousState = None #may need?
-    previousAction = None
-
-    # wait for a valid observation
-    worldState = agentHost.peekWorldState()
+    worldState = agentHost.peekWorldState() # wait until valid observation
+    sys.stdout.write("\nwait for obs")
     while worldState.is_mission_running and all(e.text == '{}' for e in worldState.observations):
         worldState = agentHost.peekWorldState()
+        sys.stdout.write(".")
+        sys.stdout.flush()
 
     if not worldState.is_mission_running:
-        return 0  # mission already ended
+        return 0
 
-    obs = json.loads(worldState.observations[-1].text)
-    print obs
+    obs = json.loads(worldState.observations[-1].text)  #Yay, observation
+    print "\n", obs,
     prevX = obs[u'XPos']
     prevZ = obs[u'ZPos']
-    print 'Initial position:', prevX, ',', prevZ
+    print '\nInitial position:', prevX, ',', prevZ
 
-    #totalReward += agentHost.sendCommand() #should be total reward plus whatever the last action got?  Maybe want to do rewards based on item collected not inventory
-
-    #Take actions ----
-
+    #Make arbitray move
+    actionSet = ["movenorth 1", "movesouth 1", "movewest 1", "moveeast 1"]
     time.sleep(1)
-    agentHost.sendCommand('movenorth 1')
-    print 'move'
+    #move = "tp .5 227 .5"#random.choice(actionSet)
+    move = random.choice(actionSet)
+    agentHost.sendCommand(move)
+    #time.sleep(2)
+    #agentHost.sendCommand("moveeast 1")
+    print '\nmoved ', move
     time.sleep(1)
+    #------------------
 
-    print 'Waiting for data...',
+    #totalReward += currentReward
+
+    # main loop to run Q stuff
+    """
     while worldState.is_mission_running:
+        print 'Waiting for data...',
         while True:
-            worldState = agentHost.peekWorldState()
+            world_state = agentHost.peekWorldState()
             if not worldState.is_mission_running:
                 print 'mission ended.'
                 break
+            if len(world_state.rewards) > 0 and not all(e.text == '{}' for e in world_state.observations):
+                obs = json.loads(world_state.observations[-1].text)
+                currX = obs[u'XPos']
+                currZ = obs[u'ZPos']
 
-        worldState = agentHost.getWorldState()
-        for err in worldState.errors:
-            print err
+            print 'New position from observation:', currX, ',', currZ, 'after action:', move,
 
-        current_r = sum(r.getValue() for r in worldState.rewards)
-
-
-#-----------AGENENT RUN--------------------
-
-#----------OUR MISSION CODE----------------
-'''
-def runOurMission(agentHost):
-    TESTING STUFF
-    #agentHost.sendCommand('tp 0 227 0')
-    time.sleep(1)
-    loc = 0
-    for i in range(10):
-
-        agentHost.sendCommand('movenorth 1')
-        print 'move'
-        time.sleep(1)
-        """
-        agentHost.sendCommand('tp ' + str(loc) + ' 227 ' +str(loc))
-        loc+=1
-        print loc, " moved\n"
-        time.sleep(1)
+            
+            world_state = agentHost.peektWorldState() #Change to peek? Even needed?
+            for err in world_state.errors:
+                print err
+            currentReward = sum(r.getValue() for r in world_state.rewards)
+            
+            #Do more moves and stuff.... Dunno Q learning checks and effects go here.
         """
 
-    #agentHost.sendCommand('setworldspawn 1 6 1')
-    
-    for x in xrange(3):
-        for z in xrange(3):
-            teleport_x = x * 2 + 1
-            teleport_z = z * 2 + 1
-            tp_command = "tp " + str(teleport_x)+ " 4 " + str(teleport_z) # command string is x y z, appears this map uses 4 as base
-            print "Sending command: " + tp_command
-            agentHost.sendCommand(tp_command)
-            time.sleep(2) # TIME BETWEEN MOVES
-    
-    agentHost.sendCommand("quit")
-'''
-# ------------------------------------------
 
-#----CONNECT/SET UP AGENT AND RUN MISSION-----
-if __name__ == "__main__":
+
+    return currentReward
+
+def setup(mazeSize = (10, 10, 10), rewards = {}):
+    worldXML = generateXML(mazeSize, rewards)  # maze size x y z  ALSO PASS ITEM DICT
     sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)  # flush print output immediately
+    mission = MalmoPython.MissionSpec(worldXML, True)
+    mission.allowAllAbsoluteMovementCommands() #-------------------DELETE THIS FOR TESSTING ONLY
+    missionRec = MalmoPython.MissionRecordSpec()
     agentHost = MalmoPython.AgentHost()
 
     try:
-        agentHost.parse( sys.argv )
+        agentHost.startMission(mission, missionRec)
     except RuntimeError as e:
-        print 'ERROR:',e
-        print agentHost.getUsage()
-        exit(1)
-    if agentHost.receivedArgument("help"):
-        print agentHost.getUsage()
-        exit(0)
+        print "Error starting mission:", e
 
-    startMission(agentHost, worldXML)
+    print "Waiting for the mission to start"
     worldState = agentHost.peekWorldState()
-    #-----------------------------------------
+    while not worldState.has_mission_begun:
+        sys.stdout.write(".")
+        time.sleep(0.1)
+        worldState = agentHost.getWorldState()
+        for error in worldState.errors:
+            print "Error:", error.text
+
+    return agentHost
 
 
-    #----------------RUN MISSION--------------
-    #Currently is moving north around with no purpose
-    #runOurMission(agentHost)
-    maxRetry = 3
+def main():
+    agentHost = setup()
+
+    #finalReward = 0
     maxMoves = 3
-    finalRewards = []
+
+    agentRun(agentHost)
+
+
     for i in range(maxMoves):
-        print "Mission starting",
-        world_state = agentHost.getWorldState()
-        while not world_state.has_mission_begun:
-            print "."
-            time.sleep(0.1)
-            world_state = agentHost.getWorldState()
-            for error in world_state.errors:
-                print "Error:", error.text
-        print
+        agentRun(agentHost)
 
-        # -- run the agent in the world -- #
-        run(agentHost) #save rewards at some poitn
 
-        print 'Final reward:',  finalRewards
-        #finalRewards += what ever last rewards were
+    #print 'Final Rewards: ', finalReward
+    time.sleep(0.5) # (let the Mod reset)
+    print "Mission Complete"
 
-        # -- clean up -- #
-        time.sleep(0.5)  # (let the Mod reset)
 
-    print "Done."
 
-    print
-    print "Final rewards for all ", maxMoves, ' runs:'
-    print finalRewards
+#----CONNECT/SET UP AGENT AND RUN MISSION-----
+if __name__ == "__main__":
+    main()
 
-    #-------------------------------------------
 
-    #------END MISSION AND CHECK REWARDS--------
-    """
-    while worldState.is_mission_running:
-        worldState = agentHost.peekWorldState()
 
-    print "Mission over."
-
-    '''
-    worldState = agentHost.getWorldState()
-    if Mission Ran :
-        Calculate Final Rewards
-    if not sucessful:
-        print "Error Messgae"
-        exit(1)
-    '''
-
-    print "Test successful"
-    exit(0)
-    """
+#-------------------------------------------
