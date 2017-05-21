@@ -3,6 +3,7 @@ from _collections import defaultdict
 import random
 import CoordinateUtils
 
+
 qTable_DEFAULT = 0
 '''
 ##################################################################
@@ -38,7 +39,7 @@ class Agent:
         self.moveHistory = [start] # [locs]... list of the locs we traversed so far...
         self.actionHistory = []
         self.rewardHistory = []
-        self.rewardsLooted = [0 for _ in range(world.getRewardList())]
+        self.rewardsLooted = [0 for _ in range(len(world.getRewardList()))]
         
         self.rewardSum = 0; # int... the sum of all the rewards gotten so far from currentPath
         self.ourAgent = Malmo.AgentHost()
@@ -50,44 +51,61 @@ class Agent:
         #returns (curLoc, itemsLooted)
         return (self.moveHistory[-1], tuple(self.rewardsLooted))
     
-
+    def isAlive(self):
+        return not self.world.onDangerBlock()
+    
     def makeMove(self,testing = True, eps = .5):
         ''' (self, [int], 
         MISSING A LOT
         '''
-        if not testing:
+        if testing:
             possibleMoves = CoordinateUtils.movement2D #hard-coded 2D movement
             moveToTake = self.chooseAction(possibleMoves, eps)
-            directionAction = self.world.getDirectionActionForMove(self.moveHistory[-1], moveToTake)
-            self.ourAgent.sendCommand(directionAction)
-            self.update(moveToTake)
-        if testing:
+            self.moveHistory.append(CoordinateUtils.sumCoordinates(moveToTake, self.moveHistory[-1]))
+            reward = self.world.moveAgent(moveToTake)
+            self.rewardHistory.append(reward)
+            self.update(reward)
+        if not testing:
             possibleMoves = None
             self.world.moveAgent()
 
 
-    def chooseAction(self, possibleMoves, eps):
-        rnd = random.random()
-        if rnd < eps:
-            a = random.randint(0, len(possibleMoves) - 1)
-            return possibleMoves[a]
+    def chooseAction(self, possibleMoves, eps, testing = True):
+        if testing:
+            #todo: return random move in possibleMoves
+            rand = random.randrange(len(possibleMoves))
+            return possibleMoves[rand]
         else:
-            posBest = []
-            bestReward = -10000
-            for i, action in enumerate(possibleMoves):
-                if self.qTable[self.moveHistory[-1]][action] > bestReward:
-                    bestReward = self.qTable[self.moveHistory[-1]][action]
-                    posBest = [i]
-                elif self.qTable[self.moveHistory[-1]][action] == bestReward:
-                    posBest += [i]
-            a = random.randint(0, len(posBest) - 1)
-            return possibleMoves[posBest[a]]
+            rnd = random.random()
+            if rnd < eps:
+                a = random.randint(0, len(possibleMoves) - 1)
+                return possibleMoves[a]
+            else:
+                posBest = []
+                bestReward = -10000
+                for i, action in enumerate(possibleMoves):
+                    if self.qTable[self.moveHistory[-1]][action] > bestReward:
+                        bestReward = self.qTable[self.moveHistory[-1]][action]
+                        posBest = [i]
+                    elif self.qTable[self.moveHistory[-1]][action] == bestReward:
+                        posBest += [i]
+                a = random.randint(0, len(posBest) - 1)
+                return possibleMoves[posBest[a]]
+    
+    def update(self, reward):
+        pass#todo: qLearning
+
+    ########################################################################################################
+    #-----------------------------------------Depreciated Code---------------------------------------------#
+    ########################################################################################################
     
     
+    
+        
     ########################################################################################################
     #-----------------------------------------QTable Code--------------------------------------------------#
     ########################################################################################################
-    
+    """
     def updateQTable(self, T, nextState):
         #must be called every action BEFORE the next state is appended to moveHistory
         for i in range(-1, -(len(self.actionHistory)+1)+self.n):
@@ -101,12 +119,8 @@ class Agent:
     def _optimalValue(self, state):
         for _, stateQTable in self.qTable.items():
             return max( [(value, action) for action, value in stateQTable.items()])
-                
+    """
     
-    
-    ########################################################################################################
-    #-----------------------------------------Depreciated Code---------------------------------------------#
-    ########################################################################################################
     
     """
     def update(self, moveToTake):

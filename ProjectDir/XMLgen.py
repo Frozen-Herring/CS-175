@@ -18,43 +18,45 @@ def generateXML(mazeSize, rewardDict):
 
     #USE THIS TO SET UP WITH MODIFICATIONS
     initialXML = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://ProjectMalmo.microsoft.com Mission.xsd">
+<Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
   <About>
-    <Summary>LARS Project 175</Summary>
+    <Summary>Lars 175</Summary>
   </About>
   
   <ModSettings>
-    <MsPerTick>20</MsPerTick>
+    <MsPerTick>1</MsPerTick>
   </ModSettings>
 
   <ServerSection>
-    <ServerInitialConditions>
-      <Time>
-        <StartTime>13200</StartTime>
-        <AllowPassageOfTime>false</AllowPassageOfTime>
-      </Time>
-      <Weather>clear</Weather>
-      <AllowSpawning>false</AllowSpawning>																
-    </ServerInitialConditions>
+      <ServerInitialConditions>
+            <Time>
+                <StartTime>6000</StartTime>
+                <AllowPassageOfTime>false</AllowPassageOfTime>
+            </Time>
+            <Weather>clear</Weather>
+            <AllowSpawning>false</AllowSpawning>
+      </ServerInitialConditions>
     <ServerHandlers>
-      <FlatWorldGenerator destroyAfterUse="true" forceReset="false" generatorString="3;7,220*1,5*3,2;3;,biome_1" seed=""/>
-      <ServerQuitWhenAnyAgentFinishes description=""/>
+      <FlatWorldGenerator generatorString="3;7,220*1,5*3,2;3;,biome_1"/>
+      <DrawingDecorator>
+        <!-- coordinates for cuboid are inclusive -->
+        <DrawCuboid x1="-2" y1="46" z1="-2" x2="7" y2="50" z2="18" type="air" />            <!-- limits of our arena -->
+      </DrawingDecorator>
+      <ServerQuitFromTimeUp timeLimitMs="1000000"/>
+      <ServerQuitWhenAnyAgentFinishes/>
     </ServerHandlers>
   </ServerSection>
-									   
+
   <AgentSection mode="Survival">
     <Name>Lars</Name>
     <AgentStart>
-       <Placement x="0.5" y="227" z="0.5" pitch="30" yaw="0"/>
+      <Placement x="0" y="227" z="0" pitch="30" yaw="0"/>
     </AgentStart>
     <AgentHandlers>
         <RewardForCollectingItem>REWARD_DICT_GOES_HERE
         </RewardForCollectingItem>
-      <ObservationFromRecentCommands/>
       <ObservationFromFullStats/>
-      <ObservationFromFullInventory/>
-      <ContinuousMovementCommands turnSpeedDegs="180"/>
       <VideoProducer want_depth="false">
           <Width>640</Width>
           <Height>480</Height>
@@ -68,10 +70,12 @@ def generateXML(mazeSize, rewardDict):
         <Block reward="-100.0" type="lava" behaviour="onceOnly"/>
       </RewardForTouchingBlockType>
       <RewardForSendingCommand reward="-1"/>
-	<InventoryCommands/>	  
+      <AgentQuitFromTouchingBlockType>
+          <Block type="lava" />
+      </AgentQuitFromTouchingBlockType>
     </AgentHandlers>
   </AgentSection>
-				 
+
 </Mission>'''
 
     rewardDictXmlString = ""
@@ -82,8 +86,10 @@ def generateXML(mazeSize, rewardDict):
 
 
 
+
+
     #Set up Misscion class
-    missionSpecs = MalmoPython.MissionSpec(initialXML, True)
+    missionSpecs = MalmoPython.MissionSpec(initialXML,True)
 
     #Describe Mission
     missionSpecs.setSummary("LARS Project 175")
@@ -97,7 +103,7 @@ def generateXML(mazeSize, rewardDict):
     missionSpecs.setTimeOfDay(13200 ,False)
 
     #For Future use, set a entrance or exit state to be recorded
-    missionSpecs.startAt(0.5, 227, 0.5) #- float x, float y, float z, float tolerance
+    missionSpecs.startAt(0, 227, 0) #- float x, float y, float z, float tolerance
     maze = MazeGen.genMaze(mazeSize, rewardCount=len(rewardDict))
     mazeValue = maze.maze
 
@@ -135,17 +141,19 @@ def generateXML(mazeSize, rewardDict):
 
     #Rewards
     #rewardForReachingPosition(float x, float y, float, z, float amount, float tolerance) # to be included when end is implemented
-    #Change to reward for touching block?????
 
 
     #Settings
-    missionSpecs.removeAllCommandHandlers()
     missionSpecs.allowAllDiscreteMovementCommands()
-    missionSpecs.requestVideo(520, 440)
-    missionSpecs.setViewpoint(1)
+    #missionSpecs.allowAllAbsoluteMovementCommands()
+    missionSpecs.setViewpoint( 1 )
     missionSpecs.allowAllInventoryCommands()
 
     return missionSpecs.getAsXML(True)
 
 if __name__ == '__main__':
     print generateXML((25,25,25), {"coal":10, "iron_ingot":20, "gold_ingot":30, "lapis_ore":40, "emerald_ore":50, "diamond":60, "potato":70})
+
+
+
+
