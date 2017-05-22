@@ -15,9 +15,9 @@ def testRunEpisode(agent, eps = .5):
 
 def runNEpidsodes(agent, n, eps = .5, verbose = False):
     for i in range(n):
-        print i
         testRunEpisode(agent, eps)
         if verbose:
+            print i
             printAgentHistory(agent)
         agent.new_episode()
         
@@ -49,7 +49,7 @@ if __name__ == '__main__':
     if TEST:
         world = WorldSim.WorldSim(maze)
         agent = AgentModule.Agent(world)
-        runNEpidsodes(agent, 3, .2, verbose=True)
+        runNEpidsodes(agent, 50, .2, verbose=False)
         print "Best: "
         PrintBestPath(agent)
         print agent.qTable
