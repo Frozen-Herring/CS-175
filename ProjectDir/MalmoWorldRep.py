@@ -2,14 +2,16 @@ import json
 import time
 
 class WorldRep:
-    def __init__(self, agentHost, worldState = None):
+    def __init__(self, agentHost, worldState = None, rewards = {}):
         '''Define a world state'''
         self.worldState = worldState
+        self.sortedRewards = sorted(rewards.keys())
         self.agentHost = agentHost
         self.obs = None
-        self.QAgentLoc = None
+        self.QAgentLoc = (0.5, 227, 0.5)
         self.rewardList = None
-        self.lastReward = None
+        self.totatlRewards = 0
+        self.lastReward = 0
 
 
     def newEpisode(self, worldState): #Agent Calls this
@@ -17,8 +19,8 @@ class WorldRep:
         self.worldState = worldState
         self.obs = json.loads(worldState.observations[-1].text)
         self.QAgentLoc = (self.obs[u'XPos'], self.obs[u'YPos'])
-        self.rewardList = None
-        self.lastReward = None
+        self.rewardList = 0
+        self.lastReward = 0
 
 
     def _updateWorldState(self, worldState):
@@ -26,33 +28,31 @@ class WorldRep:
         self.self.worldState = worldState
         self.obs = json.loads(worldState.observations[-1].text)
         self.QAgentLoc = (self.obs[u'XPos'], self.obs[u'YPos'])
-        self.rewardList = self.updateLastReward()
-        self.lastReward = self.updateRewardList()
+        self._updateAllRewards()
 
-    def _updateLastReward(self): #getreward from move
-        pass
+    def _updateAllRewards(self): #getreward from move
+        self.rewardList = self.createRewardList()
+        self.lastReward = self.worldState.rewards[-1].getValue() - self.totatlRewards
+        self.totatlRewards = self.worldState.rewards[-1].getValue()
 
     def _getInventoryItemsAsSet(self):
         rewardSet = set()
         for i in range(9):
             invKey = 'InventorySlot{}_item'.format(str(i))
             if invKey in self.obs:
-                rewardSet.append(self.obvs[invKey])
+                rewardSet.add(self.obs[invKey])
         return rewardSet
 
-    def createRewardList(self, rewardDict):
+    def _createRewardList(self, rewardDict):
         inventoryItems = self._getInventoryItemsAsSet()
         rewardList = []
 
-        for key in sorted(rewardDict.keys()):
+        for key in self.sortedRewards:
             if key in inventoryItems:
                 rewardList.append(1)
             else:
                 rewardList.append(0)
         return rewardList
-
-    def _updateRewardList(self): ################DEREKS STUFF
-        pass
 
     def _getMoveCommandFromCoordTuple(moveCoordinates):
         '''Convert Agent Motion to malmo commands'''
@@ -67,11 +67,11 @@ class WorldRep:
         return False
 
     def getRewardList(self): #Agent Calls this
-        '''Put the structure and values here'''
         return self.rewardList
 
     def moveAgent(self, move = tuple()): #Agent Calls this
         '''Enacts the qAgents command and returns the reward from that command'''
+        """MUCHO PROBLEMO WITH RETURNING THE REWARD AFTER MOVE"""
         malmoMove = self._getMoveCommandFromCoordTuple(move)
         self.agentHost.sendCommand(malmoMove)
         time.sleep(0.1)
