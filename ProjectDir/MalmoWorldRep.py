@@ -4,9 +4,9 @@ import time
 class WorldRep:
     def __init__(self, agentHost, worldState = None, rewards = {}):
         '''Define a world state'''
-        self.worldState = worldState
         self.sortedRewards = sorted(rewards.keys())
         self.agentHost = agentHost
+        self.worldState = worldState
         self.obs = None
         self.QAgentLoc = (0.5, 227, 0.5)
         self.rewardList = None
@@ -19,11 +19,12 @@ class WorldRep:
         self.worldState = worldState
         self.obs = json.loads(worldState.observations[-1].text)
         self.QAgentLoc = (self.obs[u'XPos'], self.obs[u'YPos'])
-        self.rewardList = 0
+        self.rewardList = None
+        self.totatlRewards = 0
         self.lastReward = 0
 
 
-    def _updateWorldState(self, worldState):
+    def _updateWorldRep(self, worldState):
         '''Update attributes that may have changed'''
         self.self.worldState = worldState
         self.obs = json.loads(worldState.observations[-1].text)
@@ -32,7 +33,7 @@ class WorldRep:
 
     def _updateAllRewards(self): #getreward from move
         self.rewardList = self.createRewardList()
-        self.lastReward = self.worldState.rewards[-1].getValue() - self.totatlRewards
+        self.lastReward = self.worldState.rewards[-1].getValue() - self.totatlRewards #ehhhhhh probably
         self.totatlRewards = self.worldState.rewards[-1].getValue()
 
     def _getInventoryItemsAsSet(self):
@@ -63,7 +64,7 @@ class WorldRep:
         return d[moveCoordinates]
 
     def onDangerBlock(self): #Agent Calls this
-        '''For contingency's sack, will never be true while the world is being updated'''
+        '''For contingency reasons, will never be true while the world is being updated'''
         return False
 
     def getRewardList(self): #Agent Calls this
@@ -71,9 +72,8 @@ class WorldRep:
 
     def moveAgent(self, move = tuple()): #Agent Calls this
         '''Enacts the qAgents command and returns the reward from that command'''
-        """MUCHO PROBLEMO WITH RETURNING THE REWARD AFTER MOVE"""
         malmoMove = self._getMoveCommandFromCoordTuple(move)
         self.agentHost.sendCommand(malmoMove)
         time.sleep(0.1)
-        self.updateLastReward()
+        self._updateWorldRep(self.agentHost.peekWorldState())
         return self.lastReward
