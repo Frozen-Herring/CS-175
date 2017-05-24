@@ -9,7 +9,7 @@ class WorldRep:
         self.worldState = worldState
         self.obs = None
         self.QAgentLoc = (0.5, 227, 0.5)
-        self.rewardList = None
+        self.rewardList = [0 for _ in rewards]
         self.totatlRewards = 0
         self.lastReward = 0
 
@@ -26,13 +26,13 @@ class WorldRep:
 
     def _updateWorldRep(self, worldState):
         '''Update attributes that may have changed'''
-        self.self.worldState = worldState
+        self.worldState = worldState
         self.obs = json.loads(worldState.observations[-1].text)
         self.QAgentLoc = (self.obs[u'XPos'], self.obs[u'YPos'])
         self._updateAllRewards()
 
     def _updateAllRewards(self): #getreward from move
-        self.rewardList = self.createRewardList()
+        self.rewardList = self._createRewardList()
         self.lastReward = self.worldState.rewards[-1].getValue() - self.totatlRewards #ehhhhhh probably
         self.totatlRewards = self.worldState.rewards[-1].getValue()
 
@@ -44,7 +44,7 @@ class WorldRep:
                 rewardSet.add(self.obs[invKey])
         return rewardSet
 
-    def _createRewardList(self, rewardDict):
+    def _createRewardList(self):
         inventoryItems = self._getInventoryItemsAsSet()
         rewardList = []
 
@@ -55,7 +55,7 @@ class WorldRep:
                 rewardList.append(0)
         return rewardList
 
-    def _getMoveCommandFromCoordTuple(moveCoordinates):
+    def _getMoveCommandFromCoordTuple(self, moveCoordinates):
         '''Convert Agent Motion to malmo commands'''
         d = {(-1, 0, 0): "movewest 1",
              (1, 0, 0): "moveeast 1",

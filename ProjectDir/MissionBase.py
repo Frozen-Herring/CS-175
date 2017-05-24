@@ -2,7 +2,7 @@ import MalmoPython
 import os
 import sys
 import time
-from XMLGen import generateXML
+from XMLgen import generateXML
 from AgentModule import Agent as QAgent
 from MalmoWorldRep import WorldRep
 
