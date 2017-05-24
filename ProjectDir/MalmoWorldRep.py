@@ -38,7 +38,7 @@ class WorldRep:
     def _getInventoryItemsAsSet(self):
         rewardSet = set()
         for i in range(9):
-            invKey = 'InventorySlot{}_item'.format(str(i))
+            invKey = 'InventorySlot_{}_item'.format(str(i))
             if invKey in self.obs:
                 rewardSet.add(self.obs[invKey])
         return rewardSet
