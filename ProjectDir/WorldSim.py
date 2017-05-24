@@ -27,6 +27,7 @@ class WorldSim():
         self.worldMaze = worldMaze
         self.spawnLoc = spawnLoc
         self.agentLoc = spawnLoc
+        self.rewardList = [0 for _ in self.worldMaze.rewardBlocks]
     
     def getRewardList(self):
         return self.worldMaze.rewardBlocks
@@ -53,6 +54,9 @@ class WorldSim():
         return self.worldMaze[loc]
     
     def _getReward(self):
+        if self.agentLoc in self.worldMaze.rewardBlocks:
+            a = self.worldMaze.rewardBlocks.index(self.agentLoc)
+            self.rewardList[a] = 1
         tile = self._getTile()
         if tile == CoordinateUtils.rewardBlock:#if it's a rewardBlock then turn it normal (can't be taken more than once)
             self.worldMaze.set(self.agentLoc, CoordinateUtils.normalBlock, weak = False)
