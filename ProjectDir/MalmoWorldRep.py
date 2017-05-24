@@ -18,7 +18,7 @@ class WorldRep:
         '''Clear all attributes and get new world state'''
         self.obs = json.loads(self.worldState.observations[-1].text)
         self.QAgentLoc = (self.obs[u'XPos'], self.obs[u'YPos'])
-        self.rewardList = None
+        self.rewardList = [0 for _ in self.sortedRewards]
         self.totalRewards = 0
         self.lastReward = 0
 
