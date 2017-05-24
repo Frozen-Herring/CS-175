@@ -101,14 +101,14 @@ class Agent:
                 a = random.randint(0, len(possibleMoves) - 1)
                 return possibleMoves[a]
             else:
-                cur_state = (tuple(self.rewardsLooted), self.moveHistory[-1])
+                cur_state = (tuple(self.world.rewardList), self.moveHistory[-1])
                 return self._bestMove(possibleMoves, cur_state)
 
     def printStatus(self):
         print "make move..."
         print " - self.actionHistory = " + str(self.actionHistory)
         print " - self.rewardHistory = " + str(self.rewardHistory)
-        print " - self.rewardsLooted = " + str(self.rewardsLooted)
+        print " - self.rewardsLooted = " + str(self.world.rewardList)
         print " - self.world.totalRewards = " + str(self.world.totalRewards)
         print " - self.world.lastReward = " + str(self.world.lastReward)
 
