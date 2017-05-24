@@ -70,7 +70,7 @@ class Agent:
     def getRawardTotal(self):
         return sum(self.rewardHistory)
     
-    def makeMove(self, eps = .5):
+    def makeMove(self, eps = .5, verbose = True):
         old_state = (tuple(self.world.rewardList), self.moveHistory[-1])
         possibleMoves = CoordinateUtils.movement2D #hard-coded 2D movement
         moveToTake = self.chooseAction(possibleMoves, eps)
@@ -86,7 +86,8 @@ class Agent:
             self.rewardsLooted[a] = 1
         """
         self.updateQTable(old_state)
-        self.printStatus()
+        if verbose:
+            self.printStatus()
         
         
 

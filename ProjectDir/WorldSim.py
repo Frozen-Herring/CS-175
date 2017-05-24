@@ -28,6 +28,7 @@ class WorldSim():
         self.spawnLoc = spawnLoc
         self.agentLoc = spawnLoc
         self.rewardList = [0 for _ in self.worldMaze.rewardBlocks]
+        self.totalRewards = 0
     
     def getRewardList(self):
         return self.worldMaze.rewardBlocks
@@ -37,6 +38,9 @@ class WorldSim():
     
     def newEpisode(self):
         self.agentLoc = self.spawnLoc
+        self.rewardList = [0 for _ in self.worldMaze.rewardBlocks]
+        for rewardBlock in self.worldMaze.rewardBlocks:
+            self.worldMaze.set(rewardBlock, CoordinateUtils.rewardBlock, weak = False)
     
     def moveAgent(self, directionToMove):
         '''returns reward here of new state'''
@@ -61,7 +65,9 @@ class WorldSim():
         if tile == CoordinateUtils.rewardBlock:#if it's a rewardBlock then turn it normal (can't be taken more than once)
             self.worldMaze.set(self.agentLoc, CoordinateUtils.normalBlock, weak = False)
         #print "tile: {}, reward: {}".format(tile, self.rewardDict[tile])
-        return self.rewardDict[tile]
+        reward = self.rewardDict[tile]
+        self.totalRewards+=reward
+        return reward
         
 
     
