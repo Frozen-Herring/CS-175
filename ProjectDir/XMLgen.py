@@ -109,6 +109,10 @@ def generateXML(mazeSize, rewardDict):
     missionSpecs.drawCuboid(-9, HEIGHT, -9, mazeSize[0] + 9, mazeSize[1] + HEIGHT, mazeSize[2] + 9, 'air')
     missionSpecs.drawCuboid(-9, HEIGHT, -9, mazeSize[0] + 9, HEIGHT, mazeSize[2] + 9, 'lava')
 
+    rewardDictCopy = dict()
+    for key in rewardDict:
+        rewardDictCopy[key] = rewardDict[key]
+
     # Draw Maze/Items
     for xVal in range(len(mazeValue)):
 
@@ -121,7 +125,7 @@ def generateXML(mazeSize, rewardDict):
                 if str(mazeValue[x][z][y]) == "lapis_block":
                     assert (len(
                         rewardDict) != 0)  # make sure that the number of reward blocks is equal to the size of the reward dict
-                    missionSpecs.drawItem(x, (y + HEIGHT + 2), z, rewardDict.popitem()[0])
+                    missionSpecs.drawItem(x, (y + HEIGHT + 2), z, rewardDictCopy.popitem()[0])
 
     # Observations
     missionSpecs.observeFullInventory()  # Full item inventory of the player included in the observations

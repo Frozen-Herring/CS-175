@@ -84,6 +84,7 @@ class Agent:
             a = self.world.getRewardList().index(self.moveHistory[-1])#TODO: interects with world
             self.rewardsLooted[a] = 1
         self.updateQTable(old_state)
+        self.printStatus()
         
         
 
@@ -100,7 +101,15 @@ class Agent:
             else:
                 cur_state = (tuple(self.rewardsLooted), self.moveHistory[-1])
                 return self._bestMove(possibleMoves, cur_state)
-    
+
+    def printStatus(self):
+        print "make move..."
+        print " - self.actionHistory = " + str(self.actionHistory)
+        print " - self.rewardHistory = " + str(self.rewardHistory)
+        print " - self.rewardsLooted = " + str(self.rewardsLooted)
+        print " - self.world.totatlRewards = " + str(self.world.totatlRewards)
+        print " - self.world.lastReward = " + str(self.world.lastReward)
+
 
     ########################################################################################################
     #-----------------------------------------QTable Code--------------------------------------------------#

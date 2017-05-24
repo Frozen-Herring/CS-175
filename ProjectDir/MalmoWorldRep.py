@@ -9,7 +9,7 @@ class WorldRep:
         self.worldState = worldState
         self.obs = None
         self.QAgentLoc = (0.5, 227, 0.5)
-        self.rewardList = [0 for _ in rewards]
+        self.rewardList = [0 for _ in rewards.keys()]
         self.totatlRewards = 0
         self.lastReward = 0
 

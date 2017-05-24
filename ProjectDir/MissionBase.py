@@ -17,13 +17,14 @@ fix world Rep
 
 
 def agentRun(agentHost, qAgent, world):
-
     worldState = agentHost.peekWorldState() # wait until valid observation
-    sys.stdout.write("\nwait for obs")
+    # sys.stdout.write("\nwait for obs")
     while worldState.is_mission_running and all(e.text == '{}' for e in worldState.observations):
         worldState = agentHost.peekWorldState()
-        sys.stdout.write(".")
-        sys.stdout.flush()
+        # sys.stdout.write(".")
+        # sys.stdout.flush()
+    # sys.stdout.write("\n")
+    # sys.stdout.flush()
 
     if not worldState.is_mission_running:
         print "Mission quit"
@@ -47,19 +48,10 @@ def startMission(agentHost, mission, missionRec):
     except RuntimeError as e:
         print "Error starting mission:", e
 
-    print "Waiting for the mission to start"
+    print "\nStarting New Mission..."
     worldState = agentHost.peekWorldState()
     while not worldState.has_mission_begun:
-        sys.stdout.write(".")
-        time.sleep(0.1)
-        worldState = agentHost.getWorldState()
-        for error in worldState.errors:
-            print "Error:", error.text
-
-    print "Waiting for the mission to start"
-    worldState = agentHost.peekWorldState()
-    while not worldState.has_mission_begun:
-        sys.stdout.write(".")
+        # sys.stdout.write(".")
         time.sleep(0.1)
         worldState = agentHost.getWorldState()
         for error in worldState.errors:
