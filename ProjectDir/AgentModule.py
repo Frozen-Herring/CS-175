@@ -49,20 +49,20 @@ class Agent:
         self.moveHistory = [start] # [locs]... list of the locs we traversed so far...
         self.actionHistory = []
         self.rewardHistory = []
-        self.rewardsLooted = [0 for _ in range(len(world.getRewardList()))]
+        #self.rewardsLooted = [0 for _ in range(len(world.getRewardList()))]
         '''end episodic variables'''
     
     def new_episode(self):
         self.moveHistory = [self.start]
         self.actionHistory = []
         self.rewardHistory = []
-        self.rewardsLooted = [0 for _ in range(len(self.world.getRewardList()))]#TODO: interects with world
+        #self.rewardsLooted = [0 for _ in range(len(self.world.getRewardList()))]#TODO: interects with world
         self.moveCount = 0
         self.world.newEpisode()#TODO: interects with world
         
     def getCurrentState(self):
         #returns (curLoc, itemsLooted)
-        return (self.moveHistory[-1], tuple(self.rewardsLooted))
+        return (self.moveHistory[-1], tuple(self.world.rewardList))
     
     def isAlive(self):
         return self.moveCap > self.moveCount and not self.world.onDangerBlock() 
@@ -71,7 +71,7 @@ class Agent:
         return sum(self.rewardHistory)
     
     def makeMove(self, eps = .5):
-        old_state = (tuple(self.rewardsLooted), self.moveHistory[-1])
+        old_state = (tuple(self.world.rewardList), self.moveHistory[-1])
         possibleMoves = CoordinateUtils.movement2D #hard-coded 2D movement
         moveToTake = self.chooseAction(possibleMoves, eps)
         self.actionHistory.append(moveToTake)
@@ -80,9 +80,11 @@ class Agent:
         reward = self.world.moveAgent(moveToTake)#TODO: interects with world
         self.rewardHistory.append(reward)
         self.moveCount += 1
+        """
         if self.moveHistory[-1] in self.world.getRewardList():#TODO: interects with world
             a = self.world.getRewardList().index(self.moveHistory[-1])#TODO: interects with world
             self.rewardsLooted[a] = 1
+        """
         self.updateQTable(old_state)
         self.printStatus()
         
@@ -117,7 +119,7 @@ class Agent:
     
     def updateQTable(self, old_state):
         n = self.moveCount if self.moveCount < self.n else self.n
-        cur_state = (tuple(self.rewardsLooted), self.moveHistory[-1])
+        cur_state = (tuple(self.world.rewardList), self.moveHistory[-1])
         for i in range(-n, 0):
             #for the past n state/action pairs
             G = self.rewardHistory[-1]
