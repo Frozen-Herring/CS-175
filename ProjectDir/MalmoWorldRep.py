@@ -10,7 +10,7 @@ class WorldRep:
         self.obs = None
         self.QAgentLoc = (0.5, 227, 0.5)
         self.rewardList = [0 for _ in rewards.keys()]
-        self.totatlRewards = 0
+        self.totalRewards = 0
         self.lastReward = 0
 
 
@@ -20,7 +20,7 @@ class WorldRep:
         self.obs = json.loads(worldState.observations[-1].text)
         self.QAgentLoc = (self.obs[u'XPos'], self.obs[u'YPos'])
         self.rewardList = None
-        self.totatlRewards = 0
+        self.totalRewards = 0
         self.lastReward = 0
 
 
@@ -33,8 +33,8 @@ class WorldRep:
 
     def _updateAllRewards(self): #getreward from move
         self.rewardList = self._createRewardList()
-        self.lastReward = self.worldState.rewards[-1].getValue() - self.totatlRewards #ehhhhhh probably
-        self.totatlRewards = self.worldState.rewards[-1].getValue()
+        self.lastReward = self.worldState.rewards[-1].getValue() - self.totalRewards #ehhhhhh probably
+        self.totalRewards = self.worldState.rewards[-1].getValue()
 
     def _getInventoryItemsAsSet(self):
         rewardSet = set()
@@ -74,6 +74,6 @@ class WorldRep:
         '''Enacts the qAgents command and returns the reward from that command'''
         malmoMove = self._getMoveCommandFromCoordTuple(move)
         self.agentHost.sendCommand(malmoMove)
-        time.sleep(0.1)
+        time.sleep(.5)
         self._updateWorldRep(self.agentHost.peekWorldState())
         return self.lastReward

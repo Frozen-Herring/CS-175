@@ -77,7 +77,7 @@ def main():
     qAgent = QAgent(world, start = (.5, 227,.5))
 
     #finalReward = 0
-    maxMoves = 3
+    maxMoves = 100;
     for i in range(maxMoves):
         startMission(agentHost, mission, missionRec)
         agentRun(agentHost, qAgent, world)

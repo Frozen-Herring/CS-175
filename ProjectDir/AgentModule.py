@@ -107,7 +107,7 @@ class Agent:
         print " - self.actionHistory = " + str(self.actionHistory)
         print " - self.rewardHistory = " + str(self.rewardHistory)
         print " - self.rewardsLooted = " + str(self.rewardsLooted)
-        print " - self.world.totatlRewards = " + str(self.world.totatlRewards)
+        print " - self.world.totalRewards = " + str(self.world.totalRewards)
         print " - self.world.lastReward = " + str(self.world.lastReward)
 
 
