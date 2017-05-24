@@ -14,10 +14,9 @@ class WorldRep:
         self.lastReward = 0
 
 
-    def newEpisode(self, worldState): #Agent Calls this
+    def newEpisode(self): #Agent Calls this
         '''Clear all attributes and get new world state'''
-        self.worldState = worldState
-        self.obs = json.loads(worldState.observations[-1].text)
+        self.obs = json.loads(self.worldState.observations[-1].text)
         self.QAgentLoc = (self.obs[u'XPos'], self.obs[u'YPos'])
         self.rewardList = None
         self.totalRewards = 0

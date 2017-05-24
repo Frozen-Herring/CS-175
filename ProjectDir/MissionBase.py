@@ -17,26 +17,23 @@ fix world Rep
 
 
 def agentRun(agentHost, qAgent, world):
-    worldState = agentHost.peekWorldState() # wait until valid observation
+    world.worldState = agentHost.peekWorldState() # wait until valid observation
     # sys.stdout.write("\nwait for obs")
-    while worldState.is_mission_running and all(e.text == '{}' for e in worldState.observations):
-        worldState = agentHost.peekWorldState()
+    while world.worldState.is_mission_running and all(e.text == '{}' for e in world.worldState.observations):
+        world.worldState = agentHost.peekWorldState()
+
         # sys.stdout.write(".")
         # sys.stdout.flush()
     # sys.stdout.write("\n")
     # sys.stdout.flush()
 
-    if not worldState.is_mission_running:
-        print "Mission quit"
-        return 0
+    qAgent.new_episode()
 
-    world.newEpisode(worldState)
-
-    while worldState.is_mission_running:
+    while world.worldState.is_mission_running:
         #Make move
         qAgent.makeMove()
-        worldState = agentHost.peekWorldState()
-        #world.updateWorldRep(worldState) --- make move in agent, calls make move in world rep, which updates itself.
+        world.worldState = agentHost.peekWorldState()
+        #world.updateWorldRep(world.worldState) --- make move in agent, calls make move in world rep, which updates itself.
 
     #------------------
 
