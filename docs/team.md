@@ -7,10 +7,10 @@ title:  Team
 
 
 ## Siena Saltzen
-***ssaltzen***: 52137789
+***ssaltzen***
 
 ## Justin Veyna
-***jcveyna***: 77816926
+***jcveyna***
 
 ## Derek Fisher
-***dsfisher***: 55724822
+***dsfisher***
