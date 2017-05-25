@@ -21,6 +21,7 @@ def updateQTable(self, old_state):
 ```
 
 The AI knows nothing about the world other than it's current position, what items it has picked up and what items remain.
+![](Maze1.png){:height="360px" :width="640px"}
 <img src="Maze1.png" "width=640")>
 <img src="Maze2.png" "width=640")>
 
