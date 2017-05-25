@@ -7,7 +7,7 @@ Source Code: [Here](https://github.com/ssaltzen/LARS)
 LARS is an AI that uses Q-Learning in conjunction with malmo to make a player AI that solves a 2D maze with items scattered throughout. 
 
 We decieded to go with Q-Learning as implemented below:
-'''python
+```python
 def updateQTable(self, old_state):
         n = self.moveCount if self.moveCount < self.n else self.n
         cur_state = (tuple(self.world.rewardList), self.moveHistory[-1])
@@ -18,7 +18,7 @@ def updateQTable(self, old_state):
             G-= self.qTable[old_state][self.actionHistory[-1]]
             G*= self.alpha
             self.qTable[old_state][self.actionHistory[-1]] += G
-'''
+```
 
 The AI knows nothing about the world other than it's current position, what items it has picked up and what items remain.
 <img src="Maze1.png" "width=640")>
