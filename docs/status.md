@@ -6,16 +6,16 @@ title:  Status
 ##Approach:
 	The general idea of our project is a more complex variation of the Cliff Walking problem proposed by Sutton and Barto. For simplicity's sake, their problem can be casually described as an agent positioned at the edge of cliff whose task is to make its way across the ledge using the shortest path without falling off. (see fig. 1) This problem is then solved with a variety of AI algorithms. We have taken that basic problem and expanded the concept into a maze surrounded by lava, functioning as a more complex path to solve and much more "cliff" to avoid (see fig. 2) which is then evaluated  using reinforcement learning. 
 The parameters of our problem frame are as follows:
-?	A maze is randomly generated through lava with N items placed randomly upon it
-?	An agent is placed in the maze with no knowledge of its environment
-?	The agent has four movement actions and the option to craft
-?	The agent is timed to see how long it takes to find items and solve the maze
-?	If the agent walks off the maze and lands in lava, it dies and the episode is restarted
-?	Touching lava blocks gives a large negative reward to the agent
-?	Items each have a positive reward associated with them
-?	A small negative reward is assigned each time the agent preforms an action to encourage it find the most efficient solution.
-?	Episodes are run continuously until the agent converges to find the best policy for that maze.
-?	The mission ends and returns statistics regarding the agent's performance.
+..*	A maze is randomly generated through lava with N items placed randomly upon it
+..*	An agent is placed in the maze with no knowledge of its environment
+..*	The agent has four movement actions and the option to craft
+..*	The agent is timed to see how long it takes to find items and solve the maze
+..*	If the agent walks off the maze and lands in lava, it dies and the episode is restarted
+..*	Touching lava blocks gives a large negative reward to the agent
+..*	Items each have a positive reward associated with them
+..*	A small negative reward is assigned each time the agent preforms an action to encourage it find the most efficient solution.
+..*	Episodes are run continuously until the agent converges to find the best policy for that maze.
+..*	The mission ends and returns statistics regarding the agent's performance.
 
 To start our project, we created a dynamic maze generator that allows us to adjust the difficulty and size of the maze, as well as location/number of the rewards and its tendency towards a more linear path or one with many branches. By changing the maze setting we can vary the difficulty of our problem which give us the tools to thoroughly test and stress our algorithm's capabilities and performance. 
 Our agent uses tabular Q-learning for its decision making algorithm.  We chose to implement the code ourselves to allow for greater flexibility as we progress with progress. However, at the moment our algorithm is a fairly standard application of the algorithm. Q-learning in can be used to find an optimal action-selection policy for any given (finite) Markov decision process. We represent our world with a MDP that uses its location and inventory contents as states. The number of states varies greatly with the size of the maze, lava content with in the maze and number of items we have placed for LARS to find. In general, the baseline number of states for an n by m maze will be approximately ((n ~ m)- lava content) modified by the number of items. Our action set (at the moment) consists of four actions: move north, south, east or west by one block. Touching a lava block results in a reward of -100, obtaining an item gives rewards of 20-100 and while there are no rewards associated with stone blocks, each time an action is made it receives a reward of -1 to promote finding the most efficient path. As the agent takes actions it updates the Q-table for that state and uses this update function to evaluate the rewards:
