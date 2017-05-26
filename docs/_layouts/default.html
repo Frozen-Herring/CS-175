@@ -19,7 +19,7 @@
   <body>
 
     {% assign current = page.url | downcase | split: '/' %}
-    {% assign statusClass = 'disabled' %}
+    {% assign statusClass = 'enabled' %}
     {% assign proposalClass = 'disabled' %}
     {% assign finalClass = 'disabled' %}
     {% for page in site.html_pages %}
