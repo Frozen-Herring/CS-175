@@ -36,10 +36,10 @@ def updateQTable(self, old_state):
               self.qTable[old_state][self.actionHistory[-1]] += G
 ```
 The rest of the algorithm evaluates the expected reward of taking a given action in a state and then executes the optimal policy for that state with a chance for random action. As it makes moves it continually updates the Q-table until it reaches convergence to the final solution. 
-![](image2.jpeg)
-figure 1
 
-![](image1.png)                
+![](image2.jpeg){:height="360px" :width="640px"}
+figure 1
+![](image1.png){:height="360px" :width="640px"}               
 figure 2
 
 ## Evaluation:
