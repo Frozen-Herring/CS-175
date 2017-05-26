@@ -38,8 +38,11 @@ def updateQTable(self, old_state):
 The rest of the algorithm evaluates the expected reward of taking a given action in a state and then executes the optimal policy for that state with a chance for random action. As it makes moves it continually updates the Q-table until it reaches convergence to the final solution. 
 
 
-![](image1.jpeg)
-![](image2.png) 
+![](image2.png)
+(figure 1)
+
+![](image1.jpeg) 
+(figure 2)
 
 ## Evaluation:
 Our evaluation is based mostly recording and analyzing information about the AI’s positions, values and action choices through a printed log and observational conclusions by manually watching it progress through the maze. Generally, we have found that simple empirical evaluation of the agent tends to provide enough information for most of the basic developmental purposes. For example, it is easy to tell when the agent is not preforming properly, as it will not progress very far in the maze, get stuck repeating the same actions with no variation or ignore the reward items. When debugging the agent or setting up basic parameters, visual evaluation provides quick and effective benchmarks to assess baselines of performance.	Once we have assessed the agent to be preforming adequately, we try to evaluate and/or optimize the algorithm's performance by turning to the output logs. A typical log file contains records such as the following:
