@@ -3,7 +3,7 @@ layout: default
 title:  Status
 ---
  
-##Approach:
+##　Approach:
 	The general idea of our project is a more complex variation of the Cliff Walking problem proposed by Sutton and Barto. For simplicity's sake, their problem can be casually described as an agent positioned at the edge of cliff whose task is to make its way across the ledge using the shortest path without falling off. (see fig. 1) This problem is then solved with a variety of AI algorithms. We have taken that basic problem and expanded the concept into a maze surrounded by lava, functioning as a more complex path to solve and much more "cliff" to avoid (see fig. 2) which is then evaluated  using reinforcement learning. 
 The parameters of our problem frame are as follows:
 ..*	A maze is randomly generated through lava with N items placed randomly upon it
@@ -33,11 +33,10 @@ def updateQTable(self, old_state):
 ```
 The rest of the algorithm evaluates the expected reward of taking a given action in a state and then executes the optimal policy for that state with a chance for random action. As it makes moves it continually updates the Q-table until it reaches convergence to the final solution. 
 
-  
-Figure 2
-                 
+![](image1.jpeg){:height="360px" :width="640px"}
+![](image2.png){:height="360px" :width="640px"}                 
 
-##Evaluation:
+##　Evaluation:
 	Our evaluation is based mostly recording and analyzing information about the AI's positions, values and actions choices through a printed log and observational conclusions and by manually watching it progress through the maze. Generally, we have found that simple empirical evaluation of the agent tends to provide enough information for most of the basic developmental purposes. For example, it is easy to tell when the agent is not preforming properly, as it will not progress very far in the maze, get stuck repeating the same actions with no variation or ignore the reward items. When debugging the agent or setting up basic parameters, visual evaluation provides quick and effective benchmarks to assess baselines of performance. 
 	Once we have assessed the agent to be preforming adequately, we try to evaluate and/or optimize the algorithm's performance by turning to the output logs. A typical log file contains records such as the following:
 ```
