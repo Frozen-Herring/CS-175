@@ -65,8 +65,9 @@ last move stats:
  - self.world.totatlRewards = -102.0
  - self.world.lastReward = -101.0
 ```
-	We can then follow the algorithms execution by hand to more solidly determine that the agent is behaving exactly as expected and then establish finer points to tune for maximum performance. 
-	At the moment, LARS is capable of navigating around a maze with relative efficiency while prioritizing the collection of items. However, as detailed in the next section, we hope to add in some more aspects of the challenge that will allow us to collect more meaningful statistics and complicated success states. 
+We can then follow the algorithms execution by hand to more solidly determine that the agent is behaving exactly as expected and then establish finer points to tune for maximum performance. 
+
+At the moment, LARS is capable of navigating around a maze with relative efficiency while prioritizing the collection of items. However, as detailed in the next section, we hope to add in some more aspects of the challenge that will allow us to collect more meaningful statistics and complicated success states. 
  
 ## Remaining Goals and Challenges:
 Currently, LARS is a simple maze runner modified to find several rewards along the way. Our reach goal is to give LARS more agency to interact with objects it collects and a more distinctive end goal. However, before we can start expanding LARS' capabilities we need to a better way to asses our performance. 
