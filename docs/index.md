@@ -11,6 +11,8 @@ title:  Home
 LARS is an on going project for the CS175 course at University California, Irvine. Our goal is to explore various machine learning techniques and implement an interesting AI to interact with the world of Minecraft. The projects are based in Microsoft’s Malmo, which is a platform for interfacing with the Minecraft game that allows our AI agent to command and observe various world dynamics. 
 For our project, we chose to create a reinforcement learning AI that can efficiently navigate around a maze of treacherous obstacles and find useful rewards. We do not supply our agent with any information about the world state and so it must “learn” how to behave through trial and error. This is a brief overview of [Reinforcement Learning](https://en.wikipedia.org/wiki/Reinforcement_learning) .
 
+
+
 [![LARSVID](VideoLink.PNG)](https://youtu.be/fzii_TnV2Xg "LARS project video HD")
 
 
