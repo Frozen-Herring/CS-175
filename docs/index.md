@@ -3,11 +3,22 @@ layout: default
 title:  Home
 ---
 
-Source Code: [Here](https://github.com/ssaltzen/LARS)
-LARS is an AI that uses Q-Learning in conjunction with malmo to make a player AI that solves a 2D maze with items scattered throughout. 
+# Welcome to Project LARS
+##### Source Code: [Github](https://github.com/ssaltzen/LARS)							 	 Class Website: [CS175](http://sameersingh.org/courses/aiproj/sp17/)						 		 Project Malmo: [Malmo](https://github.com/Microsoft/malmo)
 
-We decieded to go with Q-Learning as described [here](https://en.wikipedia.org/wiki/Q-learning) and as implemented in the below code:
+### What is LARS?
+
+LARS is an on going project for the CS175 course at University California, Irvine. Our goal is to explore various machine learning techniques and implement an interesting AI to interact with the world of Minecraft. The projects are based in Microsoft’s Malmo, which is a platform for interfacing with the Minecraft game that allows our AI agent to command and observe various world dynamics. 
+For our project, we chose to create a reinforcement learning AI that can efficiently navigate around a maze of treacherous obstacles and find useful rewards. We do not supply our agent with any information about the world state and so it must “learn” how to behave through trial and error. This is a brief overview of [Reinforcement Learning](https://en.wikipedia.org/wiki/Reinforcement_learning) .
+
+[![LARSVID](VideoLink.PNG)](https://youtu.be/fzii_TnV2Xg "LARS project video HD")
+
+
+	
+More specifically our AI is aganet that uses Q-Learningdescribed [here](https://en.wikipedia.org/wiki/Q-learning) with some variations. An example of our update function is below:
+
 ```python
+
 def updateQTable(self, old_state):
         n = self.moveCount if self.moveCount < self.n else self.n
         cur_state = (tuple(self.world.rewardList), self.moveHistory[-1])
@@ -20,10 +31,9 @@ def updateQTable(self, old_state):
             self.qTable[old_state][self.actionHistory[-1]] += G
 ```
 
-The AI knows nothing about the world other than it's current position, what items it has picked up and what items remain.
 
 The AI is rewarded for collecting these items and is given a negative reward for taking time to get to the end as well as a negative reward for falling into lava.
-Our ultimate goal is to make an AI the has a low training time and can learn medium sized mazed with relative haste. To reach this goal we plan to
+Our ultimate goal is to make an AI the has a low training time and can learn medium sized mazed with relative haste.
 
 ![](Maze1.png){:height="360px" :width="640px"}
 ![](Maze2.png){:height="360px" :width="640px"}
