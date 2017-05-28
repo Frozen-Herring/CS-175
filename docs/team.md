@@ -6,11 +6,11 @@ title:  Team
 # {{ page.title }}
 
 
-## Siena Saltzen
+### Siena Saltzen
 ***ssaltzen***
 
-## Justin Veyna
+### Justin Veyna
 ***jcveyna***
 
-## Derek Fisher
+### Derek Fisher
 ***dsfisher***
