@@ -17,7 +17,7 @@ For our project, we chose to create a reinforcement learning AI that can efficie
 
 
 	
-More specifically our AI is aganet that uses Q-Learningdescribed [here](https://en.wikipedia.org/wiki/Q-learning) with some variations. An example of our update function is below:
+More specifically our AI is agent that uses Q-Learning described [here](https://en.wikipedia.org/wiki/Q-learning) with some variations. An example of our update function is below:
 
 ```python
 
@@ -35,7 +35,7 @@ def updateQTable(self, old_state):
 
 
 The AI is rewarded for collecting these items and is given a negative reward for taking time to get to the end as well as a negative reward for falling into lava.
-Our ultimate goal is to make an AI the has a low training time and can learn medium sized mazed with relative haste.
+Our ultimate goal is to make the AI have the lowest training time and be able to learn medium sized mazed with relative haste.
 
 ![](Maze1.png){:height="360px" :width="640px"}
 ![](Maze2.png){:height="360px" :width="640px"}
