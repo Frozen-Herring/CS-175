@@ -21,7 +21,7 @@ File still needs to be cleaned up a lot documentation wise and there are a lot o
 
 from random import random, shuffle
 from CoordinateUtils import emptyBlock, normalBlock, dangerBlock, rewardBlock, possibleMovementDict, seperateCoordinate, sumCoordinates, subCoordinates, disCoordinates
-
+from pickle import Pickler, Unpickler
 
 '''
 ############################################################################################################
