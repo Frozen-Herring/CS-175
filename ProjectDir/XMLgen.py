@@ -146,6 +146,8 @@ class XmlGen:
         missionSpecs.setViewpoint(1)
         missionSpecs.allowAllInventoryCommands()
 
+        self.endBlock = maze.endBlock
+
         return missionSpecs.getAsXML(True)
 
 
