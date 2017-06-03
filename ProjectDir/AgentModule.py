@@ -51,12 +51,48 @@ class Agent:
         self.rewardHistory = []
         #self.rewardsLooted = [0 for _ in range(len(world.getRewardList()))]
         '''end episodic variables'''
-    
+
+        '''Analytics Here '''
+        self.episodeCount = 0
+        self.totalMoveCount = 0
+        self.bestScoreSoFar = -999
+        self.bestPathSoFar = []
+
+        self.movesPerEpisode = []
+        self.rewardScorePerEpisode = []
+        self.rewardsCollectedPerEpisode = []
+
+
+    def updateAnalyticsBeforeNewEpisode(self, printInfo=False):
+        self.episodeCount += 1
+
+        if self.episodeCount > 1:
+            # update move trackers
+            self.totalMoveCount += self.moveCount
+            self.movesPerEpisode.append(self.moveCount)
+
+            # update reward trackers
+            rewardSum = sum(self.rewardHistory)
+            self.rewardScorePerEpisode.append(rewardSum)
+            self.rewardsCollectedPerEpisode.append(sum(self.world.rewardList))
+            if rewardSum > self.bestScoreSoFar:
+                self.bestScoreSoFar = rewardSum
+                self.bestPathSoFar = self.moveHistory
+
+            if printInfo:
+                print "analytics:"
+                print " - total moves: " + str(self.totalMoveCount)
+                print " - total episodes: " + str(self.episodeCount)
+                print " - best score so far: " + str(self.bestScoreSoFar)
+                print " - best path so far: " + str(self.bestPathSoFar)
+                print " - moves per episode: " + str(self.movesPerEpisode)
+                print " - reward score per episode " + str(self.rewardScorePerEpisode)
+
     def new_episode(self):
+        self.updateAnalyticsBeforeNewEpisode(True)
         self.moveHistory = [self.start]
         self.actionHistory = []
         self.rewardHistory = []
-        #self.rewardsLooted = [0 for _ in range(len(self.world.getRewardList()))]#TODO: interects with world
         self.moveCount = 0
         self.world.newEpisode()#TODO: interects with world
         
@@ -147,44 +183,4 @@ class Agent:
                 posBest.append(i)
         a = random.randint(0, len(posBest) - 1)
         return possibleMoves[posBest[a]]
-    
-    ########################################################################################################
-    #-----------------------------------------Depreciated Code---------------------------------------------#
-    ########################################################################################################
-    
-    
-    
-        
-    
-    
-    
-    """
-    def update(self, moveToTake):
-        ''' (self, int) -> None... updates moveHistory and rewardSum with the consequence of taking the move'''
-        self.moveHistory.append(moveToTake) # add the move we took to moveHistory
-        # TODO: update rewardSum... possibly something like "self.rewardSum += self.world.blockRewardDict[moveToTake] + self.world.qTableDict[moveToTake]
-        # TODO: update self.world.expectedBlockRewardDict by distributing our rewardSum through all blocks in self.moveHistory
-        # TODO: if we hit lava, set self.hitLava to true
-        # TODO: if we hit a reward block, remrove it from self.remainingRewards... "if self.world.blocks[moveToMake] == 'emerald_block": self.remainingRewards.remove(moveToMake)
-
-    def makePath(self, N):#not sure if we need this? or should this just be run
-    ''' (self, int) -> None
-        Continually call makeMove N times, or until we hit lava, or until remainingRewards is empty '''
-        
-    count = 0
-    while count < N and not self.hitLava:
-        self.makeMove()
-        count += 1
-        
-    
-    
-    def chooseMove(self, possibleMoves):
-        ''' (self, [int] -> int... use expectedRewardDict and blockReward and a RNG to choose a move'''
-        for move in possibleMoves:
-            expectedReward = self.world.expectedRewardDict[move]
-            blockReward = self.world.blockRewardDict[move]
-            # TODO: use expectedReward and blockReward to choose a move
-    """
-    
-
 

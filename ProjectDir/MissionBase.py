@@ -31,7 +31,7 @@ def agentRun(agentHost, qAgent, world):
 
     while world.worldState.is_mission_running:
         #Make move
-        qAgent.makeMove()
+        qAgent.makeMove(0.02, False)
         world.worldState = agentHost.peekWorldState()
         #world.updateWorldRep(world.worldState) --- make move in agent, calls make move in world rep, which updates itself.
 
@@ -74,11 +74,11 @@ def main():
     qAgent = QAgent(world, start = (.5, 227,.5))
 
     #finalReward = 0
-    maxMoves = 100;
+    maxMoves = 10000;
     for i in range(maxMoves):
         startMission(agentHost, mission, missionRec)
         agentRun(agentHost, qAgent, world)
-        time.sleep(.5)
+        time.sleep(.1)
 
     #print 'Final Rewards: ', finalReward
     time.sleep(0.5) # (let the Mod reset)

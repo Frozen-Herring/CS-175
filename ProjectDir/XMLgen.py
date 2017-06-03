@@ -140,7 +140,7 @@ def generateXML(mazeSize, rewardDict):
     # Settings
     missionSpecs.removeAllCommandHandlers()
     missionSpecs.allowAllDiscreteMovementCommands()
-    missionSpecs.requestVideo(520, 440)
+    missionSpecs.requestVideo(960, 540)
     missionSpecs.setViewpoint(1)
     missionSpecs.allowAllInventoryCommands()
 
