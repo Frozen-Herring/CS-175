@@ -8,12 +8,11 @@ import WorldSim
 import AgentModule
 import SaveLoader as sl
 from random import randrange
-from scipy.optimize import minimize
-from CoordinateUtils import sumCoordinates
 TEST = True
-
+MOVECAP = 300
 def testRunEpisode(agent, eps = .5, verbose = False):
-    while agent.isAlive() or sumCoordinates(agent.moveHistory[-1], (1,1,1)) == agent.world.worldMaze.mazeSize: #TODO: add terminal block check
+    i = 0
+    while (agent.isAlive() or agent.moveHistory[-1] == agent.world.worldMaze.endBlock) and i < MOVECAP:
         agent.makeMove(eps = eps, verbose = verbose)
 
 def runNEpidsodes(agent, n, eps = .5, verbose = False):
@@ -57,6 +56,7 @@ if __name__ == '__main__':
         print "Best: "
         PrintBestPath(agent)
         print agent.qTable
+    
     if f != "":
         f = raw_input("Enter a file name to save to: ")
         if f == "":
