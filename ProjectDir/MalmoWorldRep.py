@@ -2,7 +2,7 @@ import json
 import time
 
 class WorldRep:
-    def __init__(self, agentHost, worldState = None, rewards = {}):
+    def __init__(self, agentHost, endBlock, worldState = None, rewards = {}):
         '''Define a world state'''
         self.sortedRewards = sorted(rewards.keys())
         self.agentHost = agentHost
@@ -12,12 +12,13 @@ class WorldRep:
         self.rewardList = [0 for _ in rewards.keys()]
         self.totalRewards = 0
         self.lastReward = 0
+        self.endBlock = (endBlock[0]+.5, endBlock[1]+.5)
 
 
     def newEpisode(self): #Agent Calls this
         '''Clear all attributes and get new world state'''
         self.obs = json.loads(self.worldState.observations[-1].text)
-        self.QAgentLoc = (self.obs[u'XPos'], self.obs[u'YPos'])
+        self.QAgentLoc = (self.obs[u'XPos'], self.obs[u'ZPos'])
         self.rewardList = [0 for _ in self.sortedRewards]
         self.totalRewards = 0
         self.lastReward = 0
@@ -27,7 +28,8 @@ class WorldRep:
         '''Update attributes that may have changed'''
         self.worldState = worldState
         self.obs = json.loads(worldState.observations[-1].text)
-        self.QAgentLoc = (self.obs[u'XPos'], self.obs[u'YPos'])
+        print self.obs
+        self.QAgentLoc = (self.obs[u'XPos'], self.obs[u'ZPos'])
         self._updateAllRewards()
 
     def _updateAllRewards(self): #getreward from move
@@ -76,3 +78,10 @@ class WorldRep:
         time.sleep(.5)
         self._updateWorldRep(self.agentHost.peekWorldState())
         return self.lastReward
+
+    def finishedTheMaze(self):
+        # if the agent is on the end block AND we have collected all the rewards, we finished the maze
+        return self.endBlock == self.QAgentLoc and sum(self.rewardList) == len(self.rewardList)
+
+
+
