@@ -20,8 +20,7 @@ File still needs to be cleaned up a lot documentation wise and there are a lot o
 '''
 
 from random import random, shuffle
-from CoordinateUtils import emptyBlock, normalBlock, dangerBlock, rewardBlock, possibleMovementDict, seperateCoordinate, sumCoordinates, subCoordinates, disCoordinates
-from pickle import Pickler, Unpickler
+from CoordinateUtils import emptyBlock, normalBlock, dangerBlock, rewardBlock, terminalBlock, possibleMovementDict, seperateCoordinate, sumCoordinates, subCoordinates, disCoordinates
 
 '''
 ############################################################################################################
@@ -122,10 +121,13 @@ def _pickMove(posMoves, currentPath, endBlock, impetus=1.5, momentum = .1, backt
 ############################################################################################################
 '''  
 class Maze():
-    def __init__(self, mazeSize, lavaPercent=.5, rewardCount=5):
+    def __init__(self, mazeSize, endBlock, startBlock = (0,0,0), lavaPercent=.5, rewardCount=5):
         self.lavaPercent = lavaPercent
         self.rewardCount = rewardCount
         self.rewardBlocks = []
+        
+        self.startBlock = startBlock
+        self.endBlock = endBlock
         
         self.x, self.y, self.z = mazeSize
         self.mazeSize = mazeSize
@@ -178,6 +180,7 @@ class Maze():
         for i in range(self.rewardCount):
             self.set(pathBlocks[i], rewardBlock, False)
             self.rewardBlocks.append(pathBlocks[i])
+        self.set(self.endBlock, terminalBlock, False)
     
     def _fillAir(self):
         for x in range(self.x):
@@ -187,7 +190,7 @@ class Maze():
     
     def prettyPrint(self):
         #2D ONLY
-        conversionDict = {dangerBlock: " ", normalBlock: "X", rewardBlock: "O", emptyBlock: "_"}
+        conversionDict = {dangerBlock: " ", normalBlock: "X", rewardBlock: "O", emptyBlock: "_", terminalBlock: "#"}
         toPrint=""
         for x in self.maze:
             for y in x:
@@ -209,7 +212,7 @@ def genMaze(mazeSize, lavaPercent=1.0, rewardCount=5, possibleMovement="2D"):
     p =  genPath(mazeSize, startBlock, endBlock, possibleMovement)
     pSet = set(p)
     
-    maze = Maze(mazeSize, lavaPercent, rewardCount)
+    maze = Maze(mazeSize, startBlock, endBlock, lavaPercent, rewardCount)
     maze.fill_maze(pSet)
     return maze
     

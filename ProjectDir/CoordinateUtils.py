@@ -28,6 +28,7 @@ emptyBlock = "air"
 normalBlock = "stone"
 dangerBlock = "lava"
 rewardBlock = "lapis_block"
+terminalBlock = "emerald_block"
 
 movement1D = [(1,0,0),(-1,0,0)] #right, left
 movement2D = [(1,0,0),(0,1,0),(-1,0,0),(0,-1,0)] #right, up, left, down #top-down

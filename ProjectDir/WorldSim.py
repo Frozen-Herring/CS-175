@@ -9,9 +9,9 @@ import CoordinateUtils
 
 
 
-emptyBlockReward, normalBlockReward, dangerBlockReward, rewardBlockReward = None, -1, -500, 100
-blockList = [CoordinateUtils.emptyBlock, CoordinateUtils.normalBlock, CoordinateUtils.dangerBlock, CoordinateUtils.rewardBlock]
-rewardList = [emptyBlockReward, normalBlockReward, dangerBlockReward, rewardBlockReward]
+emptyBlockReward, normalBlockReward, dangerBlockReward, rewardBlockReward, terminalBlockReward= None, -1, -500, 100, 0
+blockList = [CoordinateUtils.emptyBlock, CoordinateUtils.normalBlock, CoordinateUtils.dangerBlock, CoordinateUtils.rewardBlock, CoordinateUtils.terminalBlock]
+rewardList = [emptyBlockReward, normalBlockReward, dangerBlockReward, rewardBlockReward, terminalBlockReward]
 
 
 class WorldSim():
