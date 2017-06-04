@@ -26,7 +26,7 @@ class XmlGen:
       </About>
 
       <ModSettings>
-        <MsPerTick>20</MsPerTick>
+        <MsPerTick>10</MsPerTick>
       </ModSettings>
 
       <ServerSection>
@@ -145,8 +145,8 @@ class XmlGen:
         # Settings
         missionSpecs.removeAllCommandHandlers()
         missionSpecs.allowAllDiscreteMovementCommands()
-        # missionSpecs.allowAbsoluteMovementCommand()
-        # missionSpecs.allowAllChatCommands()
+        missionSpecs.allowAllAbsoluteMovementCommands()
+        missionSpecs.allowAllChatCommands()
         missionSpecs.requestVideo(960, 540)
         missionSpecs.setViewpoint(1)
         missionSpecs.allowAllInventoryCommands()

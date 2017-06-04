@@ -5,7 +5,6 @@ import CoordinateUtils
 
 
 qTable_DEFAULT = 0
-REWARD_FOR_FINISHING_MAZE = 500
 '''
 ##################################################################
 #--------------------------todo----------------------------------#
@@ -126,8 +125,7 @@ class Agent:
         reward = self.world.moveAgent(moveToTake)#TODO: interects with world
         if self.world.finishedMaze():
             self.finishedMaze = True
-            global REWARD_FOR_FINISHING_MAZE
-            reward += REWARD_FOR_FINISHING_MAZE
+            reward += 10
 
         self.rewardHistory.append(reward)
         self.moveCount += 1
