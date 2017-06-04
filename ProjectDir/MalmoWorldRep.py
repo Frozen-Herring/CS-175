@@ -28,7 +28,6 @@ class WorldRep:
         '''Update attributes that may have changed'''
         self.worldState = worldState
         self.obs = json.loads(worldState.observations[-1].text)
-        print self.obs
         self.QAgentLoc = (self.obs[u'XPos'], self.obs[u'ZPos'])
         self._updateAllRewards()
 
@@ -75,11 +74,14 @@ class WorldRep:
         '''Enacts the qAgents command and returns the reward from that command'''
         malmoMove = self._getMoveCommandFromCoordTuple(move)
         self.agentHost.sendCommand(malmoMove)
-        time.sleep(.5)
+        time.sleep(.1)
         self._updateWorldRep(self.agentHost.peekWorldState())
         return self.lastReward
 
-    def finishedTheMaze(self):
+    def finishedMaze(self):
+        # print "agent is on end block: " + str(self.endBlock == self.QAgentLoc) + "... " + str(self.endBlock) + "==" + str(self.QAgentLoc)
+        # print " - agent has all rewards:" + str(sum(self.rewardList) == len(self.rewardList)) + "... " + str(sum(self.rewardList)) + "==" + str(len(self.rewardList))
+        # print " returning: " + str(self.endBlock == self.QAgentLoc and sum(self.rewardList) == len(self.rewardList))
         # if the agent is on the end block AND we have collected all the rewards, we finished the maze
         return self.endBlock == self.QAgentLoc and sum(self.rewardList) == len(self.rewardList)
 

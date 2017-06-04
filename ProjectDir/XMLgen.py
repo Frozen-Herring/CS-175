@@ -63,6 +63,9 @@ class XmlGen:
                 <command>attack</command>
               </ModifierList>
           </DiscreteMovementCommands>
+          <AbsoluteMovementCommands/>
+          <ChatCommands/>
+           <MissionQuitCommands/>
           <RewardForTouchingBlockType>
             <Block reward="-100.0" type="lava" behaviour="onceOnly"/>
           </RewardForTouchingBlockType>
@@ -142,6 +145,8 @@ class XmlGen:
         # Settings
         missionSpecs.removeAllCommandHandlers()
         missionSpecs.allowAllDiscreteMovementCommands()
+        # missionSpecs.allowAbsoluteMovementCommand()
+        # missionSpecs.allowAllChatCommands()
         missionSpecs.requestVideo(960, 540)
         missionSpecs.setViewpoint(1)
         missionSpecs.allowAllInventoryCommands()

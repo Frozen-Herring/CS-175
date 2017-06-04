@@ -36,11 +36,8 @@ class MissionBase:
             #Make move
             qAgent.makeMove(0.02, False)
             world.worldState = agentHost.peekWorldState()
-            #world.updateWorldRep(world.worldState) --- make move in agent, calls make move in world rep, which updates itself.
-
-        #------------------
-
-        return
+            if qAgent.finishedMaze:
+                print "finished mission"
 
     def startMission(self, agentHost, mission, missionRec):
         try:
@@ -72,7 +69,7 @@ class MissionBase:
     def main(self):
 
         rewards = {"coal": 10, "iron_ingot": 20, "gold_ingot": 30, "lapis_ore": 40, "emerald_ore": 50, "diamond": 60, "potato": 70}
-        mazeSize = (10,10,10)
+        mazeSize = (5,5,5)
 
         agentHost, mission, missionRec = self.setup(mazeSize, rewards)
         world = WorldRep(agentHost, self.endBlock, rewards = rewards)
