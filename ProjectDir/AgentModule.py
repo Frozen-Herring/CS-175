@@ -79,6 +79,7 @@ class Agent:
                 print " - best path so far: " + str(self.bestPathSoFar)
                 print " - moves per episode: " + str(self.movesPerEpisode)
                 print " - reward score per episode " + str(self.rewardScorePerEpisode)
+                print " - rewards collected per epsiode: " + str(self.rewardsCollectedPerEpisode)
     
     def clearAnalytics(self):
         self.episodeCount = 0
@@ -92,17 +93,11 @@ class Agent:
 
     def new_episode(self, verbose = False):
         self.updateAnalyticsBeforeNewEpisode(verbose)
-                print " - rewards collected per epsiode: " + str(self.rewardsCollectedPerEpisode)
-
-            with open("analytics.csv", "w") as f:
-                f.write("episode #\tmoves #\treward score\trewards collected")
-                for i in range(self.episodeCount-1):
-                    f.write("\n" + str(i) + "\t" + str(self.movesPerEpisode[i]) + "\t" + str(self.rewardScorePerEpisode[i]) + "\t" + str(self.rewardsCollectedPerEpisode[i]))
-                    f.flush()
-
-
-    def new_episode(self):
-        self.updateAnalyticsBeforeNewEpisode(True)
+        with open("analytics.csv", "w") as f:
+            f.write("episode #\tmoves #\treward score\trewards collected")
+            for i in range(self.episodeCount-1):
+                f.write("\n" + str(i) + "\t" + str(self.movesPerEpisode[i]) + "\t" + str(self.rewardScorePerEpisode[i]) + "\t" + str(self.rewardsCollectedPerEpisode[i]))
+                f.flush()
         self.finishedMaze = False
         self.moveHistory = [self.start]
         self.actionHistory = []

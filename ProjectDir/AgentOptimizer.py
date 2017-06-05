@@ -42,12 +42,18 @@ class Optimizer:
     def runOptimizer(self):
         keys = genBins()
         scores = []
-        lowest_val = self.maxEps
-        best_vals = None
+        lowestVal = self.maxEps
+        bestVals = None
         
         for vals in keys:
-            scores.append(self.runToOptimal(vals))
-        i = max(zip())
+            val = self.runToOptimal(vals)
+            if val<lowestVal:
+                lowestVal = val
+                bestVals = vals
+            
+            scores.append()
+        self.optimal = (lowestVal, bestVals)
+        print(scores)
     
     def assignVals(self, vals):
         n, alpha, gamma = vals
