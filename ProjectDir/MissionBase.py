@@ -57,7 +57,7 @@ class MissionBase:
 
 
     def setup(self, mazeSize = (10, 10, 10), rewards = {"apple":50}):
-        xmlGen = XmlGen(f = "MAZE 1", load = True)
+        xmlGen = XmlGen()
         worldXML = xmlGen.generateXML(mazeSize, rewards)
         self.endBlock = xmlGen.endBlock
         sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)  # flush print output immediately
