@@ -10,14 +10,6 @@ qTable_DEFAULT = 0
 #--------------------------todo----------------------------------#
 ##################################################################
 
-1:Use QLearning library?
-2:makeMove function (incomplete)
-    -chose move
-    -make move
-    -update q table
-3:Add run episode (or make this a separate module?????)
-    -make moves until max moves or "dead"
-
 ##################################################################
 #--------------------------\todo---------------------------------#
 ##################################################################
@@ -52,7 +44,7 @@ class Agent:
         #self.rewardsLooted = [0 for _ in range(len(world.getRewardList()))]
         '''end episodic variables'''
 
-        '''Analytics Here '''
+        '''Analytics'''
         self.episodeCount = 0
         self.totalMoveCount = 0
         self.bestScoreSoFar = -999
@@ -61,7 +53,7 @@ class Agent:
         self.movesPerEpisode = []
         self.rewardScorePerEpisode = []
         self.rewardsCollectedPerEpisode = []
-
+        '''End Analytics'''
 
     def updateAnalyticsBeforeNewEpisode(self, printInfo=False):
         self.episodeCount += 1
@@ -87,14 +79,29 @@ class Agent:
                 print " - best path so far: " + str(self.bestPathSoFar)
                 print " - moves per episode: " + str(self.movesPerEpisode)
                 print " - reward score per episode " + str(self.rewardScorePerEpisode)
+    
+    def clearAnalytics(self):
+        self.episodeCount = 0
+        self.totalMoveCount = 0
+        self.bestScoreSoFar = -999
+        self.bestPathSoFar = []
 
-    def new_episode(self):
-        self.updateAnalyticsBeforeNewEpisode(True)
+        self.movesPerEpisode = []
+        self.rewardScorePerEpisode = []
+        self.rewardsCollectedPerEpisode = []
+
+    def new_episode(self, verbose = False):
+        self.updateAnalyticsBeforeNewEpisode(verbose)
         self.moveHistory = [self.start]
         self.actionHistory = []
         self.rewardHistory = []
         self.moveCount = 0
         self.world.newEpisode()#TODO: interects with world
+    
+    def completeReset(self):
+        self.new_episode()
+        self.clearAnalytics()
+        self.qTable = createQTable()
         
     def getCurrentState(self):
         #returns (curLoc, itemsLooted)
@@ -146,8 +153,9 @@ class Agent:
         print " - self.actionHistory = " + str(self.actionHistory)
         print " - self.rewardHistory = " + str(self.rewardHistory)
         print " - self.rewardsLooted = " + str(self.world.rewardList)
-        print " - self.world.totalRewards = " + str(self.world.totalRewards)
-        print " - self.world.lastReward = " + str(self.world.lastReward)
+        #TODO: commented out due to inconsistancies with worldsim
+        #print " - self.world.totalRewards = " + str(self.world.totalRewards)
+        #print " - self.world.lastReward = " + str(self.world.lastReward)
 
 
     ########################################################################################################
