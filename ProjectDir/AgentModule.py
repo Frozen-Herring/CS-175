@@ -2,6 +2,7 @@ import MalmoPython as Malmo
 from _collections import defaultdict
 import random
 import CoordinateUtils
+from itertools import product as itproduct
 
 
 qTable_DEFAULT = 0
@@ -21,7 +22,7 @@ def createQTable():
     return defaultdict(outerDef) #qTable[state][action][projectedReward]
 
 class Agent:
-    def __init__(self, world, start=(0,0,0), n=1, alpha=1, gamma=1.0, moveCap = 100):
+    def __init__(self, world, start=(0,0,0), n=1, alpha=.5, gamma=.5, moveCap = 100):
 
         self.start = start #starting square
         
@@ -90,13 +91,14 @@ class Agent:
         self.rewardScorePerEpisode = []
         self.rewardsCollectedPerEpisode = []
 
-    def new_episode(self, verbose = False):
+    def new_episode(self, verbose = False, saveFile= False):
         self.updateAnalyticsBeforeNewEpisode(verbose)
-        with open("analytics.csv", "w") as f:
-            f.write("episode #\tmoves #\treward score\trewards collected")
-            for i in range(self.episodeCount-1):
-                f.write("\n" + str(i) + "\t" + str(self.movesPerEpisode[i]) + "\t" + str(self.rewardScorePerEpisode[i]) + "\t" + str(self.rewardsCollectedPerEpisode[i]))
-                f.flush()
+        if saveFile:
+            with open("analytics.csv", "w") as f:
+                f.write("episode #\tmoves #\treward score\trewards collected")
+                for i in range(self.episodeCount-1):
+                    f.write("\n" + str(i) + "\t" + str(self.movesPerEpisode[i]) + "\t" + str(self.rewardScorePerEpisode[i]) + "\t" + str(self.rewardsCollectedPerEpisode[i]))
+                    f.flush()
         self.finishedMaze = False
         self.moveHistory = [self.start]
         self.actionHistory = []
@@ -119,7 +121,7 @@ class Agent:
     def getRawardTotal(self):
         return sum(self.rewardHistory)
     
-    def makeMove(self, eps = .5, verbose = True):
+    def makeMove(self, eps = .1, verbose = True, experimental = True):
         old_state = (tuple(self.world.rewardList), self.moveHistory[-1])
         possibleMoves = CoordinateUtils.movement2D #hard-coded 2D movement
         moveToTake = self.chooseAction(possibleMoves, eps)
@@ -132,12 +134,12 @@ class Agent:
 
         self.rewardHistory.append(reward)
         self.moveCount += 1
-        """
-        if self.moveHistory[-1] in self.world.getRewardList():#TODO: interects with world
-            a = self.world.getRewardList().index(self.moveHistory[-1])#TODO: interects with world
-            self.rewardsLooted[a] = 1
-        """
         self.updateQTable(old_state)
+        if experimental:
+            if reward < -50: #TODO: ATTENTION HARD CODED: to check for lava
+                for rl in self.allRewardStates():
+                    old_state = (tuple(rl), self.moveHistory[-1])
+                    self.updateQTable(old_state)
         if verbose:
             self.printStatus()
         
@@ -156,6 +158,13 @@ class Agent:
             else:
                 cur_state = (tuple(self.world.rewardList), self.moveHistory[-1])
                 return self._bestMove(possibleMoves, cur_state)
+
+    def allRewardStates(self, excludeCurrent = True):
+        ret =[tuple(x) for x in itproduct([0,1], repeat = len(self.world.rewardList))]
+        if excludeCurrent:
+            ret.remove(tuple(self.world.rewardList))
+        return ret
+        
 
     def printStatus(self):
         print "make move..."
