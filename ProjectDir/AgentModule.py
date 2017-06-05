@@ -79,7 +79,6 @@ class Agent:
                 print " - best path so far: " + str(self.bestPathSoFar)
                 print " - moves per episode: " + str(self.movesPerEpisode)
                 print " - reward score per episode " + str(self.rewardScorePerEpisode)
-<<<<<<< HEAD
     
     def clearAnalytics(self):
         self.episodeCount = 0
@@ -93,7 +92,6 @@ class Agent:
 
     def new_episode(self, verbose = False):
         self.updateAnalyticsBeforeNewEpisode(verbose)
-=======
                 print " - rewards collected per epsiode: " + str(self.rewardsCollectedPerEpisode)
 
             with open("analytics.csv", "w") as f:
@@ -106,7 +104,6 @@ class Agent:
     def new_episode(self):
         self.updateAnalyticsBeforeNewEpisode(True)
         self.finishedMaze = False
->>>>>>> origin/master
         self.moveHistory = [self.start]
         self.actionHistory = []
         self.rewardHistory = []
