@@ -49,7 +49,6 @@ class Agent:
         self.moveHistory = [start] # [locs]... list of the locs we traversed so far...
         self.actionHistory = []
         self.rewardHistory = []
-        self.finishedMaze = False
         '''end episodic variables'''
 
         '''Analytics Here '''
@@ -98,7 +97,6 @@ class Agent:
 
     def new_episode(self):
         self.updateAnalyticsBeforeNewEpisode(True)
-        self.finishedMaze = False
         self.moveHistory = [self.start]
         self.actionHistory = []
         self.rewardHistory = []
@@ -123,8 +121,7 @@ class Agent:
         self.moveHistory.append(CoordinateUtils.sumCoordinates(moveToTake, self.moveHistory[-1]))
         
         reward = self.world.moveAgent(moveToTake)#TODO: interects with world
-        if self.world.finishedMaze():
-            self.finishedMaze = True
+        if self.world.finishedMaze:
             reward += 10
 
         self.rewardHistory.append(reward)
