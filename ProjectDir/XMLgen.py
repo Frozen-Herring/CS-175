@@ -1,5 +1,7 @@
 import MazeGen
 import MalmoPython
+import SaveLoader as sl
+from random import randrange
 
 # Stuff to do.
 """"
@@ -11,9 +13,29 @@ change tick time
 """
 
 class XmlGen:
-    def __init__(self):
+    def __init__(self, f = '', load = False, save = False):
         self.height = 226
         self.endBlock = None
+        self.load = load
+        self.save = save
+        self.f = f
+
+    def createMaze(self, mazeSize, rewardCount):
+        if self.load:
+            maze = sl.pickle_load(self.f)
+            maze.prettyPrint()
+
+        else:
+            possibleMovement = "2D"
+            maze = MazeGen.genMaze(mazeSize, possibleMovement, rewardCount)
+
+        if self.save:
+                if self.f == "":
+                    self.f = str(randrange(0, 9999999999))
+                    self.f += "-maze.p"
+                mazeSaved = sl.pickle_save(maze, self.f)
+
+        return maze
 
 
     def generateXML(self, mazeSize, rewardDict):
@@ -26,7 +48,7 @@ class XmlGen:
       </About>
 
       <ModSettings>
-        <MsPerTick>10</MsPerTick>
+        <MsPerTick>20</MsPerTick>
       </ModSettings>
 
       <ServerSection>
@@ -89,8 +111,6 @@ class XmlGen:
         # Describe Mission
         missionSpecs.setSummary("LARS Project 175")
 
-        # /setworldspawn 0 227 0
-
         # Timer??
         # missionSpecs.timeLimitInSeconds(100)
 
@@ -98,8 +118,10 @@ class XmlGen:
         missionSpecs.setTimeOfDay(13200, False)
 
         # For Future use, set a entrance or exit state to be recorded
-        missionSpecs.startAt(0.5, 227, 0.5)  # - float x, float y, float z, float tolerance
-        maze = MazeGen.genMaze(mazeSize, rewardCount=len(rewardDict))
+        missionSpecs.startAt(0.5, 229, 0.5)  # - float x, float y, float z, float tolerance
+
+        #CREATE THE MAZE
+        maze = self.createMaze(mazeSize, rewardCount=len(rewardDict))
 
         mazeValue = maze.maze
 
@@ -110,8 +132,8 @@ class XmlGen:
         missionSpecs.drawBlock(mazeSize[0] + 1, 227, mazeSize[2] + 1, 'glowstone')  # Start block
         missionSpecs.drawBlock(mazeSize[0] + 1, 227, -1, 'glowstone')  # Start block
 
-        missionSpecs.drawCuboid(-10, self.height, -10, mazeSize[0] + 10, mazeSize[1] + self.height + 1, mazeSize[2] + 10, 'obsidian')
-        missionSpecs.drawCuboid(-9, self.height, -9, mazeSize[0] + 9, mazeSize[1] + self.height, mazeSize[2] + 9, 'air')
+        missionSpecs.drawCuboid(-10, self.height, -10, mazeSize[0] + 10, mazeSize[1] + self.height + 10, mazeSize[2] + 10, 'obsidian')
+        missionSpecs.drawCuboid(-9, self.height, -9, mazeSize[0] + 9, mazeSize[1] + self.height + 9, mazeSize[2] + 9, 'air')
         missionSpecs.drawCuboid(-9, self.height, -9, mazeSize[0] + 9, self.height, mazeSize[2] + 9, 'lava')
 
         rewardDictCopy = dict()
@@ -126,11 +148,12 @@ class XmlGen:
                 z = zVal
                 for yVal in range(len(mazeValue[xVal][zVal])):
                     y = yVal
-                    missionSpecs.drawBlock(x, (y + self.height), z, str(mazeValue[x][z][y]))
-                    if str(mazeValue[x][z][y]) == "lapis_block":
-                        assert (len(
-                            rewardDict) != 0)  # make sure that the number of reward blocks is equal to the size of the reward dict
-                        missionSpecs.drawItem(x, (y + self.height + 2), z, rewardDictCopy.popitem()[0])
+                    if str(mazeValue[x][z][y]) == "lava":
+                        missionSpecs.drawBlock(x, (y + self.height), z, str(mazeValue[x][z][y]))
+                    else:
+                        missionSpecs.drawBlock(x, (y + self.height)+2, z, str(mazeValue[x][z][y]))
+                        if str(mazeValue[x][z][y]) == "lapis_block":
+                            missionSpecs.drawItem(x, (y + self.height + 4), z, rewardDictCopy.popitem()[0])
 
         # Observations
         missionSpecs.observeFullInventory()  # Full item inventory of the player included in the observations
@@ -146,7 +169,7 @@ class XmlGen:
         missionSpecs.removeAllCommandHandlers()
         missionSpecs.allowAllDiscreteMovementCommands()
         missionSpecs.allowAllAbsoluteMovementCommands()
-        missionSpecs.allowAllChatCommands()
+        # missionSpecs.allowAllChatCommands()
         missionSpecs.requestVideo(960, 540)
         missionSpecs.setViewpoint(1)
         missionSpecs.allowAllInventoryCommands()
@@ -158,7 +181,7 @@ class XmlGen:
 
 if __name__ == '__main__':
     xmlGen = XmlGen()
-    print xmlGen.generasteXML((25, 25, 25), {"coal": 10, "iron_ingot": 20, "gold_ingot": 30, "lapis_ore": 40, "emerald_ore": 50,
+    print xmlGen.generateXML((25, 25, 25), {"coal": 10, "iron_ingot": 20, "gold_ingot": 30, "lapis_ore": 40, "emerald_ore": 50,
                                      "diamond": 60, "potato": 70})
 
 
