@@ -129,11 +129,8 @@ class Agent:
         self.moveHistory.append(CoordinateUtils.sumCoordinates(moveToTake, self.moveHistory[-1]))
         
         reward = self.world.moveAgent(moveToTake)#TODO: interects with world
-<<<<<<< HEAD
-=======
         if self.world.finishedMaze:
             reward += 10
->>>>>>> origin/master
 
         self.rewardHistory.append(reward)
         self.moveCount += 1
