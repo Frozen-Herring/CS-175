@@ -13,12 +13,13 @@ from SaveLoader import MazeSaveLoader
 
 def genBins():
     ret = []
-    for i in range(1,21):
-        for j in range(1,21):
-            j /= 20.0
-            for k in range(1,21):
-                k /= 20.0
+    for i in range(5,21,3):
+        for j in range(1,6):
+            j /= 5.0
+            for k in range(1,6):
+                k /= 5.0
                 ret.append((i,j,k))
+    return ret
                 
 
 class Optimizer:
@@ -50,8 +51,7 @@ class Optimizer:
             if val<lowestVal:
                 lowestVal = val
                 bestVals = vals
-            
-            scores.append()
+            scores.append((vals, val))
         self.optimal = (lowestVal, bestVals)
         print(scores)
     

@@ -13,14 +13,18 @@ change tick time
 """
 
 class XmlGen:
-    def __init__(self, f = '', load = False, save = False):
+    def __init__(self, f = '', load = False, save = False, jsl = True):
         self.height = 226
         self.endBlock = None
         self.load = load
         self.save = save
+        self.jsl = jsl
         self.f = f
+        
 
     def createMaze(self, mazeSize, rewardCount):
+        if self.jsl:
+            return sl.MazeSaveLoader().getMaze()
         if self.load:
             maze = sl.pickle_load(self.f)
             maze.prettyPrint()
