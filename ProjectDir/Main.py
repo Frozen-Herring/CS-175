@@ -6,14 +6,15 @@ Created on May 20, 2017
 import MazeGen
 import WorldSim
 import AgentModule
-import SaveLoader as sl
+from SaveLoader  import MazeSaveLoader
 from random import randrange
+from CoordinateUtils import MOVECAP
 TEST = True
-MOVECAP = 300
 def testRunEpisode(agent, eps = .5, verbose = False):
     i = 0
     while (agent.isAlive() or agent.moveHistory[-1] == agent.world.worldMaze.endBlock) and i < MOVECAP:
         agent.makeMove(eps = eps, verbose = verbose)
+        i+=1
 
 def runNEpidsodes(agent, n, eps = .5, verbose = False):
     for i in range(n):
@@ -35,18 +36,7 @@ def printAgentHistory(agent):
         print "Move: {}, Tile: {}, Reward: {}".format(move, agent.world._getTile(move), reward)
 
 if __name__ == '__main__':   
-    f = raw_input("Enter a file name to load from: ")
-    if f == "":
-        x=7
-        y=7
-        z=1
-        mazeSize = (x,y,z)
-        possibleMovement = "2D"
-        rewardCount = 3
-        maze = MazeGen.genMaze(mazeSize, possibleMovement, rewardCount = rewardCount)
-    else:
-        f+="-maze.p"
-        maze = sl.pickle_load(f)
+    maze = MazeSaveLoader().getMaze()
     maze.prettyPrint()
 
     if TEST:
@@ -57,12 +47,6 @@ if __name__ == '__main__':
         PrintBestPath(agent)
         print agent.qTable
     
-    if f != "":
-        f = raw_input("Enter a file name to save to: ")
-        if f == "":
-            f = str(randrange(0,9999999999))
-        f+="-maze.p"
-        maze = sl.pickle_save(maze, f)
 
 
 

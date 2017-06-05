@@ -10,14 +10,6 @@ qTable_DEFAULT = 0
 #--------------------------todo----------------------------------#
 ##################################################################
 
-1:Use QLearning library?
-2:makeMove function (incomplete)
-    -chose move
-    -make move
-    -update q table
-3:Add run episode (or make this a separate module?????)
-    -make moves until max moves or "dead"
-
 ##################################################################
 #--------------------------\todo---------------------------------#
 ##################################################################
@@ -51,7 +43,7 @@ class Agent:
         self.rewardHistory = []
         '''end episodic variables'''
 
-        '''Analytics Here '''
+        '''Analytics'''
         self.episodeCount = 0
         self.totalMoveCount = 0
         self.bestScoreSoFar = -999
@@ -60,7 +52,7 @@ class Agent:
         self.movesPerEpisode = []
         self.rewardScorePerEpisode = []
         self.rewardsCollectedPerEpisode = []
-
+        '''End Analytics'''
 
     def updateAnalyticsBeforeNewEpisode(self, printInfo=False):
         self.episodeCount += 1
@@ -88,21 +80,35 @@ class Agent:
                 print " - reward score per episode " + str(self.rewardScorePerEpisode)
                 print " - rewards collected per epsiode: " + str(self.rewardsCollectedPerEpisode)
 
-            with open("analytics.csv", "w") as f:
-                f.write("episode #\tmoves #\treward score\trewards collected")
-                for i in range(self.episodeCount-1):
-                    f.write("\n" + str(i) + "\t" + str(self.movesPerEpisode[i]) + "\t" + str(self.rewardScorePerEpisode[i]) + "\t" + str(self.rewardsCollectedPerEpisode[i]))
-                    f.flush()
+    def clearAnalytics(self):
+        self.episodeCount = 0
+        self.totalMoveCount = 0
+        self.bestScoreSoFar = -999
+        self.bestPathSoFar = []
 
+        self.movesPerEpisode = []
+        self.rewardScorePerEpisode = []
+        self.rewardsCollectedPerEpisode = []
 
-    def new_episode(self):
-        self.updateAnalyticsBeforeNewEpisode(True)
+    def new_episode(self, verbose = False):
+        self.updateAnalyticsBeforeNewEpisode(verbose)
+        with open("analytics.csv", "w") as f:
+            f.write("episode #\tmoves #\treward score\trewards collected")
+            for i in range(self.episodeCount-1):
+                f.write("\n" + str(i) + "\t" + str(self.movesPerEpisode[i]) + "\t" + str(self.rewardScorePerEpisode[i]) + "\t" + str(self.rewardsCollectedPerEpisode[i]))
+                f.flush()
+        self.finishedMaze = False
         self.moveHistory = [self.start]
         self.actionHistory = []
         self.rewardHistory = []
         self.moveCount = 0
         self.world.newEpisode()#TODO: interects with world
-        
+
+    def completeReset(self):
+        self.new_episode()
+        self.clearAnalytics()
+        self.qTable = createQTable()
+
     def getCurrentState(self):
         #returns (curLoc, itemsLooted)
         return (self.moveHistory[-1], tuple(self.world.rewardList))
@@ -156,8 +162,9 @@ class Agent:
         print " - self.actionHistory = " + str(self.actionHistory)
         print " - self.rewardHistory = " + str(self.rewardHistory)
         print " - self.rewardsLooted = " + str(self.world.rewardList)
-        print " - self.world.totalRewards = " + str(self.world.totalRewards)
-        print " - self.world.lastReward = " + str(self.world.lastReward)
+        #TODO: commented out due to inconsistancies with worldsim
+        #print " - self.world.totalRewards = " + str(self.world.totalRewards)
+        #print " - self.world.lastReward = " + str(self.world.lastReward)
 
 
     ########################################################################################################
