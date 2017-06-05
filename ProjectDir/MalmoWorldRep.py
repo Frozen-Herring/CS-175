@@ -14,6 +14,7 @@ class WorldRep:
         self.lastReward = 0
         self.endBlock = (endBlock[0]+.5, endBlock[1]+.5)
         self.finishedMaze = False
+        self.inventoryItemsAsSet = set()
 
 
     def newEpisode(self): #Agent Calls this
@@ -23,7 +24,7 @@ class WorldRep:
         self.rewardList = [0 for _ in self.sortedRewards]
         self.totalRewards = 0
         self.lastReward = 0
-        self.finishedMaze = False
+        self.inventoryItemsAsSet = set()
 
 
     def _updateWorldRep(self, worldState):
@@ -45,6 +46,7 @@ class WorldRep:
             invKey = 'InventorySlot_{}_item'.format(str(i))
             if invKey in self.obs:
                 rewardSet.add(self.obs[invKey])
+        self.inventoryItemsAsSet = rewardSet
         return rewardSet
 
     def _createRewardList(self):

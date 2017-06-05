@@ -169,7 +169,7 @@ class XmlGen:
         missionSpecs.removeAllCommandHandlers()
         missionSpecs.allowAllDiscreteMovementCommands()
         missionSpecs.allowAllAbsoluteMovementCommands()
-        # missionSpecs.allowAllChatCommands()
+        missionSpecs.allowAllChatCommands()
         missionSpecs.requestVideo(960, 540)
         missionSpecs.setViewpoint(1)
         missionSpecs.allowAllInventoryCommands()
