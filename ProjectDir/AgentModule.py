@@ -41,7 +41,7 @@ class Agent:
         self.moveHistory = [start] # [locs]... list of the locs we traversed so far...
         self.actionHistory = []
         self.rewardHistory = []
-        #self.rewardsLooted = [0 for _ in range(len(world.getRewardList()))]
+        self.finishedMaze = False
         '''end episodic variables'''
 
         '''Analytics'''
@@ -79,6 +79,7 @@ class Agent:
                 print " - best path so far: " + str(self.bestPathSoFar)
                 print " - moves per episode: " + str(self.movesPerEpisode)
                 print " - reward score per episode " + str(self.rewardScorePerEpisode)
+<<<<<<< HEAD
     
     def clearAnalytics(self):
         self.episodeCount = 0
@@ -92,6 +93,20 @@ class Agent:
 
     def new_episode(self, verbose = False):
         self.updateAnalyticsBeforeNewEpisode(verbose)
+=======
+                print " - rewards collected per epsiode: " + str(self.rewardsCollectedPerEpisode)
+
+            with open("analytics.csv", "w") as f:
+                f.write("episode #\tmoves #\treward score\trewards collected")
+                for i in range(self.episodeCount-1):
+                    f.write("\n" + str(i) + "\t" + str(self.movesPerEpisode[i]) + "\t" + str(self.rewardScorePerEpisode[i]) + "\t" + str(self.rewardsCollectedPerEpisode[i]))
+                    f.flush()
+
+
+    def new_episode(self):
+        self.updateAnalyticsBeforeNewEpisode(True)
+        self.finishedMaze = False
+>>>>>>> origin/master
         self.moveHistory = [self.start]
         self.actionHistory = []
         self.rewardHistory = []
@@ -121,6 +136,10 @@ class Agent:
         self.moveHistory.append(CoordinateUtils.sumCoordinates(moveToTake, self.moveHistory[-1]))
         
         reward = self.world.moveAgent(moveToTake)#TODO: interects with world
+        if self.world.finishedMaze():
+            self.finishedMaze = True
+            reward += 10
+
         self.rewardHistory.append(reward)
         self.moveCount += 1
         """
