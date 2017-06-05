@@ -42,7 +42,6 @@ class Agent:
         self.moveHistory = [start] # [locs]... list of the locs we traversed so far...
         self.actionHistory = []
         self.rewardHistory = []
-        self.finishedMaze = False
         '''end episodic variables'''
 
         '''Analytics'''
@@ -81,7 +80,7 @@ class Agent:
                 print " - moves per episode: " + str(self.movesPerEpisode)
                 print " - reward score per episode " + str(self.rewardScorePerEpisode)
                 print " - rewards collected per epsiode: " + str(self.rewardsCollectedPerEpisode)
-    
+
     def clearAnalytics(self):
         self.episodeCount = 0
         self.totalMoveCount = 0
@@ -106,12 +105,12 @@ class Agent:
         self.rewardHistory = []
         self.moveCount = 0
         self.world.newEpisode()#TODO: interects with world
-    
+
     def completeReset(self):
         self.new_episode()
         self.clearAnalytics()
         self.qTable = createQTable()
-        
+
     def getCurrentState(self):
         #returns (curLoc, itemsLooted)
         return (self.moveHistory[-1], tuple(self.world.rewardList))
@@ -130,6 +129,11 @@ class Agent:
         self.moveHistory.append(CoordinateUtils.sumCoordinates(moveToTake, self.moveHistory[-1]))
         
         reward = self.world.moveAgent(moveToTake)#TODO: interects with world
+<<<<<<< HEAD
+=======
+        if self.world.finishedMaze:
+            reward += 10
+>>>>>>> origin/master
 
         self.rewardHistory.append(reward)
         self.moveCount += 1

@@ -36,7 +36,9 @@ class MissionBase:
             #Make move
             qAgent.makeMove(0.02, False)
             world.worldState = agentHost.peekWorldState()
-            if qAgent.finishedMaze:
+            if world.finishedMaze:
+                agentHost.sendCommand("chat /kill")
+                agentHost.sendCommand("chat I finished the maze!")
                 print "finished mission"
 
     def startMission(self, agentHost, mission, missionRec):
@@ -48,7 +50,6 @@ class MissionBase:
         print "\nStarting New Mission..."
         worldState = agentHost.peekWorldState()
         while not worldState.has_mission_begun:
-            # sys.stdout.write(".")
             time.sleep(0.1)
             worldState = agentHost.getWorldState()
             for error in worldState.errors:
@@ -67,25 +68,34 @@ class MissionBase:
 
 
     def main(self):
-
-        rewards = {"coal": 10, "iron_ingot": 20, "gold_ingot": 30, "lapis_ore": 40, "emerald_ore": 50, "diamond": 60, "potato": 70}
-        mazeSize = (5,5, 5)
+        CURRENT_MAZE_NAME = "some maze"
+        BEST_POSSIBLE_SCORE = -999
+        # rewards = {"coal": 10, "iron_ingot": 20, "gold_ingot": 30, "lapis_ore": 40, "emerald_ore": 50, "diamond": 60, "potato": 70}
+        rewards = {"coal": 10, "iron_ingot": 10, "gold_ingot": 10, "lapis_ore": 10, "emerald_ore": 10, "diamond": 10, "potato": 10}
+        mazeSize = (10,10,10)
 
         agentHost, mission, missionRec = self.setup(mazeSize, rewards)
         world = WorldRep(agentHost, self.endBlock, rewards = rewards)
         qAgent = QAgent(world, start = (.5, 229,.5))
+        agentHost.sendCommand("chat /difficulty 3")
+        agentHost.sendCommand("chat oh boy I sure hope there's no lava around here")
 
         #finalReward = 0
-        maxMoves = 10000;
-        for i in range(maxMoves):
+        while(not (world.finishedMaze and qAgent.bestScoreSoFar >= BEST_POSSIBLE_SCORE)):
             self.startMission(agentHost, mission, missionRec)
             self.agentRun(agentHost, qAgent, world)
-            time.sleep(.1)
 
-        #print 'Final Rewards: ', finalReward
-        time.sleep(0.5) # (let the Mod reset)
-        print "Mission Complete"
+        print ("optimal path (best possible score) found in: " + str(qAgent.episodeCount) + " episodes. Stopping Agent.")
+        self.updateRecordStats(CURRENT_MAZE_NAME, qAgent.episodeCount, qAgent.totalMoveCount)
 
+
+    def updateRecordStats(self, currentMazeName, episodesTaken, totalMovesTaken):
+        with open("best_run_stats.csv", "r+") as f:
+            data = f.read()
+            data += "\n" + str(currentMazeName) + "\t" + str(episodesTaken) + "\t" + str(totalMovesTaken)
+            f.seek(0)
+            f.write(data)
+            f.truncate()
 
 
 #----CONNECT/SET UP AGENT AND RUN MISSION-----
