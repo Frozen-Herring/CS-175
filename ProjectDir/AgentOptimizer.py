@@ -51,7 +51,7 @@ class Optimizer:
         if verbose: print header
         for vals in keys:
             avgValList = []
-            for i in range(2):
+            for i in range(100):
                 avgValList.append(self.runToOptimal(vals))
             val = float(sum(avgValList))/len(avgValList)
             currentLine = str(val) + "\t" + str(vals[0]) + "\t" + str(vals[1]) + "\t" + str(vals[2]) + "\t" + str(avgValList)
