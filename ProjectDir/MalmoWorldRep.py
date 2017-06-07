@@ -13,8 +13,8 @@ class WorldRep:
         self.totalRewards = 0
         self.lastReward = 0
         self.endBlock = (endBlock[0]+.5, endBlock[1]+.5)
-        self.finishedMaze = False
         self.inventoryItemsAsSet = set()
+        self.finishMazeReward = 10
 
 
     def newEpisode(self): #Agent Calls this
@@ -33,11 +33,12 @@ class WorldRep:
         self.obs = json.loads(worldState.observations[-1].text)
         self.QAgentLoc = (self.obs[u'XPos'], self.obs[u'ZPos'])
         self._updateAllRewards()
-        self.updateFinishedMaze()
 
     def _updateAllRewards(self): #getreward from move
         self.rewardList = self._createRewardList()
         self.lastReward = self.worldState.rewards[-1].getValue() - self.totalRewards #ehhhhhh probably
+        if self.finishedMaze():
+            self.lastReward = self.finishMazeReward
         self.totalRewards = self.worldState.rewards[-1].getValue()
 
     def _getInventoryItemsAsSet(self):
@@ -83,12 +84,12 @@ class WorldRep:
         self._updateWorldRep(self.agentHost.peekWorldState())
         return self.lastReward
 
-    def updateFinishedMaze(self):
+    def finishedMaze(self):
         # print "agent is on end block: " + str(self.endBlock == self.QAgentLoc) + "... " + str(self.endBlock) + "==" + str(self.QAgentLoc)
         # print " - agent has all rewards:" + str(sum(self.rewardList) == len(self.rewardList)) + "... " + str(sum(self.rewardList)) + "==" + str(len(self.rewardList))
         # print " returning: " + str(self.endBlock == self.QAgentLoc and sum(self.rewardList) == len(self.rewardList))
         # if the agent is on the end block AND we have collected all the rewards, we finished the maze
-        self.finishedMaze = self.endBlock == self.QAgentLoc and sum(self.rewardList) == len(self.rewardList)
+        return self.endBlock == self.QAgentLoc and sum(self.rewardList) == len(self.rewardList)
 
 
 

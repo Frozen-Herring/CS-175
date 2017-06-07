@@ -99,7 +99,6 @@ class Agent:
                 for i in range(self.episodeCount-1):
                     f.write("\n" + str(i) + "\t" + str(self.movesPerEpisode[i]) + "\t" + str(self.rewardScorePerEpisode[i]) + "\t" + str(self.rewardsCollectedPerEpisode[i]))
                     f.flush()
-        self.finishedMaze = False
         self.moveHistory = [self.start]
         self.actionHistory = []
         self.rewardHistory = []
@@ -116,7 +115,9 @@ class Agent:
         return (self.moveHistory[-1], tuple(self.world.rewardList))
     
     def isAlive(self):
-        return self.moveCap > self.moveCount and not self.world.onDangerBlock() 
+        if self.world.finishedMaze():
+            return False
+        return self.moveCap > self.moveCount and not self.world.onDangerBlock()
     
     def getRawardTotal(self):
         return sum(self.rewardHistory)
@@ -129,8 +130,7 @@ class Agent:
         self.moveHistory.append(CoordinateUtils.sumCoordinates(moveToTake, self.moveHistory[-1]))
         
         reward = self.world.moveAgent(moveToTake)#TODO: interects with world
-        if self.world.finishedMaze:
-            reward += 10
+
 
         self.rewardHistory.append(reward)
         self.moveCount += 1

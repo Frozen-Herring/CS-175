@@ -12,6 +12,7 @@ import CoordinateUtils
 emptyBlockReward, normalBlockReward, dangerBlockReward, rewardBlockReward, terminalBlockReward= None, -1, -500, 100, 0
 blockList = [CoordinateUtils.emptyBlock, CoordinateUtils.normalBlock, CoordinateUtils.dangerBlock, CoordinateUtils.rewardBlock, CoordinateUtils.terminalBlock]
 rewardList = [emptyBlockReward, normalBlockReward, dangerBlockReward, rewardBlockReward, terminalBlockReward]
+rewardForFinishingMazeWithAllItems = 100
 
 
 class WorldSim():
@@ -65,9 +66,15 @@ class WorldSim():
         if tile == CoordinateUtils.rewardBlock:#if it's a rewardBlock then turn it normal (can't be taken more than once)
             self.worldMaze.set(self.agentLoc, CoordinateUtils.normalBlock, weak = False)
         #print "tile: {}, reward: {}".format(tile, self.rewardDict[tile])
-        reward = self.rewardDict[tile]
+        if self.finishedMaze():
+            reward = rewardForFinishingMazeWithAllItems
+        else:
+            reward = self.rewardDict[tile]
         self.totalRewards+=reward
         return reward
+
+    def finishedMaze(self):
+        return self.worldMaze.endBlock == self.agentLoc and sum(self.rewardList) == len(self.rewardList)
         
 
     
