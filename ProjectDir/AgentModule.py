@@ -223,8 +223,7 @@ class Agent:
         world_x = self.world.maze.x
         world_y = self.world.maze.y
         scale = self.scale
-        curr_x, curr_y, _ = CoordinateUtils.malToMazeCoord(self.moveHistory[-1])
-        print curr_x, curr_y
+        curr_x, curr_y, _ = self.moveHistory[-1]
         self.canvas.delete("all")
         action_inset = 0.1
         action_radius = 0.1
@@ -242,7 +241,7 @@ class Agent:
         max_value = 10
         for x in range(world_x):
             for y in range(world_y):
-                stateCoord = CoordinateUtils.mazeToMalCoord((y,x,0))
+                stateCoord = (x,y,0)
                 s = (tuple(self.world.rewardList),stateCoord)
                 self.canvas.create_rectangle( (world_x-1-x)*scale, (world_y-1-y)*scale, (world_x-1-x+1)*scale, (world_y-1-y+1)*scale, outline="#fff", fill="#000")
                 for aInd in range(4):

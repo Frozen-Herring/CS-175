@@ -29,6 +29,7 @@ terminalBlock = "emerald_block"
 malmoGroundY = 226
 raiseBy = 2
 agentStart = (.5, malmoGroundY+raiseBy+1, .5)
+agentStart2 = (0,0,0)
 
 #rewardDict = {"coal": 10, "iron_ingot": 20, "gold_ingot": 30, "lapis_ore": 40, "emerald_ore": 50, "diamond": 60, "potato": 70}
 rewardDict = {"coal": 10, "iron_ingot": 10, "gold_ingot": 10, "lapis_ore": 10, "emerald_ore": 10, "diamond": 10, "potato": 10}

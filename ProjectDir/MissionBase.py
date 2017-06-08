@@ -6,7 +6,7 @@ from XMLgen import XmlGen
 from AgentModule import Agent as QAgent
 from MalmoWorldRep import WorldRep
 from SaveLoader import MazeSaveLoader as msl
-from CoordinateUtils import agentStart
+from CoordinateUtils import agentStart2
 """
 ==================
 Stuff to change:
@@ -73,7 +73,7 @@ class MissionBase:
 
         agentHost, mission, missionRec = self.setup()
         world = WorldRep(agentHost, self.maze)
-        qAgent = QAgent(world, start = agentStart)
+        qAgent = QAgent(world, start = agentStart2)
         agentHost.sendCommand("chat /difficulty 3")
         agentHost.sendCommand("chat oh boy I sure hope there's no lava around here")
 
