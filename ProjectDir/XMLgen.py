@@ -29,7 +29,7 @@ class XmlGen:
       </About>
 
       <ModSettings>
-        <MsPerTick>20</MsPerTick>
+        <MsPerTick>10</MsPerTick>
       </ModSettings>
 
       <ServerSection>

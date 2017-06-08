@@ -3,7 +3,7 @@ from _collections import defaultdict
 import random
 import CoordinateUtils
 from itertools import product as itproduct
-
+import Tkinter as tk
 
 qTable_DEFAULT = 0
 '''
@@ -35,6 +35,17 @@ class Agent:
         self.alpha = alpha #learning rate
         self.gamma = gamma #discount factor
         self.qTable = createQTable()
+        '''draw'''
+        scale = 40
+        self.scale = scale
+        root = tk.Tk()
+        root.wm_title("Q-table")
+        canvas = tk.Canvas(root, width=self.world.maze.x*scale, height=self.world.maze.y*scale, borderwidth=0, highlightthickness=0, bg="black")
+        canvas.grid()
+        root.update()
+        self.canvas = canvas
+        self.root = root
+        '''end draw'''
         '''end Q Learning'''
         
         '''episodic variables'''
@@ -112,7 +123,7 @@ class Agent:
 
     def getCurrentState(self):
         #returns (curLoc, itemsLooted)
-        return (self.moveHistory[-1], tuple(self.world.rewardList))
+        return (tuple(self.world.rewardList), self.moveHistory[-1])
     
     def isAlive(self):
         if self.world.finishedMaze():
@@ -123,6 +134,7 @@ class Agent:
         return sum(self.rewardHistory)
     
     def makeMove(self, eps = .1, verbose = False, learningType = True):
+        self._draw()
         old_state = (tuple(self.world.rewardList), self.moveHistory[-1])
         possibleMoves = CoordinateUtils.movement2D #hard-coded 2D movement
         moveToTake = self.chooseAction(possibleMoves, eps)
@@ -130,7 +142,6 @@ class Agent:
         self.moveHistory.append(CoordinateUtils.sumCoordinates(moveToTake, self.moveHistory[-1]))
         
         reward = self.world.moveAgent(moveToTake)#TODO: interects with world
-        print(reward)
 
         self.rewardHistory.append(reward)
         self.moveCount += 1
@@ -208,4 +219,50 @@ class Agent:
                 posBest.append(i)
         a = random.randint(0, len(posBest) - 1)
         return possibleMoves[posBest[a]]
+    def _draw(self):
+        world_x = self.world.maze.x
+        world_y = self.world.maze.y
+        scale = self.scale
+        curr_x, curr_y, _ = CoordinateUtils.malToMazeCoord(self.moveHistory[-1])
+        print curr_x, curr_y
+        self.canvas.delete("all")
+        action_inset = 0.1
+        action_radius = 0.1
+        curr_radius = 0.2
+        #action_positions = [ ( 0.5, 1-action_inset ), ( 0.5, action_inset ), ( 1-action_inset, 0.5 ), ( action_inset, 0.5 ) ]
+        #action_positions = [ ( 1-action_inset, 0.5 ), ( 0.5, 1-action_inset ), ( action_inset, 0.5 ), ( 0.5, action_inset ) ]
+        #action_positions = [ ( 0.5, 1-action_inset ), ( 1-action_inset, 0.5 ), ( 0.5, action_inset ), ( action_inset, 0.5 ) ]
+        #action_positions = [ ( 0.5, action_inset ), ( 1-action_inset, 0.5 ), ( 0.5, 1-action_inset ), ( action_inset, 0.5 ) ]
+        #action_positions = [ ( 0.5, action_inset ), ( action_inset, 0.5 ), ( 0.5, 1-action_inset ), ( 1-action_inset, 0.5 ) ]
+        #action_positions = [ ( 0.5, 1-action_inset ), ( action_inset, 0.5 ), ( 0.5, action_inset ), ( 1-action_inset, 0.5 ) ]
+        #action_positions = [ ( action_inset, 0.5 ), ( 0.5, 1-action_inset ), ( 1-action_inset, 0.5 ), ( 0.5, action_inset ) ]close?
+        action_positions = [ ( action_inset, 0.5 ), ( 0.5, action_inset ), ( 1-action_inset, 0.5 ), ( 0.5, 1-action_inset ) ]
+        # (NSWE to match action order)
+        min_value = -10
+        max_value = 10
+        for x in range(world_x):
+            for y in range(world_y):
+                stateCoord = CoordinateUtils.mazeToMalCoord((y,x,0))
+                s = (tuple(self.world.rewardList),stateCoord)
+                self.canvas.create_rectangle( (world_x-1-x)*scale, (world_y-1-y)*scale, (world_x-1-x+1)*scale, (world_y-1-y+1)*scale, outline="#fff", fill="#000")
+                for aInd in range(4):
+                    action = CoordinateUtils.movement2D[aInd]
+                    if not s in self.qTable:
+                        continue
+                    value = self.qTable[s][action]
+                    color = 255 * ( value - min_value ) / ( max_value - min_value ) # map value to 0-255
+                    color = max( min( color, 255 ), 0 ) # ensure within [0,255]
+                    color_string = '#%02x%02x%02x' % (255-color, color, 0)
+                    self.canvas.create_oval( (world_x - 1 - x + action_positions[aInd][0] - action_radius ) *scale,
+                                             (world_y - 1 - y + action_positions[aInd][1] - action_radius ) *scale,
+                                             (world_x - 1 - x + action_positions[aInd][0] + action_radius ) *scale,
+                                             (world_y - 1 - y + action_positions[aInd][1] + action_radius ) *scale, 
+                                             outline=color_string, fill=color_string )
+        if curr_x is not None and curr_y is not None:
+            self.canvas.create_oval( (world_x - 1 - curr_x + 0.5 - curr_radius ) * scale, 
+                                     (world_y - 1 - curr_y + 0.5 - curr_radius ) * scale, 
+                                     (world_x - 1 - curr_x + 0.5 + curr_radius ) * scale, 
+                                     (world_y - 1 - curr_y + 0.5 + curr_radius ) * scale, 
+                                     outline="#fff", fill="#fff" )
+        self.root.update()
 

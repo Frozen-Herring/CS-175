@@ -6,7 +6,7 @@ from XMLgen import XmlGen
 from AgentModule import Agent as QAgent
 from MalmoWorldRep import WorldRep
 from SaveLoader import MazeSaveLoader as msl
-from CoordinateUtils import rewardDict, agentStart
+from CoordinateUtils import agentStart
 """
 ==================
 Stuff to change:
@@ -96,7 +96,7 @@ class MissionBase:
 
 #----CONNECT/SET UP AGENT AND RUN MISSION-----
 if __name__ == "__main__":
-    maze = msl().getMaze()
+    maze = msl(rewardCount=1).getMaze()
     # maze = msl(x=2,y=5,rewardCount=2,lavaPercent=.2).getMaze()
     missionBase = MissionBase(maze)
     missionBase.main()

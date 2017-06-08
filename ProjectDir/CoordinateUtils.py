@@ -55,13 +55,16 @@ MOVECAP = 300
 '''
 
 #for the malmo-maze coordinate conversions do we have to add/ subtract 1 to the height?
-def absoluteToRelative():
+def mazeToMalCoord(mazeCoord):
     #convert maze coordinates to malmo coordinates
-    pass
+    x,y,z = mazeCoord
+    mazeCoord = (x,z,y)
+    return sumCoordinates(mazeCoord, agentStart)
 
-def relativeToAbsolute():
+def malToMazeCoord(malCoord):
     #convert malmo coordinates to maze coordinates
-    pass
+    x,y,z = subCoordinates(malCoord, agentStart)
+    return (int(x), int(z), int(y))
 
 def seperateCoordinate(coordinate, default):
     if len(coordinate) == 1:
