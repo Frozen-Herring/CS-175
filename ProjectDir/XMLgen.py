@@ -1,7 +1,7 @@
 import MazeGen
 import MalmoPython
 import SaveLoader as sl
-from CoordinateUtils import rewardDict
+from CoordinateUtils import rewardDict, malmoGroundY, raiseBy, agentStart
 
 # Stuff to do.
 """"
@@ -14,11 +14,20 @@ change tick time
 
 class XmlGen:
     def __init__(self, f = '', maze = None):
-        self.height = 226
-        self.endBlock = None
+
+        self.height = malmoGroundY
+        self.raiseBy = raiseBy
+        self.agentStart = agentStart
+
         if maze == None:
             maze = sl.MazeSaveLoader().getMaze()
+
         self.maze = maze
+        self.mazeXSize = self.maze.x
+        self.mazeYSize = self.maze.z
+        self.mazeZSize = self.maze.y
+
+
 
     def generateXML(self):
         # USE THIS TO SET UP WITH MODIFICATIONS
@@ -81,8 +90,7 @@ class XmlGen:
       </AgentSection>
 
     </Mission>'''
-        
-        mazeSize = self.maze.maze
+
         rewardDictXmlString = ""
         for key, value in rewardDict.items():
             rewardDictXmlString += "\n<Item type=\"{}\" reward=\"{}\"/>".format(key, value)
@@ -101,20 +109,14 @@ class XmlGen:
         missionSpecs.setTimeOfDay(13200, False)
 
         # For Future use, set a entrance or exit state to be recorded
-        missionSpecs.startAt(0.5, 229, 0.5)  # - float x, float y, float z, float tolerance
+        missionSpecs.startAt(self.agentStart)  # - float x, float y, float z, float tolerance
 
         mazeValue = self.maze.maze
 
         # Draw world in XML
-        missionSpecs.drawBlock(-1, 227, -1, 'glowstone')  # Start block
-
-        missionSpecs.drawBlock(-1, 227, mazeSize[2] + 1, 'glowstone')  # Start block
-        missionSpecs.drawBlock(mazeSize[0] + 1, 227, mazeSize[2] + 1, 'glowstone')  # Start block
-        missionSpecs.drawBlock(mazeSize[0] + 1, 227, -1, 'glowstone')  # Start block
-
-        missionSpecs.drawCuboid(-10, self.height, -10, mazeSize[0] + 10, mazeSize[1] + self.height + 10, mazeSize[2] + 10, 'obsidian')
-        missionSpecs.drawCuboid(-9, self.height, -9, mazeSize[0] + 9, mazeSize[1] + self.height + 9, mazeSize[2] + 9, 'air')
-        missionSpecs.drawCuboid(-9, self.height, -9, mazeSize[0] + 9, self.height, mazeSize[2] + 9, 'lava')
+        missionSpecs.drawCuboid(-10, self.height, -10, self.mazeXSize + 10, self.mazeYSize + self.height + 10, self.mazeZSize + 10, 'obsidian')
+        missionSpecs.drawCuboid(-9, self.height, -9, self.mazeXSize + 9, self.mazeYSize + self.height + 9, self.mazeZSize + 9, 'air')
+        missionSpecs.drawCuboid(-9, self.height, -9, self.mazeXSize + 9, self.mazeYSize, self.mazeZSize + 9, 'lava')
 
         rewardDictCopy = dict()
         for key in rewardDict:
@@ -122,7 +124,6 @@ class XmlGen:
 
         # Draw Maze/Items
         for xVal in range(len(mazeValue)):
-
             x = xVal
             for zVal in range(len(mazeValue[xVal])):
                 z = zVal
@@ -131,10 +132,10 @@ class XmlGen:
                     if str(mazeValue[x][z][y]) == "lava":
                         missionSpecs.drawBlock(x, (y + self.height), z, str(mazeValue[x][z][y]))
                     else:
-                        missionSpecs.drawBlock(x, (y + self.height)+2, z, str(mazeValue[x][z][y]))
-                        if str(mazeValue[x][z][y]) == "lapis_block":
-                            missionSpecs.drawItem(x, (y + self.height + 4), z, rewardDictCopy.popitem()[0])
+                        missionSpecs.drawBlock(x, (y + self.height + self.raiseBy), z, str(mazeValue[x][z][y]))
 
+                        if str(mazeValue[x][z][y]) == "lapis_block":
+                            missionSpecs.drawItem(x, (y + self.height + self.raiseBy + 2), z, rewardDictCopy.popitem()[0])
         # Observations
         missionSpecs.observeFullInventory()  # Full item inventory of the player included in the observations
         missionSpecs.observeRecentCommands()  # list of commands acted upon since the last timestep
@@ -154,7 +155,6 @@ class XmlGen:
         missionSpecs.setViewpoint(1)
         missionSpecs.allowAllInventoryCommands()
 
-        self.endBlock = maze.endBlock
 
         return missionSpecs.getAsXML(True)
 
