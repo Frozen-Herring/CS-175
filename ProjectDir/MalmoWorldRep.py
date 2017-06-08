@@ -11,7 +11,7 @@ class WorldRep:
         self.worldState = worldState
         self.obs = None
         self.QAgentLoc = (0.5, 227, 0.5)
-        self.rewardList = [0 for _ in rewardDict.keys()]
+        self.rewardList = [0 for _ in self.sortedRewards]
         self.totalRewards = 0
         self.lastReward = 0
         self.endBlock = (maze.endBlock[0]+.5, maze.endBlock[1]+.5)
