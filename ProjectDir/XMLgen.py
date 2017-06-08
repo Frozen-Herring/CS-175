@@ -13,9 +13,8 @@ change tick time
 """
 
 class XmlGen:
-    def __init__(self, f = '', maze = None):
+    def __init__(self, maze = None):
         self.height = 226
-        self.endBlock = None
         if maze == None:
             maze = sl.MazeSaveLoader().getMaze()
         self.maze = maze
@@ -82,7 +81,7 @@ class XmlGen:
 
     </Mission>'''
         
-        mazeSize = self.maze.maze
+        mazeSize = (10,10,10)
         rewardDictXmlString = ""
         for key, value in rewardDict.items():
             rewardDictXmlString += "\n<Item type=\"{}\" reward=\"{}\"/>".format(key, value)
@@ -153,8 +152,6 @@ class XmlGen:
         missionSpecs.requestVideo(960, 540)
         missionSpecs.setViewpoint(1)
         missionSpecs.allowAllInventoryCommands()
-
-        self.endBlock = maze.endBlock
 
         return missionSpecs.getAsXML(True)
 

@@ -122,7 +122,7 @@ class Agent:
     def getRawardTotal(self):
         return sum(self.rewardHistory)
     
-    def makeMove(self, eps = .1, verbose = True, learningType = True):
+    def makeMove(self, eps = .1, verbose = False, learningType = True):
         old_state = (tuple(self.world.rewardList), self.moveHistory[-1])
         possibleMoves = CoordinateUtils.movement2D #hard-coded 2D movement
         moveToTake = self.chooseAction(possibleMoves, eps)
@@ -130,7 +130,7 @@ class Agent:
         self.moveHistory.append(CoordinateUtils.sumCoordinates(moveToTake, self.moveHistory[-1]))
         
         reward = self.world.moveAgent(moveToTake)#TODO: interects with world
-
+        print(reward)
 
         self.rewardHistory.append(reward)
         self.moveCount += 1

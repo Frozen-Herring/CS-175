@@ -58,6 +58,7 @@ class MazeSaveLoader:
         else:
             self.f+="-maze.p"
             self.maze = pickle_load(self.f)    
+        self.maze.prettyPrint()
     
     def insertMaze(self, maze):
         self.maze = maze
