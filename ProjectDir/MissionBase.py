@@ -6,7 +6,7 @@ from XMLgen import XmlGen
 from AgentModule import Agent as QAgent
 from MalmoWorldRep import WorldRep
 from SaveLoader import MazeSaveLoader as msl
-from CoordinateUtils import rewardDict
+from CoordinateUtils import rewardDict, agentStart
 """
 ==================
 Stuff to change:
@@ -73,12 +73,12 @@ class MissionBase:
 
         agentHost, mission, missionRec = self.setup()
         world = WorldRep(agentHost, self.maze)
-        qAgent = QAgent(world, start = (.5, 229,.5))
+        qAgent = QAgent(world, start = agentStart)
         agentHost.sendCommand("chat /difficulty 3")
         agentHost.sendCommand("chat oh boy I sure hope there's no lava around here")
 
         #finalReward = 0
-        while True:#(not (world.finishedMaze and qAgent.bestScoreSoFar >= BEST_POSSIBLE_SCORE)):
+        while True:#(not (world.finishedMaze and qAgent.bestScoreSoFar >= BEST_POSSIBLE_SCORE)): #TODO: doesn't work???
             self.startMission(agentHost, mission, missionRec)
             self.agentRun(agentHost, qAgent, world)
 

@@ -13,17 +13,11 @@ change tick time
 """
 
 class XmlGen:
-<<<<<<< HEAD
     def __init__(self, maze = None):
-        self.height = 226
-=======
-    def __init__(self, f = '', maze = None):
-
         self.height = malmoGroundY
         self.raiseBy = raiseBy
         self.agentStart = agentStart
 
->>>>>>> origin/master
         if maze == None:
             maze = sl.MazeSaveLoader().getMaze()
 
@@ -95,12 +89,7 @@ class XmlGen:
       </AgentSection>
 
     </Mission>'''
-<<<<<<< HEAD
-        
-        mazeSize = (10,10,10)
-=======
 
->>>>>>> origin/master
         rewardDictXmlString = ""
         for key, value in rewardDict.items():
             rewardDictXmlString += "\n<Item type=\"{}\" reward=\"{}\"/>".format(key, value)
@@ -165,17 +154,12 @@ class XmlGen:
         missionSpecs.setViewpoint(1)
         missionSpecs.allowAllInventoryCommands()
 
-<<<<<<< HEAD
-=======
-
->>>>>>> origin/master
         return missionSpecs.getAsXML(True)
 
 
 if __name__ == '__main__':
     xmlGen = XmlGen()
-    print xmlGen.generateXML((25, 25, 25), {"coal": 10, "iron_ingot": 20, "gold_ingot": 30, "lapis_ore": 40, "emerald_ore": 50,
-                                     "diamond": 60, "potato": 70})
+    print xmlGen.generateXML()
 
 
 
