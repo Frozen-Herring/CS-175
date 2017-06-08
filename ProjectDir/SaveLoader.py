@@ -42,11 +42,12 @@ class MazeSaveLoader:
     
     def askSaveMaze(self):
         if self.f == "":
-            self.f = raw_input("Enter a file name to save to: ")     
+            self.f = raw_input("Enter a file name to save to: ")
             if self.f == "":
                 self.f = str(randrange(0,9999999999))
             self.f+="-maze.p"
             self._saveMaze()
+            print(self.f)
     
     def _saveMaze(self):
         pickle_save(self.maze, self.f)
@@ -57,7 +58,7 @@ class MazeSaveLoader:
             self.maze = genMaze(self.mazeSize, rewardCount = self.rewardCount, lavaPercent = self.lavaPercent)
         else:
             self.f+="-maze.p"
-            self.maze = pickle_load(self.f)    
+            self.maze = pickle_load(self.f)
         self.maze.prettyPrint()
     
     def insertMaze(self, maze):
