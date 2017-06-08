@@ -1,48 +1,25 @@
 import MazeGen
 import MalmoPython
 import SaveLoader as sl
-from random import randrange
-
-# Stuff to do.
-""""
-change skin? 
-Timer?
-change sleep times
-change tick time
-
-"""
+from CoordinateUtils import rewardDict, malmoGroundY, raiseBy, agentStart
 
 class XmlGen:
-    def __init__(self, f = '', load = False, save = False, jsl = True):
-        self.height = 226
-        self.endBlock = None
-        self.load = load
-        self.save = save
-        self.jsl = jsl
-        self.f = f
-        
+    def __init__(self, maze = None):
+        self.height = malmoGroundY
+        self.raiseBy = raiseBy
+        self.agentStart = agentStart
 
-    def createMaze(self, mazeSize, rewardCount):
-        if self.jsl:
-            return sl.MazeSaveLoader().getMaze()
-        if self.load:
-            maze = sl.pickle_load(self.f)
-            maze.prettyPrint()
+        if maze == None:
+            maze = sl.MazeSaveLoader().getMaze()
 
-        else:
-            possibleMovement = "2D"
-            maze = MazeGen.genMaze(mazeSize, possibleMovement, rewardCount)
-
-        if self.save:
-                if self.f == "":
-                    self.f = str(randrange(0, 9999999999))
-                    self.f += "-maze.p"
-                mazeSaved = sl.pickle_save(maze, self.f)
-
-        return maze
+        self.maze = maze
+        self.mazeXSize = self.maze.x
+        self.mazeYSize = self.maze.z
+        self.mazeZSize = self.maze.y
 
 
-    def generateXML(self, mazeSize, rewardDict):
+
+    def generateXML(self):
         # USE THIS TO SET UP WITH MODIFICATIONS
         initialXML = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
     <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -105,7 +82,8 @@ class XmlGen:
     </Mission>'''
 
         rewardDictXmlString = ""
-        for key, value in rewardDict.items():
+        sorted(rewardDict.keys())
+        for key, value in sorted(rewardDict.items()):
             rewardDictXmlString += "\n<Item type=\"{}\" reward=\"{}\"/>".format(key, value)
         initialXML = initialXML.replace("REWARD_DICT_GOES_HERE", rewardDictXmlString)
 
@@ -122,23 +100,14 @@ class XmlGen:
         missionSpecs.setTimeOfDay(13200, False)
 
         # For Future use, set a entrance or exit state to be recorded
-        missionSpecs.startAt(0.5, 229, 0.5)  # - float x, float y, float z, float tolerance
+        missionSpecs.startAt(self.agentStart[0], self.agentStart[1], self.agentStart[2])  # - float x, float y, float z, float tolerance
 
-        #CREATE THE MAZE
-        maze = self.createMaze(mazeSize, rewardCount=len(rewardDict))
-
-        mazeValue = maze.maze
+        mazeValue = self.maze.maze
 
         # Draw world in XML
-        missionSpecs.drawBlock(-1, 227, -1, 'glowstone')  # Start block
-
-        missionSpecs.drawBlock(-1, 227, mazeSize[2] + 1, 'glowstone')  # Start block
-        missionSpecs.drawBlock(mazeSize[0] + 1, 227, mazeSize[2] + 1, 'glowstone')  # Start block
-        missionSpecs.drawBlock(mazeSize[0] + 1, 227, -1, 'glowstone')  # Start block
-
-        missionSpecs.drawCuboid(-10, self.height, -10, mazeSize[0] + 10, mazeSize[1] + self.height + 10, mazeSize[2] + 10, 'obsidian')
-        missionSpecs.drawCuboid(-9, self.height, -9, mazeSize[0] + 9, mazeSize[1] + self.height + 9, mazeSize[2] + 9, 'air')
-        missionSpecs.drawCuboid(-9, self.height, -9, mazeSize[0] + 9, self.height, mazeSize[2] + 9, 'lava')
+        missionSpecs.drawCuboid(-10, self.height, -10, self.mazeXSize + 10, self.mazeYSize + self.height + 10, self.mazeZSize + 10, 'obsidian')
+        missionSpecs.drawCuboid(-9, self.height, -9, self.mazeXSize + 9, self.mazeYSize + self.height + 9, self.mazeZSize + 9, 'air')
+        missionSpecs.drawCuboid(-9, self.height, -9, self.mazeXSize + 9, self.height, self.mazeZSize + 9, 'lava')
 
         rewardDictCopy = dict()
         for key in rewardDict:
@@ -146,7 +115,6 @@ class XmlGen:
 
         # Draw Maze/Items
         for xVal in range(len(mazeValue)):
-
             x = xVal
             for zVal in range(len(mazeValue[xVal])):
                 z = zVal
@@ -155,10 +123,10 @@ class XmlGen:
                     if str(mazeValue[x][z][y]) == "lava":
                         missionSpecs.drawBlock(x, (y + self.height), z, str(mazeValue[x][z][y]))
                     else:
-                        missionSpecs.drawBlock(x, (y + self.height)+2, z, str(mazeValue[x][z][y]))
-                        if str(mazeValue[x][z][y]) == "lapis_block":
-                            missionSpecs.drawItem(x, (y + self.height + 4), z, rewardDictCopy.popitem()[0])
+                        missionSpecs.drawBlock(x, (y + self.height + self.raiseBy), z, str(mazeValue[x][z][y]))
 
+                        if str(mazeValue[x][z][y]) == "lapis_block":
+                            missionSpecs.drawItem(x, (y + self.height + self.raiseBy + 2), z, rewardDictCopy.popitem()[0])
         # Observations
         missionSpecs.observeFullInventory()  # Full item inventory of the player included in the observations
         missionSpecs.observeRecentCommands()  # list of commands acted upon since the last timestep
@@ -178,15 +146,12 @@ class XmlGen:
         missionSpecs.setViewpoint(1)
         missionSpecs.allowAllInventoryCommands()
 
-        self.endBlock = maze.endBlock
-
         return missionSpecs.getAsXML(True)
 
 
 if __name__ == '__main__':
     xmlGen = XmlGen()
-    print xmlGen.generateXML((25, 25, 25), {"coal": 10, "iron_ingot": 20, "gold_ingot": 30, "lapis_ore": 40, "emerald_ore": 50,
-                                     "diamond": 60, "potato": 70})
+    print xmlGen.generateXML()
 
 
 

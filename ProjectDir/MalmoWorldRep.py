@@ -1,18 +1,20 @@
 import json
 import time
+from CoordinateUtils import rewardDict
 
 class WorldRep:
-    def __init__(self, agentHost, endBlock, worldState = None, rewards = {}):
+    def __init__(self, agentHost, maze, worldState = None):
         '''Define a world state'''
-        self.sortedRewards = sorted(rewards.keys())
+        self.maze = maze
+        self.sortedRewards = sorted(rewardDict.keys())[0:self.maze.rewardCount]
         self.agentHost = agentHost
         self.worldState = worldState
         self.obs = None
         self.QAgentLoc = (0.5, 227, 0.5)
-        self.rewardList = [0 for _ in rewards.keys()]
+        self.rewardList = [0 for _ in rewardDict.keys()]
         self.totalRewards = 0
         self.lastReward = 0
-        self.endBlock = (endBlock[0]+.5, endBlock[1]+.5)
+        self.endBlock = (maze.endBlock[0]+.5, maze.endBlock[1]+.5)
         self.inventoryItemsAsSet = set()
         self.finishMazeReward = 10
 

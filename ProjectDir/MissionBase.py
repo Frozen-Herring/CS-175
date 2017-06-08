@@ -5,7 +5,8 @@ import time
 from XMLgen import XmlGen
 from AgentModule import Agent as QAgent
 from MalmoWorldRep import WorldRep
-
+from SaveLoader import MazeSaveLoader as msl
+from CoordinateUtils import rewardDict, agentStart
 """
 ==================
 Stuff to change:
@@ -16,8 +17,8 @@ fix world Rep
 """
 
 class MissionBase:
-    def __init__(self):
-        self.endBlock = None
+    def __init__(self, maze):
+        self.maze = maze
 
     def agentRun(self, agentHost, qAgent, world):
         world.worldState = agentHost.peekWorldState() # wait until valid observation
@@ -30,13 +31,13 @@ class MissionBase:
         # sys.stdout.write("\n")
         # sys.stdout.flush()
 
-        qAgent.new_episode()
+        qAgent.new_episode() #TODO: what is this?
 
         while world.worldState.is_mission_running:
             #Make move
-            qAgent.makeMove(0.02, False)
+            qAgent.makeMove()
             world.worldState = agentHost.peekWorldState()
-            if world.finishedMaze:
+            if False:#world.finishedMaze: #TODO: doesn't work???
                 agentHost.sendCommand("chat /kill")
                 agentHost.sendCommand("chat I finished the maze!")
                 print "finished mission"
@@ -56,10 +57,9 @@ class MissionBase:
                 print "Error:", error.text
 
 
-    def setup(self, mazeSize = (10, 10, 10), rewards = {"apple":50}):
-        xmlGen = XmlGen()
-        worldXML = xmlGen.generateXML(mazeSize, rewards)
-        self.endBlock = xmlGen.endBlock
+    def setup(self):
+        xmlGen = XmlGen(self.maze)
+        worldXML = xmlGen.generateXML()
         sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)  # flush print output immediately
         mission = MalmoPython.MissionSpec(worldXML, True)
         missionRec = MalmoPython.MissionRecordSpec()
@@ -70,18 +70,15 @@ class MissionBase:
     def main(self):
         CURRENT_MAZE_NAME = "some maze"
         BEST_POSSIBLE_SCORE = -999
-        # rewards = {"coal": 10, "iron_ingot": 20, "gold_ingot": 30, "lapis_ore": 40, "emerald_ore": 50, "diamond": 60, "potato": 70}
-        rewards = {"coal": 10, "iron_ingot": 10, "gold_ingot": 10, "lapis_ore": 10, "emerald_ore": 10, "diamond": 10, "potato": 10}
-        mazeSize = (10,10,10)
 
-        agentHost, mission, missionRec = self.setup(mazeSize, rewards)
-        world = WorldRep(agentHost, self.endBlock, rewards = rewards)
-        qAgent = QAgent(world, start = (.5, 229,.5))
+        agentHost, mission, missionRec = self.setup()
+        world = WorldRep(agentHost, self.maze)
+        qAgent = QAgent(world, start = agentStart)
         agentHost.sendCommand("chat /difficulty 3")
         agentHost.sendCommand("chat oh boy I sure hope there's no lava around here")
 
         #finalReward = 0
-        while(not (world.finishedMaze and qAgent.bestScoreSoFar >= BEST_POSSIBLE_SCORE)):
+        while True:#(not (world.finishedMaze and qAgent.bestScoreSoFar >= BEST_POSSIBLE_SCORE)): #TODO: doesn't work???
             self.startMission(agentHost, mission, missionRec)
             self.agentRun(agentHost, qAgent, world)
 
@@ -100,7 +97,8 @@ class MissionBase:
 
 #----CONNECT/SET UP AGENT AND RUN MISSION-----
 if __name__ == "__main__":
-    missionBase = MissionBase()
+    maze = msl().getMaze()
+    missionBase = MissionBase(maze)
     missionBase.main()
 
 
