@@ -26,6 +26,8 @@ dangerBlock = "lava"
 rewardBlock = "lapis_block"
 terminalBlock = "emerald_block"
 
+rewardDict = {"coal": 10, "iron_ingot": 10, "gold_ingot": 10, "lapis_ore": 10, "emerald_ore": 10, "diamond": 10, "potato": 10}
+
 movement1D = [(1,0,0),(-1,0,0)] #right, left
 movement2D = [(1,0,0),(0,1,0),(-1,0,0),(0,-1,0)] #right, up, left, down #top-down
 

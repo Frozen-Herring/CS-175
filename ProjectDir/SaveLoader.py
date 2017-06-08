@@ -28,11 +28,12 @@ def pickle_load(file_name):
     return obj
 
 class MazeSaveLoader:
-    def __init__(self, x = 5, y = 5, rewardCount = 3):
+    def __init__(self, x = 12, y = 12, rewardCount = 7, lavaPercent=.5):
         self.f = ""
         self.maze = None
         self.mazeSize = (x,y,1)
         self.rewardCount = rewardCount
+        self.lavaPercent = lavaPercent
         self.askLoadMaze()
         self.askSaveMaze()
     
@@ -53,8 +54,7 @@ class MazeSaveLoader:
     def askLoadMaze(self):
         self.f = raw_input("Enter a file name to load from: ")
         if self.f == "":
-            possibleMovement = "2D"
-            self.maze = genMaze(self.mazeSize, possibleMovement, rewardCount = self.rewardCount)
+            self.maze = genMaze(self.mazeSize, rewardCount = self.rewardCount, lavaPercent = self.lavaPercent)
         else:
             self.f+="-maze.p"
             self.maze = pickle_load(self.f)    

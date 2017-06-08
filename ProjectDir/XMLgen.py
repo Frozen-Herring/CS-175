@@ -1,7 +1,7 @@
 import MazeGen
 import MalmoPython
 import SaveLoader as sl
-from random import randrange
+from CoordinateUtils import rewardDict
 
 # Stuff to do.
 """"
@@ -13,36 +13,14 @@ change tick time
 """
 
 class XmlGen:
-    def __init__(self, f = '', load = False, save = False, jsl = True):
+    def __init__(self, f = '', maze = None):
         self.height = 226
         self.endBlock = None
-        self.load = load
-        self.save = save
-        self.jsl = jsl
-        self.f = f
-        
+        if maze == None:
+            maze = sl.MazeSaveLoader().getMaze()
+        self.maze = maze
 
-    def createMaze(self, mazeSize, rewardCount):
-        if self.jsl:
-            return sl.MazeSaveLoader().getMaze()
-        if self.load:
-            maze = sl.pickle_load(self.f)
-            maze.prettyPrint()
-
-        else:
-            possibleMovement = "2D"
-            maze = MazeGen.genMaze(mazeSize, possibleMovement, rewardCount)
-
-        if self.save:
-                if self.f == "":
-                    self.f = str(randrange(0, 9999999999))
-                    self.f += "-maze.p"
-                mazeSaved = sl.pickle_save(maze, self.f)
-
-        return maze
-
-
-    def generateXML(self, mazeSize, rewardDict):
+    def generateXML(self):
         # USE THIS TO SET UP WITH MODIFICATIONS
         initialXML = '''<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
     <Mission xmlns="http://ProjectMalmo.microsoft.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -103,7 +81,8 @@ class XmlGen:
       </AgentSection>
 
     </Mission>'''
-
+        
+        mazeSize = self.maze.maze
         rewardDictXmlString = ""
         for key, value in rewardDict.items():
             rewardDictXmlString += "\n<Item type=\"{}\" reward=\"{}\"/>".format(key, value)
@@ -124,10 +103,7 @@ class XmlGen:
         # For Future use, set a entrance or exit state to be recorded
         missionSpecs.startAt(0.5, 229, 0.5)  # - float x, float y, float z, float tolerance
 
-        #CREATE THE MAZE
-        maze = self.createMaze(mazeSize, rewardCount=len(rewardDict))
-
-        mazeValue = maze.maze
+        mazeValue = self.maze.maze
 
         # Draw world in XML
         missionSpecs.drawBlock(-1, 227, -1, 'glowstone')  # Start block

@@ -70,7 +70,7 @@ class Optimizer:
         n, alpha, gamma = vals
         self.agent.n = int(n)
         self.agent.alpha = alpha
-        self.agent.gamma = gamma    
+        self.agent.gamma = gamma
     
     def runToOptimal(self, vals, verbose = False):
         self.agent.completeReset()
@@ -92,14 +92,42 @@ class Optimizer:
     def callBack(self, vals):
         pass
     
-    def findBestScore(self):
-        self.idealScore=-60
-        pass
+    def findBestScore(self, experimental=True):
+        if experimental:
+            self.agent.completeReset()
+            self.assignVals((2,.5,.5))
+            eps = 50000
+            for _ in range(eps):
+                eps+=1
+                i=0
+                while (self.agent.isAlive() or self.agent.moveHistory[-1] == self.agent.world.worldMaze.endBlock) and i < MOVECAP:
+                    self.agent.makeMove(eps = self.eps, verbose = False)
+                    i+=1
+                self.agent.new_episode(verbose = False)
+            self.idealScore = self.agent.bestScoreSoFar
+            self.agent.completeReset()
+            print(self.agent.bestPathSoFar)
+            return self.idealScore
+        else:
+            self.idealScore=-60
+    
+    def findAgentsBestLearnedPath(self):
+        i=0
+        while (self.agent.isAlive() or self.agent.moveHistory[-1] == self.agent.world.worldMaze.endBlock) and i < MOVECAP:
+            self.agent.makeMove(eps = self.eps, verbose = False)
+            i+=1
+        self.agent.new_episode(verbose = False)
     
     def getAnalytics(self):
         pass
 
-
+    
+    def avgValNRuns(self, vals, N=100, learningType=True):
+        avgValList = []
+        for _ in range(100):
+            avgValList.append(self.runUntilMazeSolved(vals, verbose=False, learningType=learningType))
+        return float(sum(avgValList))/len(avgValList)
+    
     def derekRunOptimizer(self):
         keys = genBins()
         scores = []
@@ -119,7 +147,7 @@ class Optimizer:
         self.optimal = (lowestVal, bestVals)
         print(scores)
 
-    def runUntilMazeSolved(self, vals, verbose=True):
+    def runUntilMazeSolved(self, vals, verbose=True, learningType=True):
         self.agent.completeReset()
         self.assignVals(vals)
 
@@ -127,7 +155,7 @@ class Optimizer:
             i = 0
             self.agent.new_episode(verbose=False)
             while i < MOVECAP and self.agent.isAlive() and not self.agent.world.finishedMaze():
-                self.agent.makeMove(eps=self.eps, verbose=False)
+                self.agent.makeMove(eps=self.eps, verbose=False, learningType=True)
                 i += 1
         if verbose: print str(vals) + ":\n - episodes: " + str(self.agent.episodeCount) + "\n - score: " + str(self.agent.bestScoreSoFar)
         return self.agent.episodeCount
@@ -138,7 +166,7 @@ if __name__ == '__main__':
     msl = MazeSaveLoader()
     maze = msl.getMaze()
     optmzr = Optimizer(maze)
-    optmzr.findBestScore()
+    print(optmzr.findBestScore())
     optmzr.runOptimizer()
     print(optmzr.optimal)
     print(msl.f)

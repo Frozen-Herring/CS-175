@@ -122,7 +122,7 @@ class Agent:
     def getRawardTotal(self):
         return sum(self.rewardHistory)
     
-    def makeMove(self, eps = .1, verbose = True, experimental = True):
+    def makeMove(self, eps = .1, verbose = True, learningType = True):
         old_state = (tuple(self.world.rewardList), self.moveHistory[-1])
         possibleMoves = CoordinateUtils.movement2D #hard-coded 2D movement
         moveToTake = self.chooseAction(possibleMoves, eps)
@@ -135,7 +135,7 @@ class Agent:
         self.rewardHistory.append(reward)
         self.moveCount += 1
         self.updateQTable(old_state)
-        if experimental:
+        if learningType == True:#add lava punishment to all with q-learning
             if reward < -50: #TODO: ATTENTION HARD CODED: to check for lava
                 for rl in self.allRewardStates():
                     old_state = (tuple(rl), self.moveHistory[-1])
@@ -147,7 +147,6 @@ class Agent:
 
     def chooseAction(self, possibleMoves, eps, testing = False):
         if testing:
-            #todo: return random move in possibleMoves
             rand = random.randrange(len(possibleMoves))
             return possibleMoves[rand]
         else:

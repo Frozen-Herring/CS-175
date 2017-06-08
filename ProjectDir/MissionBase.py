@@ -5,7 +5,8 @@ import time
 from XMLgen import XmlGen
 from AgentModule import Agent as QAgent
 from MalmoWorldRep import WorldRep
-
+from SaveLoader import MazeSaveLoader as msl
+from CoordinateUtils import rewardDict
 """
 ==================
 Stuff to change:
@@ -16,8 +17,9 @@ fix world Rep
 """
 
 class MissionBase:
-    def __init__(self):
+    def __init__(self, maze):
         self.endBlock = None
+        self.maze = maze
 
     def agentRun(self, agentHost, qAgent, world):
         world.worldState = agentHost.peekWorldState() # wait until valid observation
@@ -30,13 +32,13 @@ class MissionBase:
         # sys.stdout.write("\n")
         # sys.stdout.flush()
 
-        qAgent.new_episode()
+        qAgent.new_episode() #TODO: what is this?
 
         while world.worldState.is_mission_running:
             #Make move
-            qAgent.makeMove(0.02, False)
+            qAgent.makeMove()
             world.worldState = agentHost.peekWorldState()
-            if world.finishedMaze:
+            if False:#world.finishedMaze: #TODO: doesn't work???
                 agentHost.sendCommand("chat /kill")
                 agentHost.sendCommand("chat I finished the maze!")
                 print "finished mission"
@@ -57,7 +59,7 @@ class MissionBase:
 
 
     def setup(self, mazeSize = (10, 10, 10), rewards = {"apple":50}):
-        xmlGen = XmlGen()
+        xmlGen = XmlGen(self.maze)
         worldXML = xmlGen.generateXML(mazeSize, rewards)
         self.endBlock = xmlGen.endBlock
         sys.stdout = os.fdopen(sys.stdout.fileno(), 'w', 0)  # flush print output immediately
@@ -81,7 +83,7 @@ class MissionBase:
         agentHost.sendCommand("chat oh boy I sure hope there's no lava around here")
 
         #finalReward = 0
-        while(not (world.finishedMaze and qAgent.bestScoreSoFar >= BEST_POSSIBLE_SCORE)):
+        while True:#(not (world.finishedMaze and qAgent.bestScoreSoFar >= BEST_POSSIBLE_SCORE)):
             self.startMission(agentHost, mission, missionRec)
             self.agentRun(agentHost, qAgent, world)
 
@@ -100,7 +102,8 @@ class MissionBase:
 
 #----CONNECT/SET UP AGENT AND RUN MISSION-----
 if __name__ == "__main__":
-    missionBase = MissionBase()
+    maze = msl().getMaze()
+    missionBase = MissionBase(maze)
     missionBase.main()
 
 
