@@ -3,15 +3,6 @@ import MalmoPython
 import SaveLoader as sl
 from CoordinateUtils import rewardDict, malmoGroundY, raiseBy, agentStart
 
-# Stuff to do.
-""""
-change skin? 
-Timer?
-change sleep times
-change tick time
-
-"""
-
 class XmlGen:
     def __init__(self, maze = None):
         self.height = malmoGroundY
