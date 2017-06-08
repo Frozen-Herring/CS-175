@@ -99,7 +99,7 @@ class XmlGen:
         missionSpecs.setTimeOfDay(13200, False)
 
         # For Future use, set a entrance or exit state to be recorded
-        missionSpecs.startAt(self.agentStart)  # - float x, float y, float z, float tolerance
+        missionSpecs.startAt(self.agentStart[0], self.agentStart[1], self.agentStart[2])  # - float x, float y, float z, float tolerance
 
         mazeValue = self.maze.maze
 
