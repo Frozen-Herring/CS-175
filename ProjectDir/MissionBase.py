@@ -37,7 +37,7 @@ class MissionBase:
             #Make move
             qAgent.makeMove()
             world.worldState = agentHost.peekWorldState()
-            if False:#world.finishedMaze: #TODO: doesn't work???
+            if world.finishedMaze(): #TODO: doesn't work???
                 agentHost.sendCommand("chat /kill")
                 agentHost.sendCommand("chat I finished the maze!")
                 print "finished mission"
@@ -77,8 +77,7 @@ class MissionBase:
         agentHost.sendCommand("chat /difficulty 3")
         agentHost.sendCommand("chat oh boy I sure hope there's no lava around here")
 
-        #finalReward = 0
-        while True:#(not (world.finishedMaze and qAgent.bestScoreSoFar >= BEST_POSSIBLE_SCORE)): #TODO: doesn't work???
+        while (not (world.finishedMaze() and qAgent.bestScoreSoFar >= BEST_POSSIBLE_SCORE)): #TODO: doesn't work???
             self.startMission(agentHost, mission, missionRec)
             self.agentRun(agentHost, qAgent, world)
 
@@ -97,7 +96,12 @@ class MissionBase:
 
 #----CONNECT/SET UP AGENT AND RUN MISSION-----
 if __name__ == "__main__":
+<<<<<<< HEAD
     maze = msl(rewardCount=1).getMaze()
+=======
+    maze = msl().getMaze()
+    # maze = msl(x=2,y=5,rewardCount=2,lavaPercent=.2).getMaze()
+>>>>>>> origin/master
     missionBase = MissionBase(maze)
     missionBase.main()
 

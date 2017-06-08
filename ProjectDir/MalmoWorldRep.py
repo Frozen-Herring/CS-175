@@ -10,8 +10,13 @@ class WorldRep:
         self.agentHost = agentHost
         self.worldState = worldState
         self.obs = None
+<<<<<<< HEAD
         self.QAgentLoc = agentStart
         self.rewardList = [0 for _ in rewardDict.keys()]
+=======
+        self.QAgentLoc = (0.5, 227, 0.5)
+        self.rewardList = [0 for _ in self.sortedRewards]
+>>>>>>> origin/master
         self.totalRewards = 0
         self.lastReward = 0
         self.endBlock = (maze.endBlock[0]+.5, maze.endBlock[1]+.5)
