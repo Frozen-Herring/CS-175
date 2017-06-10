@@ -10,7 +10,7 @@ class WorldRep:
         self.agentHost = agentHost
         self.worldState = worldState
         self.obs = None
-        self.QAgentLoc = agentStart
+        self.QAgentLoc = (.5, .5)
         self.rewardList = [0 for _ in self.sortedRewards]
         self.totalRewards = 0
         self.lastReward = 0
