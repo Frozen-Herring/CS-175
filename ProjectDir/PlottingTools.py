@@ -13,6 +13,7 @@ gammaArray = []
 
 
 for i, line in enumerate(open("C:/Users/Admin/Desktop/optimization results justin.csv")):
+# for i, line in enumerate(open("C:/Users/Admin/Desktop/optimization results.csv")):
     if i != 0:
         split = line.split("\t")
 
@@ -25,7 +26,8 @@ for i, line in enumerate(open("C:/Users/Admin/Desktop/optimization results justi
 masterArray = [alphaArray,gammaArray,nArray]
 masterArrayNames = ['alpha','gamma','n']
 grayscaleArray = avgEpisodesArray
-grayscaleName = 'average agent score'
+# grayscaleName = 'average agent episodes to get all rewards and get to end block'
+grayscaleName = 'average agent episodes to find shortest path to all rewards (no exit)'
 
 for i in range(3):
     masterArray.append(masterArray.pop(0))
@@ -33,16 +35,24 @@ for i in range(3):
 
 
 
-    xYPairToZDict = defaultdict(list)
+    xYPairToZDictList = defaultdict(list)
     for x,y,z in zip(masterArray[0], masterArray[1], grayscaleArray):
-        xYPairToZDict[(x,y)].append(float(z))
+        xYPairToZDictList[(x, y)].append(float(z))
 
     x, y, z = [], [], []
 
-    for key in xYPairToZDict.keys():
+
+    xyPairToZDictSum = dict()
+
+    for key in xYPairToZDictList.keys():
         x.append(key[0])
         y.append(key[1])
-        z.append(sum(xYPairToZDict.get(key)))
+        z.append(sum(xYPairToZDictList.get(key)))
+        xyPairToZDictSum[(key[0], key[1])] = sum(xYPairToZDictList.get(key))
+
+
+
+
 
     for i in range(len(x)):
         print "x="+str(x[i]) + ", y="+str(y[i]) + ", z="+str(z[i])
@@ -52,18 +62,22 @@ for i in range(3):
     y = np.array(y)
     z = np.array(z)
 
-
+    maximum = max(xyPairToZDictSum, key=xyPairToZDictSum.get)
+    minimum = min(xyPairToZDictSum, key=xyPairToZDictSum.get)
+    figTextString = "max x,y = (" + str(maximum[0]) + ", " + maximum[1] +") with " + str(xyPairToZDictSum[maximum]) + " episodes" + "\nmin x,y = (" + str(minimum[0]) + ", " + minimum[1] +") with " + str(xyPairToZDictSum[minimum]) + " episodes";
+    # infoText = "Because of the different " + masterArrayNames[2] + " values which are not being graphed:\n Each x,y pair has " + str(len(xYPairToZDictList[(x[0],y[0])])) + " " + grayscaleName + " values.\n which have been averaged to make a single value for each x,y pair."
+    print "the " + str(len(xYPairToZDictList[(x[0],y[0])])) + " z values for each x,y pair have been averaged to make a single z value.\n hidden variable: " + masterArrayNames[2]
 
     plt.scatter(x,y,c=z,s=500, alpha=1)
     plt.xlabel(masterArrayNames[0])
     plt.ylabel(masterArrayNames[1])
-    plt.title("grayscale = " + grayscaleName)
-    maximum = max(xYPairToZDict, key=xYPairToZDict.get)
-    minimum = min(xYPairToZDict, key=xYPairToZDict.get)
-    figTextString = "max"
-    plt.figtext()
+    plt.title("grayscale = " + grayscaleName + "\n" + figTextString)
+
+
     plt.gray()
-    print(z)
+    # print(z)
+    # plt.savefig("x="+masterArrayNames[0]+"_y="+masterArrayNames[1]+"_Derek_Optimizer_9161708779")
+    plt.savefig("x="+masterArrayNames[0]+"_y="+masterArrayNames[1]+"_Justin_Optimizer_9161708779")
     plt.show()
     plt.clf()
 
