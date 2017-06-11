@@ -44,14 +44,21 @@ class WorldRep:
     def _updateAllRewards(self): #getreward from move
         self.rewardList = self._createRewardList()
 
-        if (self.worldState.rewards == None) or (len(self.worldState.rewards) == 0):
-            print "HOLY FRIED CHICKEN ITS ALLL GONE TO HELL"
+        if (self.worldState.rewards == None) or (len(self.worldState.rewards) == 0): #Prevent Crashing Error, give -1 reward
+            self.lastReward = -1
+            #print("defualt -1 last rewards")
         else:
-            self.lastReward = self.worldState.rewards[-1].getValue() - self.totalRewards #ehhhhhh probably
+            self.lastReward = self.worldState.rewards[-1].getValue() - self.totalRewards
 
         if self.finishedMaze():
             self.lastReward = self.finishMazeReward
-        self.totalRewards = self.worldState.rewards[-1].getValue()
+
+        if (self.worldState.rewards == None) or (len(self.worldState.rewards) == 0): #Prevent Crashing Error, sets total rewards to previous -1
+            self.totalRewards += -1
+            #print("defualt -1 total rewards")
+        else:
+            self.totalRewards = self.worldState.rewards[-1].getValue()
+
 
     def _getInventoryItemsAsSet(self):
         rewardSet = set()
