@@ -31,6 +31,11 @@ class WorldRep:
 
     def _updateWorldRep(self, worldState):
         '''Update attributes that may have changed'''
+        while self.worldState == worldState:
+            print "waiting for new observation......"
+            time.sleep(.1)
+            worldState = self.agentHost.peekWorldState()
+
         self.worldState = worldState
         self.obs = json.loads(worldState.observations[-1].text)
         self.QAgentLoc = (self.obs[u'XPos'], self.obs[u'ZPos'])
@@ -38,7 +43,12 @@ class WorldRep:
 
     def _updateAllRewards(self): #getreward from move
         self.rewardList = self._createRewardList()
-        self.lastReward = self.worldState.rewards[-1].getValue() - self.totalRewards #ehhhhhh probably
+
+        if (self.worldState.rewards == None) or (len(self.worldState.rewards) == 0):
+            print "HOLY FRIED CHICKEN ITS ALLL GONE TO HELL"
+        else:
+            self.lastReward = self.worldState.rewards[-1].getValue() - self.totalRewards #ehhhhhh probably
+
         if self.finishedMaze():
             self.lastReward = self.finishMazeReward
         self.totalRewards = self.worldState.rewards[-1].getValue()
