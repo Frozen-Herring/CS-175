@@ -27,6 +27,7 @@ rewardBlock = "lapis_block"
 terminalBlock = "emerald_block"
 
 malmoGroundY = 226
+lavaDepth = 7
 raiseBy = 2
 agentStart = (.5, malmoGroundY+raiseBy+1, .5)
 agentStart2 = (0,0,0)

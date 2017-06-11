@@ -1,7 +1,7 @@
 import MazeGen
 import MalmoPython
 import SaveLoader as sl
-from CoordinateUtils import rewardDict, malmoGroundY, raiseBy, agentStart
+from CoordinateUtils import rewardDict, malmoGroundY, raiseBy, agentStart, lavaDepth
 
 class XmlGen:
     def __init__(self, maze = None):
@@ -107,7 +107,7 @@ class XmlGen:
         # Draw world in XML
         missionSpecs.drawCuboid(-10, self.height, -10, self.mazeXSize + 10, self.mazeYSize + self.height + 10, self.mazeZSize + 10, 'obsidian')
         missionSpecs.drawCuboid(-9, self.height, -9, self.mazeXSize + 9, self.mazeYSize + self.height + 9, self.mazeZSize + 9, 'air')
-        missionSpecs.drawCuboid(-9, self.height, -9, self.mazeXSize + 9, self.height, self.mazeZSize + 9, 'lava')
+        missionSpecs.drawCuboid(-9, self.height-lavaDepth, -9, self.mazeXSize + 9, self.height, self.mazeZSize + 9, 'lava')
 
         rewardDictCopy = dict()
         for key in rewardDict:
