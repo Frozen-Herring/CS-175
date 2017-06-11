@@ -96,7 +96,7 @@ class MissionBase:
 
 #----CONNECT/SET UP AGENT AND RUN MISSION-----
 if __name__ == "__main__":
-    maze = msl(rewardCount=1).getMaze()
+    maze = msl(x=5, y=5, rewardCount=7).getMaze()
     # maze = msl(x=2,y=5,rewardCount=2,lavaPercent=.2).getMaze()
     missionBase = MissionBase(maze)
     missionBase.main()

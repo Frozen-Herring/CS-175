@@ -22,7 +22,7 @@ def createQTable():
     return defaultdict(outerDef) #qTable[state][action][projectedReward]
 
 class Agent:
-    def __init__(self, world, start=(0,0,0), n=1, alpha=.5, gamma=.5, moveCap = 100):
+    def __init__(self, world, start=(0,0,0), n=7, alpha=.6, gamma=.8, moveCap = 100):
 
         self.start = start #starting square
         
@@ -149,7 +149,7 @@ class Agent:
         if learningType == True:#add lava punishment to all with q-learning
             if reward < -50: #TODO: ATTENTION HARD CODED: to check for lava
                 for rl in self.allRewardStates():
-                    old_state = (tuple(rl), self.moveHistory[-1])
+                    old_state = (tuple(rl), self.moveHistory[-2])
                     self.updateQTable(old_state)
         if verbose:
             self.printStatus()
