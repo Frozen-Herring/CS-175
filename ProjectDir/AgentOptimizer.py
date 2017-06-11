@@ -128,18 +128,23 @@ class Optimizer:
             avgValList.append(self.runUntilMazeSolved(vals, verbose=False, learningType=learningType))
         return float(sum(avgValList))/len(avgValList)
     
-    def derekRunOptimizer(self):
+    def derekRunOptimizer(self, verbose=True):
+        resultsAsString = ""
         keys = genBins()
         scores = []
         lowestVal = self.maxEps
         bestVals = None
-        print "avg. episodes\tn\talpha\tgamma\tentire episode list"
+        header = "avg. episodes\tn\talpha\tgamma\tentire val list"
+        resultsAsString += header
+        if verbose: print header
         for vals in keys:
             avgValList = []
             for i in range(100):
                 avgValList.append(self.runUntilMazeSolved(vals, verbose=False))
             val = float(sum(avgValList))/len(avgValList)
-            print str(val) + "\t" + str(vals[0]) + "\t" + str(vals[1]) + "\t" + str(vals[2]) + "\t" + str(avgValList)
+            currentLine = str(val) + "\t" + str(vals[0]) + "\t" + str(vals[1]) + "\t" + str(vals[2]) + "\t" + str(avgValList)
+            resultsAsString += "\n" + currentLine
+            if verbose: print currentLine
             if val<lowestVal:
                 lowestVal = val
                 bestVals = vals
@@ -166,8 +171,8 @@ if __name__ == '__main__':
     msl = MazeSaveLoader()
     maze = msl.getMaze()
     optmzr = Optimizer(maze)
-    print(optmzr.findBestScore())
-    optmzr.runOptimizer()
+    # print(optmzr.findBestScore())
+    optmzr.derekRunOptimizer()
     print(optmzr.optimal)
     print(msl.f)
 
