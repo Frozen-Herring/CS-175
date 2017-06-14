@@ -1,0 +1,40 @@
+Optimization
+
+Parameters Explained:
+Alpha is the learning rate. The value is ranged from 0-1. The higher the value, the faster the agent learns. Specifically, the rewards the agent gains are multiplied by this value.
+Gamma is the dampening factor. The value is ranged from 0-1. When distributing rewards to the last n moves, the dampening factor scales down the reward gain for each n move.
+n is how many steps back to distribute the reward to. Higher n will decrease learning time, because it will see previously visited rewards from farther away.
+
+Optimization Process:
+To optimize the agent, we tried different combinations of these values for two different optimization methods.
+ - First optimization method: run the agent for 50,000 episodes, save the score of the path which reaches all rewards in the least number of moves as the "ideal path". For each combination of alpha, gamma, and n values, record how many epsiodes it takes to find a path with the same (or better) score as the ideal path.
+ - Second optimization method: for each pair of alpha, gamma, and n values, record how many epsiodes it takes the agent to collect all rewards and get to the end block without dying.
+
+However, a large part of solving the maze quickly is based on luck. Sometimes two different runs with the same parameters can have vastly different results. To prevent this from tainting our optimization results, each set of parameters is run at least 100 times. The resulting value we assign to that pair of paramters is the average number of episodes for all 100 runs.
+
+How we visualized the data:
+We are interested in how alpha, gamma, and n affect the number of episodes our agent takes to solve a maze or get a certain score. However, visualizing 4-dimensional data is difficult to do. The parameters are not independent, so looking at each one on its own is not an option.
+
+We resolved this issue by creating the following scatterplots:
+ - x=alpha, y=gamma, grayscale=episodes
+ - x=n, y=alpha, grayscale=episodes
+ - x=gamma, y=n, grayscale=episodes
+ 
+"Grayscale" is how light or dark the x,y point is on the scatterplot. The lighter the value, the closer it is to the max z value, while the darker the value, the closer it is to the smallest z value. This setup caused each x,y pair of variables to have many z values. To resolve this issue, we set the z value of each x,y pair to the average of all of its z values 
+
+Results:
+The results showed us that the agent performed best when it had the following parameters:
+ - alpha: between .8 and 1.0 (1.0, 0.8, 1.0, 0.8)
+ - gamma: between .8 and 1.0 (1.0 0.8, 1.0, 0.6)
+ - n: between 8 and 11 (8, 17, 11, 8)
+
+ TODO: this needs some work
+We found that the agent's performance with certain parameters is different depending on the size of the maze, the number of rewards, and whether or not the agent has to find the end block after collecting all rewards. Because the end block is always the block which the agent started on, and the last reward found is almost always the farthest reward from the start block, finding the path back is considerably difficult. There are no more rewards left to help tell the agent whether or not he is going in the right direction, and walking in circles yields the same reward as walking closer to the end block. As a result, different configurations of the parameters help the agent find the rewards faster, but they seem to have little effect on the agent's ability to find the end block. We beleive this is why some of the configurations that give the best results seem random sometimes. 
+
+The agent performed consistently better with a high alpha value between .8 and 1.0. A high gamma value between .8 and 1.0 complimented the agent's high alpha value very well. n and gamma are parameters that strongly affect each other, but that is not shown well in the optimization results. n and alpha do strongly affect each other howevever, and the optimization results for the two variables is easy to see. As long as alpha is .8 or higher, any of the n values seem to have the same effect. 
+
+Difference in optimization methods:
+Collecting all the rewards in the maze can be difficult for the agent. However, finding the exit to the maze when there are no rewards left to guide him back is even more difficult. This is made clear by the stark differences in the number of episodes it takes the agent to collect all rewards compared to the total number of episodes it takes to collect all rewards and then find the exit. 
+
+
+
