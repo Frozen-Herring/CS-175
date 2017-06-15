@@ -49,7 +49,7 @@ While this version fulfilled our initial goals, it was apparent that it suffered
 #### Solving Forgetfulness
 Previously, with the original implementation of Q learning, a single state consisted of the AI’s exact inventory and location. This meant that as soon as the agent picked up a new item, it would register as being in an entirely new state; essentially it would never be in a state that it had explored before. As a consequence, the agent would “forget” everything it learned about the maze up until that point and would have to rediscover the entire path through the maze after every new item.  Understandably this caused the AI to take time to relearn the map and limited how large we could make the maze. It became quite obvious that anything over 10x10 had an exponentially growing number of states and was impossible to solve for all practical purposes. Therefore, to counter this effect we changed the way that the agent records new observations so that it can learn the lava’s location independently from its inventory. Instead of treating each inventory/location as separate state , it now will record that action/reward pair for all inventories at that location. This makes it so that the AI will no longer “forget” where lava is when it picks up an item. In the graph below, you can clearly see our improvement in how the old agent (orange) consistently takes more episodes to solve the same maze than the modified agent (blue).
 
-![](old agent vs revised agent.PNG){:height="300px" :width="450px"}
+![](oldVSrevised.png){:height="300px" :width="450px"}
 
 
 #### Optimization
