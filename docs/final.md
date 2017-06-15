@@ -111,4 +111,4 @@ General Questions: [Stack Overflow](https://stackoverflow.com/)
 
 More SARSA and Q: [unsw.edu](http://www.cse.unsw.edu.au/~cs9417ml/RL1/algorithms.html)	
 
-Code to draw the Q Table:  [Project Malmo] (https://github.com/Microsoft/malmo/blob/master/Malmo/samples/Python_examples/tabular_q_learning.py)
+Code to draw the Q Table:  [Project Malmo](https://github.com/Microsoft/malmo/blob/master/Malmo/samples/Python_examples/tabular_q_learning.py)
