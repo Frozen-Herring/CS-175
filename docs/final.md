@@ -70,7 +70,9 @@ To optimize the agent, we tried different combinations of Q-learning parameter v
 - First optimization method: run the agent for 50,000 episodes, save the score of the path which reaches all rewards in the least number of moves as the "ideal path". For each combination of alpha, gamma, and n values, record how many epsiodes it takes to find a path with the same (or better) score as the ideal path.
 - Second optimization method: for each pair of alpha, gamma, and n values, record how many epsiodes it takes the agent to collect all rewards and get to the end block without dying.
 However, a large part of solving the maze quickly is based on luck. Sometimes two different runs with the same parameters can have vastly different results. To prevent this from tainting our optimization results, each set of parameters is run at least 100 times. The resulting value we assign to that pair of parameters is the average number of episodes for all 100 runs.
-STICK PICTURE HERR
+The first of the two graphs below show number of rewards per episode. You can see how it trends towards an increase as the agent learns. However, as you can see, the graph is very noisy. The next graph shows the same results but using a running average, which means it much easier to see how the agent progresses. 
+
+![](rewards per episode.png){:height="200px" :width="320px"} ![](rewards per episode running average.png){:height="200px" :width="320px"}
 
 #### Data Visualization
 We are interested in how alpha, gamma, and n affect the number of episodes our agent takes to solve a maze or get a certain score. However, visualizing 4-dimensional data is difficult to do. The parameters are not independent, so looking at each one on its own is not an option.
@@ -88,6 +90,8 @@ The results showed us that the agent performed best when it had the following pa
  - alpha: between .8 and 1.0 (1.0, 0.8, 1.0, 0.8)
  - gamma: between .8 and 1.0 (1.0 0.8, 1.0, 0.6)
  - n: between 8 and 11 (8, 17, 11, 8)
+ This graph shows the distribution of how many episodes the optimal agent took to finish the maze for 100 runs. 
+ ![](distribution_example_3_removed.png){:height="250px" :width="360px"}
 
 We found that the agent's performance with certain parameters is different depending on the size of the maze, the number of rewards, and whether or not the agent has to find the end block after collecting all rewards. Because the end block is always the block which the agent started on, and the last reward found is almost always the farthest reward from the start block, finding the path back is considerably difficult. There are no more rewards left to help tell the agent whether or not he is going in the right direction, and walking in circles yields the same reward as walking closer to the end block. As a result, different configurations of the parameters help the agent find the rewards faster, but they seem to have little effect on the agent's ability to find the end block. We believe this is why some of the configurations that give the best results seem random sometimes. 
 STICK GRAPH IN HERE
