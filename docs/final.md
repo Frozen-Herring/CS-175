@@ -71,7 +71,7 @@ Our focus shifted over the course of the project from the original aim of creati
 	 - x=gamma, y=n, grayscale=episodes
 	 
 	"Grayscale" is how light or dark the x,y point is on the scatterplot. The lighter the value, the closer it is to the max z value, while the darker the value, the closer it is to the smallest z value. This setup caused each x,y pair of variables to have many z values. To resolve this issue, we set the z value of each x,y pair to the average of all of its z values 
-	![](Optimizer_Results_Matrix.png){:height="360px" :width="640px"}
+	![](Optimizer_Results_Matrix_edited.png){:height="360px" :width="640px"}
 	
 	### Results
 	The results showed us that the agent performed best when it had the following parameters:
