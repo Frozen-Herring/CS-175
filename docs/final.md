@@ -36,12 +36,12 @@ At this point we evaluate the statistics, make appropriate changes, and begin ag
 #### Maze
 First, we created a configurable maze generator that allows us to create a dynamic environment to run our agent in. With the generator, we can control attributes such as the linearity, size, lava percent, and reward locations. By changing the maze settings, we can vary the size of our state space and difficulty of the problem. While we had not originally anticipated that the generator would be a significant part in our project, it soon became apparent that different types of mazes drastically changed how our agent behaved and which parameters were best for that situation. (This will be discussed more heavily in the evaluation.)
 
-![](maze5.png){:height="250px" :width="340px"} ![](maze10.png){:height="250px" :width="340px"} ![](maze15.png){:height="250px" :width="340px"}
+![](maze5.png){:height="175px" :width="240px"} ![](maze10.png){:height="175px" :width="240px"} ![](maze15.png){:height="175px" :width="240px"}
 
 #### First Agent
 Our first version of the agent was a fairly generic implantation of a Q-Learning algorithm. Q-learning can be used to find an optimal action-selection policy for any given (finite) Markov decision process. We represent our world with a MDP that uses its location and inventory contents as states. The number of states varies greatly with the size of the maze, lava content within the maze and number of items we have placed for LARS to find. In general, the baseline number of states for an n by m maze will be approximately ((n × m)- lava content) modified by the number of items. We followed a basic pseudo code for the algorithm. (pictured below)
 
-![](QPsuedo.png){:height="360px" :width="640px"}
+![](QPsuedo.png){:height="200px" :width="320px"}
 
 While this version fulfilled our initial goals, it was apparent that it suffered from some considerable limitations. 
 
@@ -55,7 +55,7 @@ We saw a great improvement in the algorithm’s effectiveness and efficiency onc
 #### SARSA
 After we had done out best with basic optimization, we looked in possibly modifying the base algorithm. We decided that switching to SARSA might limit the amount of time we spent falling into lava and would be similar to the setup we already had. Here you can see that the SARSA method is similar to Q-learning, but the major difference between it and Q-Learning, is that the maximum reward for the next state is not necessarily used for updating the Q-values. Instead, a new action, and therefore reward, is selected using the same policy that determined the original action.
 
-![](SARSApsuedo.png){:height="360px" :width="640px"}
+![](SARSApsuedo.png){:height="200px" :width="320px"}
 
 So while we had considered changing the Q learning to SARSA, we eventually realized that SARSA would prioritize the safest path, not the fastest path [See Diagram](https://studywolf.wordpress.com/2013/07/01/reinforcement-learning-sarsa-vs-q-learning/). However, with our current maze design the mazes test to have only narrow pathways surrounded by lava. As such, there is no “safe path” and even if there were, we are looking for the most efficient path.
 
@@ -79,7 +79,7 @@ We resolved this issue by creating the following scatterplots:
  - x=gamma, y=n, grayscale=episodes
  
 "Grayscale" is how light or dark the x,y point is on the scatterplot. The lighter the value, the closer it is to the max z value, while the darker the value, the closer it is to the smallest z value. This setup caused each x,y pair of variables to have many z values. To resolve this issue, we set the z value of each x,y pair to the average of all of its z values 
-![](Optimizer_Results_Matrix_edited.png){:height="360px" :width="640px"}
+![](Optimizer_Results_Matrix_edited.png){:height="700px" :width="675px"}
 
 #### Results
 The results showed us that the agent performed best when it had the following parameters:
@@ -99,11 +99,11 @@ MORE GRAPH
 ## References
 General Q Learning: [Wikipedia](https://en.wikipedia.org/wiki/Q-learning)	
 
-Q vs SARSA Reference: [Studywolf](https://studywolf.wordpress.com/2013/07/01/reinforcement-learning-sarsa-vs-q-learning/)	
+Q vs SARSA Reference / Images: [Studywolf](https://studywolf.wordpress.com/2013/07/01/reinforcement-learning-sarsa-vs-q-learning/)	
 
 Other Possible Approches: [Asynchronous n-steps Q-learning](https://papoudakis.github.io/announcements/qlearning/)	
 
-CS 175 Course Lectures: [CS175](http://sameersingh.org/courses/aiproj/sp17/sched.html)	
+CS 175 Course Lectures / Images: [CS175](http://sameersingh.org/courses/aiproj/sp17/sched.html)	
 
 General Questions: [Stack Overflow](https://stackoverflow.com/)	
 
