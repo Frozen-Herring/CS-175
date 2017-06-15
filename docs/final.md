@@ -91,4 +91,9 @@ Our focus shifted over the course of the project from the original aim of creati
 	MORE GRAPH 
 	
 ## References
-HELP
+General Q Learning: [Wikipedia](https://en.wikipedia.org/wiki/Q-learning)	
+Q vs SARSA Reference: [Studywolf](https://studywolf.wordpress.com/2013/07/01/reinforcement-learning-sarsa-vs-q-learning/)	
+Other Possible Approches: [Asynchronous n-steps Q-learning](https://papoudakis.github.io/announcements/qlearning/)	
+CS 175 Course Lectures: [CS175](http://sameersingh.org/courses/aiproj/sp17/sched.html)	
+General Questions: [Stack Overflow](https://stackoverflow.com/)	
+More SARSA and Q: [unsw.edu](http://www.cse.unsw.edu.au/~cs9417ml/RL1/algorithms.html)	
