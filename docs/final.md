@@ -7,12 +7,12 @@ title:  Final Report
 <div style="position:relative;height:0;padding-bottom:56.25%"><iframe src="https://www.youtube.com/embed/nWbt14lVtCg?ecver=2" width="640" height="360" frameborder="0" style="position:absolute;width:100%;height:100%;left:0" allowfullscreen></iframe></div>
 
 ## Project Summary
-	LARS (Lava Avoiding Reward Searcher) is a reinforcement-learning AI designed to efficiently solve mazes and collect various rewards. It operates in a Minecraft environment of a coble stone labyrinth containing items surrounded by lava. LARS does not receive any knowledge of the world prior to starting, and thus learns about its environment through trial and error exploration based on our own implementation of a Q-learning algorithm.
-	
-	The primary goal was to create the most efficient and flexible agent that could easily adapt to a variety of challenges without omniscience of its environment. Here we had several choices in approach and decided that Q-Learning had the best potential for optimization and adaptability given the changeable environment. We use a random maze generator to test the algorithm through many combinations of complex paths and then rigorous evaluations to determine the best combinations of parameters. 
-	
-	Our focus shifted over the course of the project from the original aim of creating an agent to solve mazes and craft items based on its findings, into a project to test the limits and capabilities of Q-learning. Our work is now centered around our modified Q-agent and rigorous testing, analysis, and development.
-	![](learningModel.png){:height="150px" :width="220px"}
+LARS (Lava Avoiding Reward Searcher) is a reinforcement-learning AI designed to efficiently solve mazes and collect various rewards. It operates in a Minecraft environment of a coble stone labyrinth containing items surrounded by lava. LARS does not receive any knowledge of the world prior to starting, and thus learns about its environment through trial and error exploration based on our own implementation of a Q-learning algorithm.
+
+The primary goal was to create the most efficient and flexible agent that could easily adapt to a variety of challenges without omniscience of its environment. Here we had several choices in approach and decided that Q-Learning had the best potential for optimization and adaptability given the changeable environment. We use a random maze generator to test the algorithm through many combinations of complex paths and then rigorous evaluations to determine the best combinations of parameters. 
+
+Our focus shifted over the course of the project from the original aim of creating an agent to solve mazes and craft items based on its findings, into a project to test the limits and capabilities of Q-learning. Our work is now centered around our modified Q-agent and rigorous testing, analysis, and development.
+![](learningModel.png){:height="150px" :width="220px"}
 	
 ## Approaches
 	 Along the course of this project our goals and approaches morphed away from our original plans of two generic Q-learning agents interacting, into optimizing a specialized Q-agent to maximize its peak performance in our unique environment. We focused on heavy testing and modification of the base algorithm while working against the challenges of a random path generation. 
