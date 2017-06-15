@@ -55,7 +55,7 @@ We saw a great improvement in the algorithm’s effectiveness and efficiency onc
 #### SARSA
 After we had done out best with basic optimization, we looked in possibly modifying the base algorithm. We decided that switching to SARSA might limit the amount of time we spent falling into lava and would be similar to the setup we already had. Here you can see that the SARSA method is similar to Q-learning, but the major difference between it and Q-Learning, is that the maximum reward for the next state is not necessarily used for updating the Q-values. Instead, a new action, and therefore reward, is selected using the same policy that determined the original action.
 
-![](SARSApsuedo.png){:height="200px" :width="320px"}
+![](SARSApsuedo.png){:height="250px" :width="360px"}
 
 So while we had considered changing the Q learning to SARSA, we eventually realized that SARSA would prioritize the safest path, not the fastest path [See Diagram](https://studywolf.wordpress.com/2013/07/01/reinforcement-learning-sarsa-vs-q-learning/). However, with our current maze design the mazes test to have only narrow pathways surrounded by lava. As such, there is no “safe path” and even if there were, we are looking for the most efficient path.
 
@@ -81,7 +81,7 @@ We resolved this issue by creating the following scatterplots:
  - x=gamma, y=n, grayscale=episodes
  
 "Grayscale" is how light or dark the x,y point is on the scatterplot. The lighter the value, the closer it is to the max z value, while the darker the value, the closer it is to the smallest z value. This setup caused each x,y pair of variables to have many z values. To resolve this issue, we set the z value of each x,y pair to the average of all of its z values 
-![](Optimizer_Results_Matrix_edited.png){:height="700px" :width="675px"}
+![](Optimizer_Results_Matrix_edited.png){:height="775px" :width="700px"}
 
 #### Results
 The results showed us that the agent performed best when it had the following parameters:
