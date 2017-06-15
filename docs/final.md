@@ -47,7 +47,10 @@ While this version fulfilled our initial goals, it was apparent that it suffered
 
 
 #### Solving Forgetfulness
-Previously, with the original implementation of Q learning, a single state consisted of the AI’s exact inventory and location. This meant that as soon as the agent picked up a new item, it would register as being in an entirely new state; essentially it would never be in a state that it had explored before. As a consequence, the agent would “forget” everything it learned about the maze up until that point and would have to rediscover the entire path through the maze after every new item.  Understandably this caused the AI to take time to relearn the map and limited how large we could make the maze. It became quite obvious that anything over 10x10 had an exponentially growing number of states and was impossible to solve for all practical purposes. Therefore, to counter this effect we changed the way that the agent records new observations so that it can learn the lava’s location independently from its inventory. Instead of treating each inventory/location as separate state , it now will record that action/reward pair for all inventories at that location. This makes it so that the AI will no longer “forget” where lava is when it picks up an item.
+Previously, with the original implementation of Q learning, a single state consisted of the AI’s exact inventory and location. This meant that as soon as the agent picked up a new item, it would register as being in an entirely new state; essentially it would never be in a state that it had explored before. As a consequence, the agent would “forget” everything it learned about the maze up until that point and would have to rediscover the entire path through the maze after every new item.  Understandably this caused the AI to take time to relearn the map and limited how large we could make the maze. It became quite obvious that anything over 10x10 had an exponentially growing number of states and was impossible to solve for all practical purposes. Therefore, to counter this effect we changed the way that the agent records new observations so that it can learn the lava’s location independently from its inventory. Instead of treating each inventory/location as separate state , it now will record that action/reward pair for all inventories at that location. This makes it so that the AI will no longer “forget” where lava is when it picks up an item. In the graph below, you can clearly see our improvement in how the old agent (orange) consistently takes more episodes to solve the same maze than the modified agent (blue).
+
+![](old agent vs revised agent.png){:height="300px" :width="450px"}
+
 
 #### Optimization
 We saw a great improvement in the algorithm’s effectiveness and efficiency once we made changes to accommodate for the lava, but realized that we were using fairly arbitrary values for the Q-learning parameters of the learning rate (alpha), discount factor (gamma), update length (n) and chance of random choice (epsilon).  To explain further, alpha is the learning rate. The learning rate or step size determines to what extent the newly acquired information will override the old information. Its value ranges from 0-1 and in general the higher the value, the faster the agent learns. Gamma is the dampening factor. The dampening factor gamma determines the importance of future rewards. A factor of 0 will make the agent only considering current rewards, while a factor closer to 1 will make it strive for long-term rewards. When distributing rewards to the last n moves, the dampening factor scales down the reward gain for each n move. n is how many steps back to distribute the reward to. Higher n will decrease learning time, because it will see previously visited rewards from farther away. However, that also applies to negative rewards and in certain cases can lead to non-optimal behavior. Epsilon controls how often the agent choses a random action as opposed to the best calculated one. This governs the agent’s tendency to explore vs. follow the optimal policy. Here we spent a large amount of time running various configurations of the parameter to find the optimal combination. (see more in the Evaluation).
@@ -65,6 +68,7 @@ In our status report, we realized that our evaluation methods were lacking, so c
 
 ![](DrawnQandAgent.png){:height="200px" :width="320px"} ![](DrawnQ.png){:height="200px" :width="320px"}
 
+
 #### Optimization Process
 To optimize the agent, we tried different combinations of Q-learning parameter values (alpha, gamma, epsilon and n) for two different optimization methods.
 - First optimization method: run the agent for 50,000 episodes, save the score of the path which reaches all rewards in the least number of moves as the "ideal path". For each combination of alpha, gamma, and n values, record how many epsiodes it takes to find a path with the same (or better) score as the ideal path.
@@ -73,6 +77,7 @@ However, a large part of solving the maze quickly is based on luck. Sometimes tw
 The first of the two graphs below show number of rewards per episode. You can see how it trends towards an increase as the agent learns. However, as you can see, the graph is very noisy. The next graph shows the same results but using a running average, which means it much easier to see how the agent progresses. 
 
 ![](rewards per episode.png){:height="200px" :width="320px"} ![](rewards per episode running average.png){:height="200px" :width="320px"}
+
 
 #### Data Visualization
 We are interested in how alpha, gamma, and n affect the number of episodes our agent takes to solve a maze or get a certain score. However, visualizing 4-dimensional data is difficult to do. The parameters are not independent, so looking at each one on its own is not an option.
@@ -91,16 +96,14 @@ The results showed us that the agent performed best when it had the following pa
  - gamma: between .8 and 1.0 (1.0 0.8, 1.0, 0.6)
  - n: between 8 and 11 (8, 17, 11, 8)
  This graph shows the distribution of how many episodes the optimal agent took to finish the maze for 100 runs. 
- ![](distribution_example_3_removed.png){:height="250px" :width="360px"}
+ ![](distribution_example_3_removed.png){:height="350px" :width="400px"}
 
 We found that the agent's performance with certain parameters is different depending on the size of the maze, the number of rewards, and whether or not the agent has to find the end block after collecting all rewards. Because the end block is always the block which the agent started on, and the last reward found is almost always the farthest reward from the start block, finding the path back is considerably difficult. There are no more rewards left to help tell the agent whether or not he is going in the right direction, and walking in circles yields the same reward as walking closer to the end block. As a result, different configurations of the parameters help the agent find the rewards faster, but they seem to have little effect on the agent's ability to find the end block. We believe this is why some of the configurations that give the best results seem random sometimes. 
-STICK GRAPH IN HERE
 
 The agent performed consistently better with a high alpha value between .8 and 1.0. A high gamma value between .8 and 1.0 complimented the agent's high alpha value very well. n and gamma are parameters that strongly affect each other, but that is not shown well in the optimization results. n and alpha do strongly affect each other. However, and the optimization results for the two variables is easy to see. As long as alpha is .8 or higher, any of the n values seem to have the same effect. 
 
 #### Difference in optimization methods:
 Collecting all the rewards in the maze can be difficult for the agent. However, finding the exit to the maze when there are no rewards left to guide him back is even more difficult. This is made clear by the stark differences in the number of episodes it takes the agent to collect all rewards compared to the total number of episodes it takes to collect all rewards and then find the exit.
-MORE GRAPH 
 	
 ## References
 General Q Learning: [Wikipedia](https://en.wikipedia.org/wiki/Q-learning)	
