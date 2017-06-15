@@ -7,7 +7,7 @@ title:  Final Report
 <div style="position:relative;height:0;padding-bottom:56.25%"><iframe src="https://www.youtube.com/embed/nWbt14lVtCg?ecver=2" width="640" height="360" frameborder="0" style="position:absolute;width:100%;height:100%;left:0" allowfullscreen></iframe></div>
 
 ## Project Summary
-LARS (Lava Avoiding Reward Searcher) is a reinforcement-learning AI designed to efficiently solve mazes and collect various rewards. It operates in a Minecraft environment of a coble stone labyrinth containing items surrounded by lava. LARS does not receive any knowledge of the world prior to starting, and thus learns about its environment through trial and error exploration based on our own implementation of a Q-learning algorithm.
+LARS (Lava Avoiding Reward Searcher) is a reinforcement-learning AI designed to efficiently solve mazes and collect various rewards. It operates in a Minecraft environment of a coble stone labyrinth containing items surrounded by lava. LARS does not receive any knowledge of the world prior to starting, and thus learns about its environment through trial and error exploration based on our own implementation of a Q-learning algorithm. If the Agent knew about the world then this problem could be as trivial as a traveling salesman problem, but since the AI does not know anything about the world and only gets feedback through rewards, it is very difficult to solve this problem.
 
 The primary goal was to create the most efficient and flexible agent that could easily adapt to a variety of challenges without omniscience of its environment. Here we had several choices in approach and decided that Q-Learning had the best potential for optimization and adaptability given the changeable environment. We use a random maze generator to test the algorithm through many combinations of complex paths and then rigorous evaluations to determine the best combinations of parameters. 
 
@@ -108,3 +108,5 @@ CS 175 Course Lectures / Images: [CS175](http://sameersingh.org/courses/aiproj/s
 General Questions: [Stack Overflow](https://stackoverflow.com/)	
 
 More SARSA and Q: [unsw.edu](http://www.cse.unsw.edu.au/~cs9417ml/RL1/algorithms.html)	
+
+Code to draw the Q Table:  [Project Malmo] (https://github.com/Microsoft/malmo/blob/master/Malmo/samples/Python_examples/tabular_q_learning.py)
